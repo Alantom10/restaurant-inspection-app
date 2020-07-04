@@ -6,9 +6,6 @@ public class Restaurant {
     private String mAddress;
 
     public Restaurant() {
-        mID = "SDFO-8HKP7E";
-        mName = "Pattullo A&W";
-        mAddress = "12808 King George Blvd, Surrey";
     }
 
     public String getID() {
@@ -21,5 +18,17 @@ public class Restaurant {
 
     public String getAddress() {
         return mAddress;
+    }
+
+    public void setID(String ID) {
+        mID = ID;
+    }
+
+    public void setName(String name) {
+        mName = name;
+    }
+
+    public void setAddress(String address) {
+        mAddress = address;
     }
 }

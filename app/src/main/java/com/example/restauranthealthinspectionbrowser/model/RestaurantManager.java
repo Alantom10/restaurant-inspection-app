@@ -19,9 +19,27 @@ public class RestaurantManager {
 
     private RestaurantManager(Context context) {
         mRestaurants = new ArrayList<>();
+        Restaurant restaurant = new Restaurant();
+        restaurant.setID("SDFO-8HKP7E");
+        restaurant.setName("Pattullo A&W");
+        restaurant.setAddress("12808 King George Blvd, Surrey");
+        mRestaurants.add(restaurant);
+        restaurant.setID("SHEN-B7BNSR");
+        restaurant.setName("Lee Yuen Seafood Restaurant");
+        restaurant.setAddress("1812 152 St, Surrey");
+        mRestaurants.add(restaurant);
     }
 
     public List<Restaurant> getRestaurants() {
         return mRestaurants;
+    }
+
+    public Restaurant getRestaurant(String id) {
+        for (Restaurant restaurant : mRestaurants) {
+            if (restaurant.getID().equals(id)) {
+                return restaurant;
+            }
+        }
+        return null;
     }
 }
