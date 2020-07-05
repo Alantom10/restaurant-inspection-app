@@ -4,18 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="8dp" >
-
-    <ImageView
-        android:id="@+id/restaurant_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_restaurant_black_24dp" />
+    android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/title"
@@ -23,28 +12,27 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="Restaurant Name"
-        android:textAllCaps="false"
+        android:text="Title"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/restaurant_icon"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/inspection_info"
+        android:id="@+id/address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Inspection Info"
+        android:text="Address"
         app:layout_constraintStart_toStartOf="@+id/title"
         app:layout_constraintTop_toBottomOf="@+id/title" />
 
     <TextView
-        android:id="@+id/inspection_date"
+        android:id="@+id/coordinates"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Inspection Date"
-        app:layout_constraintStart_toStartOf="@+id/title"
-        app:layout_constraintTop_toBottomOf="@+id/inspection_info" />
+        android:text="Coordinates"
+        app:layout_constraintStart_toStartOf="@+id/address"
+        app:layout_constraintTop_toBottomOf="@+id/address" />
 </androidx.constraintlayout.widget.ConstraintLayout>
