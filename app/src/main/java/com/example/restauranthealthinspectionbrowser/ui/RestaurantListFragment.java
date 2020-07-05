@@ -55,14 +55,14 @@ public class RestaurantListFragment extends Fragment {
             super(inflater.inflate(R.layout.list_item_restaurant, parent, false));
             itemView.setOnClickListener(this);
 
-            mTitleTextView = (TextView) itemView.findViewById(R.id.restaurant_name);
+            mTitleTextView = (TextView) itemView.findViewById(R.id.title);
             mInfoTextView = (TextView) itemView.findViewById(R.id.inspection_info);
             mDateTextView = (TextView) itemView.findViewById(R.id.inspection_date);
         }
 
         public void bind(Restaurant restaurant) {
             mRestaurant = restaurant;
-            mTitleTextView.setText(mRestaurant.getName());
+            mTitleTextView.setText(getString(R.string.restaurant_name, mRestaurant.getName()));
         }
 
         @Override

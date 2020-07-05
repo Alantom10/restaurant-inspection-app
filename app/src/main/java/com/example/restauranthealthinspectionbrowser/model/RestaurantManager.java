@@ -56,7 +56,7 @@ public class RestaurantManager {
                 Restaurant restaurant = new Restaurant();
                 restaurant.setID(row[0].replace("\"", ""));
                 restaurant.setName(row[1].replace("\"", ""));
-                restaurant.setAddress(row[2].replace("\"", ""));
+                restaurant.setAddress((row[2] + ", " + row[3]).replace("\"", ""));
                 restaurant.setLatitude(Double.parseDouble(row[5]));
                 restaurant.setLongitude(Double.parseDouble(row[6]));
                 mRestaurants.add(restaurant);
