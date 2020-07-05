@@ -1,5 +1,6 @@
 package com.example.restauranthealthinspectionbrowser.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,7 +44,7 @@ public class RestaurantListFragment extends Fragment {
         mRestaurantRecyclerView.setAdapter(mAdapter);
     }
 
-    private class RestaurantHolder extends RecyclerView.ViewHolder {
+    private class RestaurantHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView mTitleTextView;
         private TextView mInfoTextView;
         private TextView mDateTextView;
@@ -52,6 +53,7 @@ public class RestaurantListFragment extends Fragment {
 
         public RestaurantHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.list_item_restaurant, parent, false));
+            itemView.setOnClickListener(this);
 
             mTitleTextView = (TextView) itemView.findViewById(R.id.restaurant_name);
             mInfoTextView = (TextView) itemView.findViewById(R.id.inspection_info);
@@ -61,6 +63,12 @@ public class RestaurantListFragment extends Fragment {
         public void bind(Restaurant restaurant) {
             mRestaurant = restaurant;
             mTitleTextView.setText(mRestaurant.getName());
+        }
+
+        @Override
+        public void onClick(View v) {
+            Intent intent = RestaurantActivity.makeIntent(getActivity(), mRestaurant.getID());
+            startActivity(intent);
         }
     }
 
