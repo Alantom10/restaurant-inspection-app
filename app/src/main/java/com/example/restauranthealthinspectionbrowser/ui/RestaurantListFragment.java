@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -43,8 +44,23 @@ public class RestaurantListFragment extends Fragment {
     }
 
     private class RestaurantHolder extends RecyclerView.ViewHolder {
+        private TextView mTitleTextView;
+        private TextView mInfoTextView;
+        private TextView mDateTextView;
+
+        private Restaurant mRestaurant;
+
         public RestaurantHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.list_item_restaurant, parent, false));
+
+            mTitleTextView = (TextView) itemView.findViewById(R.id.restaurant_name);
+            mInfoTextView = (TextView) itemView.findViewById(R.id.inspection_info);
+            mDateTextView = (TextView) itemView.findViewById(R.id.inspection_date);
+        }
+
+        public void bind(Restaurant restaurant) {
+            mRestaurant = restaurant;
+            mTitleTextView.setText(mRestaurant.getName());
         }
     }
 
@@ -64,7 +80,8 @@ public class RestaurantListFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull RestaurantHolder holder, int position) {
-
+            Restaurant restaurant = mRestaurants.get(position);
+            holder.bind(restaurant);
         }
 
         @Override
