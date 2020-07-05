@@ -32,13 +32,13 @@ public class RestaurantFragment extends Fragment {
         mRestaurant = RestaurantManager.getInstance(getActivity()).getRestaurant(restaurantID);
 
         mTitleTextView = (TextView) view.findViewById(R.id.title);
-        mTitleTextView.setText(mRestaurant.getName());
+        mTitleTextView.setText(getString(R.string.restaurant_name, mRestaurant.getName()));
 
         mAddressTextView = (TextView) view.findViewById(R.id.address);
-        mAddressTextView.setText(mRestaurant.getAddress());
+        mAddressTextView.setText(getString(R.string.address, mRestaurant.getAddress()));
 
         mCoordinatesTextView = (TextView) view.findViewById(R.id.coordinates);
-        mCoordinatesTextView.setText(mRestaurant.getLatitude() + ", " + mRestaurant.getLongitude());
+        mCoordinatesTextView.setText(getString(R.string.coordinates, mRestaurant.getLatitude(), mRestaurant.getLongitude()));
 
         return view;
     }

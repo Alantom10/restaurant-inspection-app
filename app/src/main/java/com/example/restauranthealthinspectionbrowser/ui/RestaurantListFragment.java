@@ -62,7 +62,7 @@ public class RestaurantListFragment extends Fragment {
 
         public void bind(Restaurant restaurant) {
             mRestaurant = restaurant;
-            mTitleTextView.setText(mRestaurant.getName());
+            mTitleTextView.setText(getString(R.string.restaurant_name, mRestaurant.getName()));
         }
 
         @Override
