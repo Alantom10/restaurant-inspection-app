@@ -1,7 +1,6 @@
 package com.example.restauranthealthinspectionbrowser.model;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.example.restauranthealthinspectionbrowser.R;
 
@@ -10,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,22 +44,21 @@ public class RestaurantManager {
     }
 
     private void readRestaurantData(Context context) {
+        // Adapted from https://www.youtube.com/watch?v=i-TqNzUryn8&feature=youtu.be
         InputStream is = context.getResources().openRawResource(R.raw.restaurants_itr1);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
 
         try {
             String line = reader.readLine();
             while ((line = reader.readLine()) != null) {
                 String[] row = line.split(",");
                 Restaurant restaurant = new Restaurant();
-                restaurant.setID(row[0]);
-                restaurant.setName(row[1]);
-                restaurant.setAddress(row[2]);
+                restaurant.setID(row[0].replace("\"", ""));
+                restaurant.setName(row[1].replace("\"", ""));
+                restaurant.setAddress(row[2].replace("\"", ""));
                 restaurant.setLatitude(Double.parseDouble(row[5]));
                 restaurant.setLongitude(Double.parseDouble(row[6]));
                 mRestaurants.add(restaurant);
-
-                Log.d("tag", row[1]);
             }
         } catch (IOException e) {
             e.printStackTrace();
