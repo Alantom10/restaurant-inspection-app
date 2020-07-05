@@ -1,6 +1,6 @@
 package com.example.restauranthealthinspectionbrowser.model;
 
-public class Restaurant {
+public class Restaurant implements Comparable<Restaurant> {
     private String mID;
     private String mName;
     private String mAddress;
@@ -48,5 +48,10 @@ public class Restaurant {
 
     public void setLongitude(double longitude) {
         mLongitude = longitude;
+    }
+
+    @Override
+    public int compareTo(Restaurant o) {
+        return getName().compareTo(o.getName());
     }
 }
