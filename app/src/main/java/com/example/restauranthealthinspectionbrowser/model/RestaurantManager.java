@@ -8,9 +8,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class RestaurantManager {
@@ -28,6 +28,7 @@ public class RestaurantManager {
     private RestaurantManager(Context context) {
         mRestaurants = new ArrayList<>();
         readRestaurantData(context);
+        Collections.sort(mRestaurants);
     }
 
     public List<Restaurant> getRestaurants() {

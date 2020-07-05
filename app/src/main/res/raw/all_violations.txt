@@ -1,5 +1,4 @@
 All violations from Surrey's data set:
-
 101,Not Critical,Plans/construction/alterations not in accordance with the Regulation [s. 3; s. 4],Not Repeat
 102,Not Critical,Operation of an unapproved food premises [s. 6(1)],Not Repeat
 103,Not Critical,Failure to hold a valid permit while operating a food service establishment [s. 8(1)],Not Repeat
