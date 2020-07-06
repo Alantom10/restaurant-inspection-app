@@ -13,6 +13,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.restauranthealthinspectionbrowser.R;
+import com.example.restauranthealthinspectionbrowser.model.DateHelper;
+import com.example.restauranthealthinspectionbrowser.model.Inspection;
+import com.example.restauranthealthinspectionbrowser.model.InspectionManager;
 import com.example.restauranthealthinspectionbrowser.model.Restaurant;
 import com.example.restauranthealthinspectionbrowser.model.RestaurantManager;
 
@@ -49,7 +52,7 @@ public class RestaurantListFragment extends Fragment {
         private TextView mInfoTextView;
         private TextView mDateTextView;
 
-        private Restaurant mRestaurant;
+        private String mRestaurantID;
 
         public RestaurantHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.list_item_restaurant, parent, false));
@@ -61,19 +64,24 @@ public class RestaurantListFragment extends Fragment {
         }
 
         public void bind(Restaurant restaurant) {
-            mRestaurant = restaurant;
-            mTitleTextView.setText(getString(R.string.restaurant_name, mRestaurant.getName()));
+            mRestaurantID = restaurant.getID();
+            mTitleTextView.setText(getString(R.string.restaurant_name, restaurant.getName()));
+
+            InspectionManager manager = InspectionManager.getInstance(getActivity());
+            String inspectionDate = manager.getLatestInspection(mRestaurantID).getInspectionDate();
+            mDateTextView.setText(DateHelper.getDisplayDate(inspectionDate));
         }
 
         @Override
         public void onClick(View v) {
-            Intent intent = RestaurantActivity.makeIntent(getActivity(), mRestaurant.getID());
+            Intent intent = RestaurantActivity.makeIntent(getActivity(), mRestaurantID);
             startActivity(intent);
         }
     }
 
     private class RestaurantAdapter extends RecyclerView.Adapter<RestaurantHolder> {
         private List<Restaurant> mRestaurants;
+
         public RestaurantAdapter(List<Restaurant> restaurants) {
             mRestaurants = restaurants;
         }

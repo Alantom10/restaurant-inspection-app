@@ -11,8 +11,8 @@ public class DateHelper {
     public static CharSequence getDisplayDate(String inspectionDate) {
         CharSequence result = null;
         try {
-            SimpleDateFormat parseFormat = new SimpleDateFormat("yyyyMMdd");
-            long time = parseFormat.parse(inspectionDate).getTime();
+            SimpleDateFormat sdf_parse = new SimpleDateFormat("yyyyMMdd");
+            long time = sdf_parse.parse(inspectionDate).getTime();
             long now = System.currentTimeMillis();
             long interval = now - time;
             if (interval < TimeUnit.DAYS.toMillis(30)) {
