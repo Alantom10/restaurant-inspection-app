@@ -20,9 +20,9 @@ public class InspectionManager {
 
     private InspectionManager(Context context) {
         mInspections = new ArrayList<>();
-        mInspections.add(new Inspection("20200702"));
-        mInspections.add(new Inspection("20200410"));
-        mInspections.add(new Inspection("20190101"));
+        mInspections.add(new Inspection("20200702", "Low"));
+        mInspections.add(new Inspection("20200410", "Moderate"));
+        mInspections.add(new Inspection("20190101", "High"));
     }
 
     public Inspection getLatestInspection(String restaurantID) {
