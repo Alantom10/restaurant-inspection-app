@@ -1,0 +1,2 @@
+rootProject.name='Restaurant Health Inspection Browser'
+include ':app'

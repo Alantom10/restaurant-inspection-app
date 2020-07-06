@@ -30,6 +30,12 @@ public class RestaurantFragment extends Fragment {
         String restaurantID = getActivity().getIntent().getStringExtra(EXTRA_RESTAURANT_ID);
         mRestaurant = RestaurantManager.getInstance(getActivity()).getRestaurant(restaurantID);
 
+        updateUI(view);
+
+        return view;
+    }
+
+    private void updateUI(View view) {
         mTitleTextView = (TextView) view.findViewById(R.id.title);
         mTitleTextView.setText(getString(R.string.restaurant_name, mRestaurant.getName()));
 
@@ -38,7 +44,5 @@ public class RestaurantFragment extends Fragment {
 
         mCoordinatesTextView = (TextView) view.findViewById(R.id.coordinates);
         mCoordinatesTextView.setText(getString(R.string.coordinates, mRestaurant.getLatitude(), mRestaurant.getLongitude()));
-
-        return view;
     }
 }
