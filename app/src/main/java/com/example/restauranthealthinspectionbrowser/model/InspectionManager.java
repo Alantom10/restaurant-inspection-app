@@ -2,14 +2,32 @@ package com.example.restauranthealthinspectionbrowser.model;
 
 import android.content.Context;
 
+import com.example.restauranthealthinspectionbrowser.R;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class InspectionManager {
-    private static InspectionManager sInstance;
+//    public static InspectionManager getInstance(){
+//        if(instance==null){
+//            instance=new InspectionManager();
+//        }
+//        return instance;
+//    }
 
     private List<Inspection> mInspections;
+
+    public List<Inspection> getInspections(){
+        return mInspections;
+    }
+
+    private static InspectionManager sInstance;
 
     public static InspectionManager getInstance(Context context) {
         if (sInstance == null) {
@@ -20,13 +38,49 @@ public class InspectionManager {
 
     private InspectionManager(Context context) {
         mInspections = new ArrayList<>();
-        mInspections.add(new Inspection("20200702", "Low"));
-        mInspections.add(new Inspection("20200410", "Moderate"));
-        mInspections.add(new Inspection("20190101", "High"));
+//        mInspections.add(new Inspection("20200702"));
+//        mInspections.add(new Inspection("20200410"));
+//        mInspections.add(new Inspection("20190101"));
+        readData(context);
     }
 
     public Inspection getLatestInspection(String restaurantID) {
         int i = ThreadLocalRandom.current().nextInt(3);
         return mInspections.get(i);
     }
+
+    private void readData(Context context){
+
+
+        try( InputStream is = context.getResources().openRawResource(R.raw.inspectionreports_itr1);
+             BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))
+        ){
+            String line = reader.readLine();
+            while ((line = reader.readLine()) != null) {
+                String[] row = line.split(",");
+                Inspection inspection = new Inspection();
+                inspection.setTrackingNum(row[0].replace("\"", ""));
+                inspection.setInspectionDate(row[1].replace("\"", ""));
+                inspection.setInspectionType(row[2].replace("\"", ""));
+                inspection.setNumOfCritical(Integer.valueOf(row[3].replace("\"", "")));
+                inspection.setNumOfNonCritical(Integer.valueOf(row[4].replace("\"", "")));
+                inspection.setHazardRating(row[5].replace("\"",""));
+
+                //
+                String violations = "";
+                for (int i = 6;i< row.length;i++){
+                    violations += row[i];
+                }
+                String[] vio = violations.split("|");
+                inspection.setViolation(vio);
+
+                mInspections.add(inspection);
+
+            }
+        }
+        catch  (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

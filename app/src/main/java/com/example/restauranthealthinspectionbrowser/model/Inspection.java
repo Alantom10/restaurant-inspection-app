@@ -1,27 +1,118 @@
 package com.example.restauranthealthinspectionbrowser.model;
 
-public class Inspection {
-    private String mInspectionDate;
-    private String mHazardRating;
+import com.example.restauranthealthinspectionbrowser.R;
 
-    public Inspection(String inspectionDate, String hazardRating) {
-        mInspectionDate = inspectionDate;
-        mHazardRating = hazardRating;
+public class Inspection {
+    private String trackingNum;
+    private String inspectionDate;
+    private String inspectionType;
+    private String hazardRating;
+    private int numOfCritical;
+    private int numOfNonCritical;
+    private String[] violation;
+
+    public String getTrackingNum() {
+        return trackingNum;
+    }
+
+    public void setTrackingNum(String trackingNum) {
+        this.trackingNum = trackingNum;
     }
 
     public String getInspectionDate() {
-        return mInspectionDate;
-    }
-
-    public String getHazardRating() {
-        return mHazardRating;
+        return inspectionDate;
     }
 
     public void setInspectionDate(String inspectionDate) {
-        mInspectionDate = inspectionDate;
+        this.inspectionDate = inspectionDate;
+    }
+
+    public String getInspectionType() {
+        return inspectionType;
+    }
+
+    public void setInspectionType(String inspectionType) {
+        this.inspectionType = inspectionType;
+    }
+
+    public String getHazardRating() {
+        return hazardRating;
     }
 
     public void setHazardRating(String hazardRating) {
-        mHazardRating = hazardRating;
+        this.hazardRating = hazardRating;
+    }
+
+    public int getNumOfCritical() {
+        return numOfCritical;
+    }
+
+    public void setNumOfCritical(int numOfCritical) {
+        this.numOfCritical = numOfCritical;
+    }
+
+    public int getNumOfNonCritical() {
+        return numOfNonCritical;
+    }
+
+    public void setNumOfNonCritical(int numOfNonCritical) {
+        this.numOfNonCritical = numOfNonCritical;
+    }
+
+    public String[] getViolation() {
+        return violation;
+    }
+
+    public void setViolation(String[] violation) {
+        this.violation = violation;
+    }
+
+    public Inspection(){
+
+    }
+
+    public Inspection(String trackingNum, String inspectionDate, String inspectionType,
+                      int numOfCritical, int numOfNonCritical,
+                      String hazardRating, String violation){
+        this.trackingNum = trackingNum;
+        this.inspectionDate = inspectionDate;
+        this.inspectionType = inspectionType;
+        this.numOfCritical = numOfCritical;
+        this.numOfNonCritical = numOfNonCritical;
+        this.hazardRating = hazardRating;
+        this.violation = getViolationsToString(violation);
+    }
+
+    private String[] getViolationsToString(String violation) {
+        return violation.replace(", ", ", ").split("|");
+    }
+
+    public int getHazardLogo() {
+
+        if (hazardRating.equals("Low")) {
+
+            return R.drawable.green_face;
+
+        } else if (hazardRating.equals("Moderate")) {
+
+            return R.drawable.yellow_face;
+
+        } else {
+
+            return R.drawable.red_face;
+
+        }
+
+    }
+
+    @Override
+    public String toString() {
+
+        return  numOfCritical + ", " +
+                numOfNonCritical + ", " +
+                //this.date() + ", " +
+                inspectionType + ", " +
+                hazardRating;
+
     }
 }

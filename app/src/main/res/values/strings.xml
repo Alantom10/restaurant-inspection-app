@@ -5,4 +5,11 @@
     <string name="num_issues">%1$d Issues Found</string>
     <string name="address">%1$s</string>
     <string name="coordinates">%1$.8f, %2$.8f</string>
+    <string name="txtTracking">Tracking Number: </string>
+    <string name="txtInspDate">Inspection Date: </string>
+    <string name="txtInspType">Inspection Type: </string>
+    <string name="txtNumIssue"># Critical Issues: </string>
+    <string name="txtNonIssue"># Non Critical Issues: </string>
+    <string name="txtHazRating">Hazard Rating: </string>
+    <string name="txtViolation">Violation</string>
 </resources>
