@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -30,8 +31,7 @@ public class RestaurantListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_restaurant_list, container, false);
 
-        mRestaurantRecyclerView = (RecyclerView) view
-                .findViewById(R.id.restaurant_recycler_view);
+        mRestaurantRecyclerView = (RecyclerView) view.findViewById(R.id.restaurant_recycler_view);
         mRestaurantRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         updateUI();
@@ -49,8 +49,10 @@ public class RestaurantListFragment extends Fragment {
 
     private class RestaurantHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView mTitleTextView;
-        private TextView mInfoTextView;
         private TextView mDateTextView;
+        private TextView mNumIssuesTextView;
+        private TextView mHazardLevelTextView;
+        private ImageView mHazardLevelImageView;
 
         private String mRestaurantID;
 
@@ -59,17 +61,19 @@ public class RestaurantListFragment extends Fragment {
             itemView.setOnClickListener(this);
 
             mTitleTextView = (TextView) itemView.findViewById(R.id.title);
-            mInfoTextView = (TextView) itemView.findViewById(R.id.inspection_info);
             mDateTextView = (TextView) itemView.findViewById(R.id.inspection_date);
+            mNumIssuesTextView = (TextView) itemView.findViewById(R.id.num_issues);
+            mHazardLevelTextView = (TextView) itemView.findViewById(R.id.hazard_level);
+            mHazardLevelImageView = (ImageView) itemView.findViewById(R.id.hazard_level_icon);
         }
 
         public void bind(Restaurant restaurant) {
             mRestaurantID = restaurant.getID();
-            mTitleTextView.setText(getString(R.string.restaurant_name, restaurant.getName()));
-
             InspectionManager manager = InspectionManager.getInstance(getActivity());
-            String inspectionDate = manager.getLatestInspection(mRestaurantID).getInspectionDate();
-            mDateTextView.setText(DateHelper.getDisplayDate(inspectionDate));
+            Inspection inspection = manager.getLatestInspection(mRestaurantID);
+
+            mTitleTextView.setText(getString(R.string.restaurant_name, restaurant.getName()));
+            mDateTextView.setText(DateHelper.getDisplayDate(inspection.getInspectionDate()));
         }
 
         @Override
