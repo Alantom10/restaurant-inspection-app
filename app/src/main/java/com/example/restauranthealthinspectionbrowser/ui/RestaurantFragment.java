@@ -22,7 +22,6 @@ public class RestaurantFragment extends Fragment {
 
     private Restaurant mRestaurant;
 
-    @SuppressLint("SetTextI18n")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
