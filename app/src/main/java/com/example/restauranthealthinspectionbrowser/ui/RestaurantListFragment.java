@@ -75,6 +75,24 @@ public class RestaurantListFragment extends Fragment {
 
             mTitleTextView.setText(getString(R.string.restaurant_name, restaurant.getName()));
             mDateTextView.setText(DateHelper.getDisplayDate(inspection.getInspectionDate()));
+
+            int numIssues = 0;
+            mNumIssuesTextView.setText(getString(R.string.num_issues, numIssues));
+
+            String hazardLevel = inspection.getHazardRating();
+            mHazardLevelTextView.setText(getString(R.string.hazard_level, hazardLevel));
+            if (hazardLevel.equals("High")) {
+                mHazardLevelTextView.setTextColor(ContextCompat.getColor(getActivity(), R.color.highHazardLevel));
+                mHazardLevelImageView.setImageResource(R.drawable.ic_high_level_black_24dp);
+            }
+            else if (hazardLevel.equals("Moderate")) {
+                mHazardLevelTextView.setTextColor(ContextCompat.getColor(getActivity(), R.color.moderateHazardLevel));
+                mHazardLevelImageView.setImageResource(R.drawable.ic_moderate_level_black_24dp);
+            }
+            else {
+                mHazardLevelTextView.setTextColor(ContextCompat.getColor(getActivity(), R.color.lowHazardLevel));
+                mHazardLevelImageView.setImageResource(R.drawable.ic_low_level_black_24dp);
+            }
         }
 
         @Override
