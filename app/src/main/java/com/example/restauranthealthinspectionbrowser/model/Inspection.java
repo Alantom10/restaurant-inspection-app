@@ -77,13 +77,13 @@ public class Inspection {
         this.violation = violation;
     }
 
-    public Inspection(){
+    public Inspection() {
 
     }
 
     public Inspection(String trackingNum, String inspectionDate, String inspectionType,
                       int numOfCritical, int numOfNonCritical,
-                      String hazardRating, String violation){
+                      String hazardRating, String violation) {
         this.trackingNum = trackingNum;
         this.inspectionDate = inspectionDate;
         this.inspectionType = inspectionType;
