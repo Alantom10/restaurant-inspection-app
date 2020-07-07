@@ -23,10 +23,6 @@ public class InspectionManager {
 
     private List<Inspection> mInspections;
 
-    public List<Inspection> getInspections(){
-        return mInspections;
-    }
-
     private static InspectionManager sInstance;
 
     public static InspectionManager getInstance(Context context) {
@@ -38,19 +34,19 @@ public class InspectionManager {
 
     private InspectionManager(Context context) {
         mInspections = new ArrayList<>();
-//        mInspections.add(new Inspection("20200702"));
-//        mInspections.add(new Inspection("20200410"));
-//        mInspections.add(new Inspection("20190101"));
         readData(context);
     }
 
+    public List<Inspection> getInspections(){
+        return mInspections;
+    }
+
     public Inspection getLatestInspection(String restaurantID) {
-        int i = ThreadLocalRandom.current().nextInt(3);
+        int i = ThreadLocalRandom.current().nextInt(mInspections.size());
         return mInspections.get(i);
     }
 
     private void readData(Context context){
-
 
         try( InputStream is = context.getResources().openRawResource(R.raw.inspectionreports_itr1);
              BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))
@@ -78,12 +74,10 @@ public class InspectionManager {
                 inspection.setViolation(vio);
 
                 mInspections.add(inspection);
-
             }
         }
         catch  (IOException e) {
             e.printStackTrace();
         }
     }
-
 }
