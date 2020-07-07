@@ -1,15 +1,21 @@
 package com.example.restauranthealthinspectionbrowser.ui;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.restauranthealthinspectionbrowser.R;
+import com.example.restauranthealthinspectionbrowser.adapter.ViolationAdapter;
 import com.example.restauranthealthinspectionbrowser.model.Restaurant;
 import com.example.restauranthealthinspectionbrowser.model.RestaurantManager;
 
@@ -32,7 +38,22 @@ public class RestaurantFragment extends Fragment {
 
         updateUI(view);
 
+
         return view;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        Button button = (Button) getActivity().findViewById(R.id.button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(getActivity(),InspectionActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void updateUI(View view) {
@@ -44,5 +65,9 @@ public class RestaurantFragment extends Fragment {
 
         mCoordinatesTextView = (TextView) view.findViewById(R.id.coordinates);
         mCoordinatesTextView.setText(getString(R.string.coordinates, mRestaurant.getLatitude(), mRestaurant.getLongitude()));
+    }
+
+    private void dateToString(){
+
     }
 }

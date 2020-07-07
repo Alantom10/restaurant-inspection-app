@@ -65,13 +65,16 @@ public class InspectionManager {
                 inspection.setNumOfCritical(Integer.valueOf(row[3].replace("\"", "")));
                 inspection.setNumOfNonCritical(Integer.valueOf(row[4].replace("\"", "")));
                 inspection.setHazardRating(row[5].replace("\"",""));
-
+//                inspection.setTest(row[6]);
                 //
                 String violations = "";
                 for (int i = 6;i< row.length;i++){
+                    if(i > 6){
+                        violations += ",";
+                    }
                     violations += row[i];
                 }
-                String[] vio = violations.split("|");
+                String[] vio = violations.split("\\|");
                 inspection.setViolation(vio);
 
                 mInspections.add(inspection);

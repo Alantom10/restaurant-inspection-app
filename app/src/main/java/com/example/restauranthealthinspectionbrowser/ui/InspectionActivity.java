@@ -5,10 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.media.Image;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,18 +16,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.restauranthealthinspectionbrowser.R;
-import com.example.restauranthealthinspectionbrowser.adapter.violationAdapter;
+import com.example.restauranthealthinspectionbrowser.adapter.ViolationAdapter;
 import com.example.restauranthealthinspectionbrowser.model.Inspection;
 import com.example.restauranthealthinspectionbrowser.model.InspectionManager;
 import com.example.restauranthealthinspectionbrowser.model.Restaurant;
-import com.example.restauranthealthinspectionbrowser.model.RestaurantManager;
 
 import java.util.ArrayList;
 
 public class InspectionActivity extends AppCompatActivity {
-    private ArrayList<String> violations = new ArrayList<>();
+    ArrayList<String> violations = new ArrayList<String>();
     private Inspection mInspection;
     private Restaurant mRestaurant;
+
+    public InspectionActivity() {
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,12 +42,9 @@ public class InspectionActivity extends AppCompatActivity {
         getInspection();
         showInfo();
         showViolation();
-        showViolationIcon();
     }
 
     private void getInspection() {
-        //RestaurantManager manager = RestaurantManager.getInstance();
-        //...
         Intent intent = getIntent();
         final String trackingNum = intent.getStringExtra("trackingNum");
         final String inspectionDate = intent.getStringExtra("inspectionDate");
@@ -63,7 +59,7 @@ public class InspectionActivity extends AppCompatActivity {
     }
 
     void showInfo() {
-        showViolation();
+        //showViolation();
 
         TextView txtTrackNum = (TextView) findViewById(R.id.dataTracking);
         TextView txtInspectionDate = (TextView) findViewById(R.id.dataInspDate);
@@ -79,24 +75,28 @@ public class InspectionActivity extends AppCompatActivity {
         txtHazardRating.setText(mInspection.getHazardRating());
 
         ImageView hazardImage = findViewById(R.id.hazardLogo);
-        if(mInspection.getHazardRating().equals("Low")){
-            txtHazardRating.setTextColor(Color.GREEN);
-        } else if (mInspection.getHazardRating().equals("Moderate")) {
+        if(mInspection.getHazardRating().equalsIgnoreCase("Low")){
+            txtHazardRating.setTextColor(Color.BLUE);
+            hazardImage.setImageResource(R.drawable.green_face);
+        } else if (mInspection.getHazardRating().equalsIgnoreCase("Moderate")) {
             txtHazardRating.setTextColor(Color.YELLOW);
-        } else if (mInspection.getHazardRating().equals("High")) {
+            hazardImage.setImageResource(R.drawable.yellow_face);
+        } else if (mInspection.getHazardRating().equalsIgnoreCase("High")) {
             txtHazardRating.setTextColor(Color.RED);
+            hazardImage.setImageResource(R.drawable.red_face);
         }
-        txtHazardRating.setTextColor(mInspection.getHazardLogo());
+        //txtHazardRating.setTextColor(mInspection.getHazardLogo());
     }
 
     private void showViolation(){
-        ArrayAdapter<String> adapter = new violationAdapter(InspectionActivity.this, 0, R.layout.activity_inspection, violations);
-        ListView violation = findViewById(R.id.listViolation);
-        violation.setAdapter(adapter);
-    }
+        for (String s : mInspection.getViolation()) {
+            violations.add(s);
+        }
 
-    private void showViolationIcon(){
-        //ImageView violationSeverity = (ImageView)
+        ArrayAdapter<String> adapter = new ViolationAdapter(InspectionActivity.this, 0, R.layout.list_item_violation, violations);
+        ListView violation = findViewById(R.id.listViolation);
+
+        violation.setAdapter(adapter);
     }
 
     private void setListItemClick(ListView listView){
@@ -115,16 +115,4 @@ public class InspectionActivity extends AppCompatActivity {
     private void showToast(String text) {
         Toast.makeText(InspectionActivity.this, text, Toast.LENGTH_LONG).show();
     }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        finish();
-        return true;
-    }
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        MenuInflater inflater = getMenuInflater();
-//        inflater.inflate(R.menu.menu_inspection, menu);
-//        return true;
-//    }
 }
