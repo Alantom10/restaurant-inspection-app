@@ -10,6 +10,16 @@ public class Inspection {
     private int numOfCritical;
     private int numOfNonCritical;
     private String[] violation;
+    private String test;
+
+
+    public String getTest() {
+        return test;
+    }
+
+    public void setTest(String test) {
+        this.test = test;
+    }
 
     public String getTrackingNum() {
         return trackingNum;

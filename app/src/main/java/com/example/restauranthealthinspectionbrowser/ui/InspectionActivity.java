@@ -19,7 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.restauranthealthinspectionbrowser.R;
-import com.example.restauranthealthinspectionbrowser.adapter.violationAdapter;
+import com.example.restauranthealthinspectionbrowser.adapter.ViolationAdapter;
 import com.example.restauranthealthinspectionbrowser.model.Inspection;
 import com.example.restauranthealthinspectionbrowser.model.InspectionManager;
 import com.example.restauranthealthinspectionbrowser.model.Restaurant;
@@ -28,9 +28,12 @@ import com.example.restauranthealthinspectionbrowser.model.RestaurantManager;
 import java.util.ArrayList;
 
 public class InspectionActivity extends AppCompatActivity {
-    private ArrayList<String> violations = new ArrayList<>();
+    ArrayList<String> violations = new ArrayList<String>();
     private Inspection mInspection;
     private Restaurant mRestaurant;
+
+    public InspectionActivity() {
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +66,7 @@ public class InspectionActivity extends AppCompatActivity {
     }
 
     void showInfo() {
-        showViolation();
+        //showViolation();
 
         TextView txtTrackNum = (TextView) findViewById(R.id.dataTracking);
         TextView txtInspectionDate = (TextView) findViewById(R.id.dataInspDate);
@@ -79,24 +82,32 @@ public class InspectionActivity extends AppCompatActivity {
         txtHazardRating.setText(mInspection.getHazardRating());
 
         ImageView hazardImage = findViewById(R.id.hazardLogo);
-        if(mInspection.getHazardRating().equals("Low")){
-            txtHazardRating.setTextColor(Color.GREEN);
-        } else if (mInspection.getHazardRating().equals("Moderate")) {
+        if(mInspection.getHazardRating().equalsIgnoreCase("Low")){
+            txtHazardRating.setTextColor(Color.BLUE);
+            hazardImage.setImageResource(R.drawable.green_face);
+        } else if (mInspection.getHazardRating().equalsIgnoreCase("Moderate")) {
             txtHazardRating.setTextColor(Color.YELLOW);
-        } else if (mInspection.getHazardRating().equals("High")) {
+            hazardImage.setImageResource(R.drawable.yellow_face);
+        } else if (mInspection.getHazardRating().equalsIgnoreCase("High")) {
             txtHazardRating.setTextColor(Color.RED);
+            hazardImage.setImageResource(R.drawable.red_face);
         }
-        txtHazardRating.setTextColor(mInspection.getHazardLogo());
+        //txtHazardRating.setTextColor(mInspection.getHazardLogo());
     }
 
     private void showViolation(){
-        ArrayAdapter<String> adapter = new violationAdapter(InspectionActivity.this, 0, R.layout.activity_inspection, violations);
+        for (String s : mInspection.getViolation()) {
+            violations.add(s);
+        }
+
+        ArrayAdapter<String> adapter = new ViolationAdapter(InspectionActivity.this, 0, R.layout.fragment_violation_list, violations);
         ListView violation = findViewById(R.id.listViolation);
+
         violation.setAdapter(adapter);
     }
 
     private void showViolationIcon(){
-        //ImageView violationSeverity = (ImageView)
+
     }
 
     private void setListItemClick(ListView listView){
@@ -121,10 +132,4 @@ public class InspectionActivity extends AppCompatActivity {
         finish();
         return true;
     }
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        MenuInflater inflater = getMenuInflater();
-//        inflater.inflate(R.menu.menu_inspection, menu);
-//        return true;
-//    }
 }

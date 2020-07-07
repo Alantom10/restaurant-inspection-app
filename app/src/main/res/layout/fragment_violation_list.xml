@@ -10,23 +10,29 @@
         android:id="@+id/txtViolationDetail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:text="TextView"
-        tools:layout_editor_absoluteX="176dp"
-        tools:layout_editor_absoluteY="20dp" />
+        app:layout_constraintBottom_toTopOf="@+id/imageViolation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.082"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
         android:id="@+id/imageViolation"
         android:layout_width="40dp"
         android:layout_height="31dp"
-        tools:layout_editor_absoluteX="144dp"
-        tools:layout_editor_absoluteY="62dp"
+        tools:layout_editor_absoluteX="47dp"
+        tools:layout_editor_absoluteY="58dp"
         tools:srcCompat="@tools:sample/avatars" />
 
     <ImageView
         android:id="@+id/imageSeverity"
         android:layout_width="31dp"
         android:layout_height="32dp"
-        tools:layout_editor_absoluteX="222dp"
+        android:layout_marginStart="32dp"
+        app:layout_constraintStart_toEndOf="@+id/imageViolation"
         tools:layout_editor_absoluteY="58dp"
         tools:srcCompat="@tools:sample/avatars" />
 </androidx.constraintlayout.widget.ConstraintLayout>
