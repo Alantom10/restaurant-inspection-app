@@ -38,14 +38,6 @@ public class RestaurantFragment extends Fragment {
 
         updateUI(view);
 
-
-        return view;
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
         Button button = (Button) getActivity().findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,6 +46,8 @@ public class RestaurantFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+        return view;
     }
 
     private void updateUI(View view) {
