@@ -5,10 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.media.Image;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -23,7 +20,6 @@ import com.example.restauranthealthinspectionbrowser.adapter.ViolationAdapter;
 import com.example.restauranthealthinspectionbrowser.model.Inspection;
 import com.example.restauranthealthinspectionbrowser.model.InspectionManager;
 import com.example.restauranthealthinspectionbrowser.model.Restaurant;
-import com.example.restauranthealthinspectionbrowser.model.RestaurantManager;
 
 import java.util.ArrayList;
 
@@ -46,12 +42,9 @@ public class InspectionActivity extends AppCompatActivity {
         getInspection();
         showInfo();
         showViolation();
-        showViolationIcon();
     }
 
     private void getInspection() {
-        //RestaurantManager manager = RestaurantManager.getInstance();
-        //...
         Intent intent = getIntent();
         final String trackingNum = intent.getStringExtra("trackingNum");
         final String inspectionDate = intent.getStringExtra("inspectionDate");
@@ -100,14 +93,10 @@ public class InspectionActivity extends AppCompatActivity {
             violations.add(s);
         }
 
-        ArrayAdapter<String> adapter = new ViolationAdapter(InspectionActivity.this, 0, R.layout.fragment_violation_list, violations);
+        ArrayAdapter<String> adapter = new ViolationAdapter(InspectionActivity.this, 0, R.layout.list_item_violation, violations);
         ListView violation = findViewById(R.id.listViolation);
 
         violation.setAdapter(adapter);
-    }
-
-    private void showViolationIcon(){
-
     }
 
     private void setListItemClick(ListView listView){
@@ -125,11 +114,5 @@ public class InspectionActivity extends AppCompatActivity {
 
     private void showToast(String text) {
         Toast.makeText(InspectionActivity.this, text, Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        finish();
-        return true;
     }
 }
