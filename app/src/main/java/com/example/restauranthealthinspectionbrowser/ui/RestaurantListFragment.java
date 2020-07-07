@@ -76,7 +76,7 @@ public class RestaurantListFragment extends Fragment {
             mTitleTextView.setText(getString(R.string.restaurant_name, restaurant.getName()));
             mDateTextView.setText(DateHelper.getDisplayDate(inspection.getInspectionDate()));
 
-            int numIssues = 0;
+            int numIssues = inspection.getNumOfCritical() + inspection.getNumOfNonCritical();
             mNumIssuesTextView.setText(getString(R.string.num_issues, numIssues));
 
             String hazardLevel = inspection.getHazardRating();
