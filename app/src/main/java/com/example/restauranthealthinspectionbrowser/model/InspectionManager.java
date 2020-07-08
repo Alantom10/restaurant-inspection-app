@@ -9,8 +9,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.Random;
 
 public class InspectionManager {
 //    public static InspectionManager getInstance(){
@@ -41,22 +46,24 @@ public class InspectionManager {
 
     public Inspection getLatestInspection(String restaurantID) {
 
-        Inspection latestInspection = getFirstInspection(restaurantID);
+//        Inspection latestInspection = getFirstInspection(restaurantID);
+//
+//        if (latestInspection == null) {
+//            return null;
+//        }
+//
+//        for (Inspection inspection : mInspections) {
+//
+//            if (inspection.getTrackingNum().equals(restaurantID) &&
+//            isNewerThan(inspection.getInspectionDate(), latestInspection.getInspectionDate())) {
+//
+//                latestInspection = inspection;
+//            }
+//        }
 
-        if (latestInspection == null) {
-            return null;
-        }
+        Random rand = new Random();
 
-        for (Inspection inspection : mInspections) {
-
-            if (inspection.getTrackingNum().equals(restaurantID) &&
-            isNewerThan(inspection.getInspectionDate(), latestInspection.getInspectionDate())) {
-
-                latestInspection = inspection;
-            }
-        }
-
-        return latestInspection;
+        return mInspections.get(rand.nextInt(mInspections.size()));
     }
 
     public List<Inspection> getInspectionsForRestaurant(String restaurantID) {
@@ -83,35 +90,35 @@ public class InspectionManager {
         return null;
     }
 
-    private boolean isNewerThan(String inspectionDate1, String inspectionDate2) {
-
-        int inspectionYear1 = Integer.parseInt(inspectionDate1.substring(0,4));
-        int inspectionYear2 = Integer.parseInt(inspectionDate2.substring(0,4));
-
-        if (inspectionYear1 > inspectionYear2) {
-            return true;
-        }
-
-        if (inspectionYear1 < inspectionYear2) {
-            return false;
-        }
-
-        int inspectionMonth1 = Integer.parseInt(inspectionDate1.substring(4,6));
-        int inspectionMonth2 = Integer.parseInt(inspectionDate2.substring(4,6));
-
-        if (inspectionMonth1 > inspectionMonth2) {
-            return true;
-        }
-
-        if (inspectionMonth1 < inspectionMonth2) {
-            return false;
-        }
-
-        int inspectionDay1 = Integer.parseInt(inspectionDate1.substring(6,8));
-        int inspectionDay2 = Integer.parseInt(inspectionDate2.substring(6,8));
-
-        return inspectionDay1 < inspectionDay2;
-    }
+//    private boolean isNewerThan(Date inspectionDate1, Date inspectionDate2) {
+//
+//        int inspectionYear1 = Integer.parseInt(inspectionDate1.substring(0,4));
+//        int inspectionYear2 = Integer.parseInt(inspectionDate2.substring(0,4));
+//
+//        if (inspectionYear1 > inspectionYear2) {
+//            return true;
+//        }
+//
+//        if (inspectionYear1 < inspectionYear2) {
+//            return false;
+//        }
+//
+//        int inspectionMonth1 = Integer.parseInt(inspectionDate1.substring(4,6));
+//        int inspectionMonth2 = Integer.parseInt(inspectionDate2.substring(4,6));
+//
+//        if (inspectionMonth1 > inspectionMonth2) {
+//            return true;
+//        }
+//
+//        if (inspectionMonth1 < inspectionMonth2) {
+//            return false;
+//        }
+//
+//        int inspectionDay1 = Integer.parseInt(inspectionDate1.substring(6,8));
+//        int inspectionDay2 = Integer.parseInt(inspectionDate2.substring(6,8));
+//
+//        return inspectionDay1 < inspectionDay2;
+//    }
 
     private void readData(Context context){
 
@@ -123,13 +130,16 @@ public class InspectionManager {
                 String[] row = line.split(",");
                 Inspection inspection = new Inspection();
                 inspection.setTrackingNum(row[0].replace("\"", ""));
-                inspection.setInspectionDate(row[1].replace("\"", ""));
                 inspection.setInspectionType(row[2].replace("\"", ""));
                 inspection.setNumOfCritical(Integer.valueOf(row[3].replace("\"", "")));
                 inspection.setNumOfNonCritical(Integer.valueOf(row[4].replace("\"", "")));
                 inspection.setHazardRating(row[5].replace("\"",""));
-//                inspection.setTest(row[6]);
-                //
+
+                String inspectionDate = row[1].replace("\"", "");
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd", Locale.CANADA);
+                Date date = sdf.parse(inspectionDate);
+                inspection.setInspectionDate(date);
+
                 String violations = "";
                 for (int i = 6;i< row.length;i++){
                     if(i > 6){
@@ -142,8 +152,7 @@ public class InspectionManager {
 
                 mInspections.add(inspection);
             }
-        }
-        catch  (IOException e) {
+        } catch  (IOException | ParseException e) {
             e.printStackTrace();
         }
     }

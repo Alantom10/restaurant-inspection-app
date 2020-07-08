@@ -2,9 +2,11 @@ package com.example.restauranthealthinspectionbrowser.model;
 
 import com.example.restauranthealthinspectionbrowser.R;
 
+import java.util.Date;
+
 public class Inspection {
     private String trackingNum;
-    private String inspectionDate;
+    private Date inspectionDate;
     private String inspectionType;
     private String hazardRating;
     private int numOfCritical;
@@ -29,11 +31,11 @@ public class Inspection {
         this.trackingNum = trackingNum;
     }
 
-    public String getInspectionDate() {
+    public Date getInspectionDate() {
         return inspectionDate;
     }
 
-    public void setInspectionDate(String inspectionDate) {
+    public void setInspectionDate(Date inspectionDate) {
         this.inspectionDate = inspectionDate;
     }
 
@@ -81,7 +83,7 @@ public class Inspection {
 
     }
 
-    public Inspection(String trackingNum, String inspectionDate, String inspectionType,
+    public Inspection(String trackingNum, Date inspectionDate, String inspectionType,
                       int numOfCritical, int numOfNonCritical,
                       String hazardRating, String violation) {
         this.trackingNum = trackingNum;
