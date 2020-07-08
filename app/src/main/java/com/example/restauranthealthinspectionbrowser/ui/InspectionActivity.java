@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -26,11 +27,18 @@ import com.example.restauranthealthinspectionbrowser.model.Restaurant;
 import java.util.ArrayList;
 
 public class InspectionActivity extends AppCompatActivity {
-    ArrayList<String> violations = new ArrayList<String>();
-    private Inspection mInspection;
-    private Restaurant mRestaurant;
+    public static final String EXTRA_TRACKING_NUMBER = "tracking number";
+    public static final String EXTRA_INSPECTION_DATE = "inspection date";
 
-    public InspectionActivity() {
+    private Inspection mInspection;
+
+    ArrayList<String> violations = new ArrayList<String>();
+
+    public static Intent makeIntent(Context context, Inspection inspection) {
+        Intent intent = new Intent(context, InspectionActivity.class);
+        intent.putExtra(EXTRA_TRACKING_NUMBER, inspection.getTrackingNum());
+        intent.putExtra(EXTRA_INSPECTION_DATE, inspection.getInspectionDate());
+        return intent;
     }
 
     @Override
@@ -48,8 +56,8 @@ public class InspectionActivity extends AppCompatActivity {
 
     private void getInspection() {
         Intent intent = getIntent();
-        final String trackingNum = intent.getStringExtra("trackingNum");
-        final String inspectionDate = intent.getStringExtra("inspectionDate");
+        final String trackingNum = intent.getStringExtra(EXTRA_TRACKING_NUMBER);
+        final String inspectionDate = intent.getStringExtra(EXTRA_INSPECTION_DATE);
 
         for (Inspection inspection : InspectionManager.getInstance(this.getBaseContext()).getInspections()) {
             if (inspection.getTrackingNum().equalsIgnoreCase(trackingNum) && inspection.getInspectionDate().equalsIgnoreCase(inspectionDate)) {
@@ -76,13 +84,13 @@ public class InspectionActivity extends AppCompatActivity {
 
         ImageView hazardImage = findViewById(R.id.hazardLogo);
         if(mInspection.getHazardRating().equalsIgnoreCase("Low")){
-            txtHazardRating.setTextColor(Color.BLUE);
+            txtHazardRating.setTextColor(ContextCompat.getColor(this, R.color.lowHazardLevel));
             hazardImage.setImageResource(R.drawable.green_face);
         } else if (mInspection.getHazardRating().equalsIgnoreCase("Moderate")) {
             txtHazardRating.setTextColor(ContextCompat.getColor(this, R.color.moderateHazardLevel));
             hazardImage.setImageResource(R.drawable.yellow_face);
         } else if (mInspection.getHazardRating().equalsIgnoreCase("High")) {
-            txtHazardRating.setTextColor(Color.RED);
+            txtHazardRating.setTextColor(ContextCompat.getColor(this, R.color.highHazardLevel));
             hazardImage.setImageResource(R.drawable.red_face);
         }
     }

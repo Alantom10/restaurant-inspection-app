@@ -1,5 +1,6 @@
 package com.example.restauranthealthinspectionbrowser.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,7 +69,7 @@ public class RestaurantFragment extends Fragment {
         mInspectionRecyclerView.setAdapter(mAdapter);
     }
 
-    private class InspectionHolder extends RecyclerView.ViewHolder {
+    private class InspectionHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView mNumCriticalIssuesTextView;
         private TextView mNumNonCriticalIssuesTextView;
         private TextView mHazardLevelTextView;
@@ -79,6 +80,7 @@ public class RestaurantFragment extends Fragment {
 
         public InspectionHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.list_item_inspection, parent, false));
+            itemView.setOnClickListener(this);
 
             mNumCriticalIssuesTextView = (TextView) itemView.findViewById(R.id.num_critical_issues);
             mNumNonCriticalIssuesTextView = (TextView) itemView.findViewById(R.id.num_non_critical_issues);
@@ -106,6 +108,12 @@ public class RestaurantFragment extends Fragment {
                 mHazardLevelTextView.setTextColor(ContextCompat.getColor(getActivity(), R.color.lowHazardLevel));
                 mHazardLevelImageView.setImageResource(R.drawable.ic_low_level_black_24dp);
             }
+        }
+
+        @Override
+        public void onClick(View v) {
+            Intent intent = InspectionActivity.makeIntent(getActivity(), mInspection);
+            startActivity(intent);
         }
     }
 
