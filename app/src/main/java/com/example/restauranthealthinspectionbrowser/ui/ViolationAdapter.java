@@ -1,4 +1,4 @@
-package com.example.restauranthealthinspectionbrowser.adapter;
+package com.example.restauranthealthinspectionbrowser.ui;
 
 import android.content.Context;
 import android.view.LayoutInflater;
