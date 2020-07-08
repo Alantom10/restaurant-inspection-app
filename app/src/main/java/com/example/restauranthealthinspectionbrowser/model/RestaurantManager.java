@@ -45,7 +45,7 @@ public class RestaurantManager {
     }
 
     private void readRestaurantData(Context context) {
-        // Adapted from https://www.youtube.com/watch?v=i-TqNzUryn8&feature=youtu.be
+        // Adapted from https://www.youtube.com/watch?v=i-TqNzUryn8
         InputStream is = context.getResources().openRawResource(R.raw.restaurants_itr1);
         BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
 

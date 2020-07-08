@@ -1,14 +1,11 @@
 package com.example.restauranthealthinspectionbrowser.ui;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -18,11 +15,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.restauranthealthinspectionbrowser.R;
-import com.example.restauranthealthinspectionbrowser.adapter.ViolationAdapter;
 import com.example.restauranthealthinspectionbrowser.model.DateHelper;
 import com.example.restauranthealthinspectionbrowser.model.Inspection;
 import com.example.restauranthealthinspectionbrowser.model.InspectionManager;
-import com.example.restauranthealthinspectionbrowser.model.Restaurant;
 
 import java.util.ArrayList;
 
