@@ -10,11 +10,12 @@
 
     <TableLayout
         android:id="@+id/tableLayout"
-        android:layout_width="391dp"
-        android:layout_height="716dp"
+        android:layout_width="395dp"
+        android:layout_height="141dp"
         android:gravity="center_horizontal"
         android:stretchColumns="1"
-        tools:layout_editor_absoluteX="11dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         tools:layout_editor_absoluteY="13dp">
 
 
@@ -35,7 +36,9 @@
                 android:id="@+id/dataTracking"
                 android:layout_width="162dp"
                 android:layout_height="wrap_content"
-                android:gravity="start" />
+                android:gravity="start"
+                android:paddingLeft="5dp"
+                android:paddingRight="20dp" />
         </TableRow>
 
         <TableRow
@@ -49,7 +52,7 @@
                 android:paddingLeft="5dp"
                 android:paddingRight="20dp"
                 android:text="@string/txtInspDate"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/dataInspDate"
@@ -71,7 +74,7 @@
                 android:paddingLeft="5dp"
                 android:paddingRight="20dp"
                 android:text="@string/txtInspType"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/dataInspType"
@@ -93,7 +96,7 @@
                 android:paddingLeft="5dp"
                 android:paddingRight="20dp"
                 android:text="@string/txtNumIssue"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/dataNumIssue"
@@ -115,7 +118,7 @@
                 android:paddingLeft="5dp"
                 android:paddingRight="20dp"
                 android:text="@string/txtNonIssue"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/dataNonIssue"
@@ -138,7 +141,7 @@
                 android:paddingLeft="5dp"
                 android:paddingRight="20dp"
                 android:text="@string/txtHazRating"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/dataHazRating"
@@ -161,15 +164,20 @@
                 android:paddingLeft="5dp"
                 android:paddingRight="20dp"
                 android:text="@string/txtViolation"
-                android:textStyle="bold"/>
-
-            <ListView
-                android:id="@+id/listViolation"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:gravity="start" />
+                android:textStyle="bold" />
         </TableRow>
+
     </TableLayout>
+
+    <ListView
+        android:id="@+id/listViolation"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tableLayout"
+        app:layout_constraintVertical_bias="0.0"
+        tools:layout_editor_absoluteX="16dp" />
 
     <ImageView
         android:id="@+id/hazardLogo"
@@ -177,7 +185,7 @@
         android:layout_height="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.616"
+        app:layout_constraintHorizontal_bias="0.700"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.168"

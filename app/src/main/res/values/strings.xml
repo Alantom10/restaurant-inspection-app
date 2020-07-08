@@ -12,5 +12,7 @@
     <string name="txtNumIssue"># Critical Issues: </string>
     <string name="txtNonIssue"># Non Critical Issues: </string>
     <string name="txtHazRating">Hazard Rating: </string>
-    <string name="txtViolation">Violation</string>
+    <string name="txtViolation">Violations: </string>
+    <string name="toolbar">Inspection</string>
+    <string name="txtViolationDetail">violation details</string>
 </resources>

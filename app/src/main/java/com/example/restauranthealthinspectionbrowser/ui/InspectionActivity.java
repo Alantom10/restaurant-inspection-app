@@ -2,6 +2,7 @@ package com.example.restauranthealthinspectionbrowser.ui;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -78,13 +79,12 @@ public class InspectionActivity extends AppCompatActivity {
             txtHazardRating.setTextColor(Color.BLUE);
             hazardImage.setImageResource(R.drawable.green_face);
         } else if (mInspection.getHazardRating().equalsIgnoreCase("Moderate")) {
-            txtHazardRating.setTextColor(Color.YELLOW);
+            txtHazardRating.setTextColor(ContextCompat.getColor(this, R.color.moderateHazardLevel));
             hazardImage.setImageResource(R.drawable.yellow_face);
         } else if (mInspection.getHazardRating().equalsIgnoreCase("High")) {
             txtHazardRating.setTextColor(Color.RED);
             hazardImage.setImageResource(R.drawable.red_face);
         }
-        //txtHazardRating.setTextColor(mInspection.getHazardLogo());
     }
 
     private void showViolation(){
@@ -103,9 +103,16 @@ public class InspectionActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 View violation = view;
-                TextView txtDetailViolation = (TextView) violation.findViewById(R.id.txtViolationDetail);
+                TextView txtDetailViolation = (TextView) violation.findViewById(R.id.txtToast);
                 String toast = txtDetailViolation.getText().toString();
-
+//                Integer index = Integer.valueOf(toast);
+//                String toastStr = "";
+//                for (BriefViolation briefViolation : BriefViolationManager.getInstance(view.getContext()).getListBriefViolation()) {
+//                    if(briefViolation.getIndex() == index){
+//                        toastStr = briefViolation.getViolationBriefDesc();
+//                        break;
+//                    }
+//                }
                 showToast(toast);
             }
         });

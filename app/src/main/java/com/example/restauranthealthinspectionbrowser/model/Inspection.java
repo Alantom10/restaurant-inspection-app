@@ -90,39 +90,6 @@ public class Inspection {
         this.numOfCritical = numOfCritical;
         this.numOfNonCritical = numOfNonCritical;
         this.hazardRating = hazardRating;
-        this.violation = getViolationsToString(violation);
     }
 
-    private String[] getViolationsToString(String violation) {
-        return violation.replace(", ", ", ").split("|");
-    }
-
-    public int getHazardLogo() {
-
-        if (hazardRating.equals("Low")) {
-
-            return R.drawable.green_face;
-
-        } else if (hazardRating.equals("Moderate")) {
-
-            return R.drawable.yellow_face;
-
-        } else {
-
-            return R.drawable.red_face;
-
-        }
-
-    }
-
-    @Override
-    public String toString() {
-
-        return  numOfCritical + ", " +
-                numOfNonCritical + ", " +
-                //this.date() + ", " +
-                inspectionType + ", " +
-                hazardRating;
-
-    }
 }
