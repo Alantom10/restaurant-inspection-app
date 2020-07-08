@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.restauranthealthinspectionbrowser.R;
 import com.example.restauranthealthinspectionbrowser.adapter.ViolationAdapter;
+import com.example.restauranthealthinspectionbrowser.model.DateHelper;
 import com.example.restauranthealthinspectionbrowser.model.Inspection;
 import com.example.restauranthealthinspectionbrowser.model.InspectionManager;
 import com.example.restauranthealthinspectionbrowser.model.Restaurant;
@@ -54,8 +55,6 @@ public class InspectionActivity extends AppCompatActivity {
                 mInspection = inspection;
             }
         }
-
-
     }
 
     void showInfo() {
@@ -68,7 +67,7 @@ public class InspectionActivity extends AppCompatActivity {
         TextView txtNumOfNonCritical = (TextView) findViewById(R.id.dataNonIssue);
         TextView txtHazardRating = (TextView) findViewById(R.id.dataHazRating);
         txtTrackNum.setText(mInspection.getTrackingNum());
-        txtInspectionDate.setText(mInspection.getInspectionDate());
+        txtInspectionDate.setText(DateHelper.getFullDate(mInspection.getInspectionDate()));
         txtInspectionType.setText(mInspection.getInspectionType());
         txtNumOfCritical.setText(Integer.toString(mInspection.getNumOfCritical()));
         txtNumOfNonCritical.setText(Integer.toString(mInspection.getNumOfNonCritical()));

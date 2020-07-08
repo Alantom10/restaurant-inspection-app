@@ -70,28 +70,34 @@ public class RestaurantListFragment extends Fragment {
 
         public void bind(Restaurant restaurant) {
             mRestaurantID = restaurant.getID();
+            mTitleTextView.setText(getString(R.string.restaurant_name, restaurant.getName()));
+
             InspectionManager manager = InspectionManager.getInstance(getActivity());
             Inspection inspection = manager.getLatestInspection(mRestaurantID);
+            if (inspection != null) {
+                mDateTextView.setText(DateHelper.getDisplayDate(inspection.getInspectionDate()));
 
-            mTitleTextView.setText(getString(R.string.restaurant_name, restaurant.getName()));
-            mDateTextView.setText(DateHelper.getDisplayDate(inspection.getInspectionDate()));
+                int numIssues = inspection.getNumOfCritical() + inspection.getNumOfNonCritical();
+                mNumIssuesTextView.setText(getString(R.string.num_issues, numIssues));
 
-            int numIssues = inspection.getNumOfCritical() + inspection.getNumOfNonCritical();
-            mNumIssuesTextView.setText(getString(R.string.num_issues, numIssues));
-
-            String hazardLevel = inspection.getHazardRating();
-            mHazardLevelTextView.setText(getString(R.string.hazard_level, hazardLevel));
-            if (hazardLevel.equals("High")) {
-                mHazardLevelTextView.setTextColor(ContextCompat.getColor(getActivity(), R.color.highHazardLevel));
-                mHazardLevelImageView.setImageResource(R.drawable.ic_high_level_black_24dp);
-            }
-            else if (hazardLevel.equals("Moderate")) {
-                mHazardLevelTextView.setTextColor(ContextCompat.getColor(getActivity(), R.color.moderateHazardLevel));
-                mHazardLevelImageView.setImageResource(R.drawable.ic_moderate_level_black_24dp);
+                String hazardLevel = inspection.getHazardRating();
+                mHazardLevelTextView.setText(getString(R.string.hazard_level, hazardLevel));
+                if (hazardLevel.equals("High")) {
+                    mHazardLevelTextView.setTextColor(ContextCompat.getColor(getActivity(), R.color.highHazardLevel));
+                    mHazardLevelImageView.setImageResource(R.drawable.ic_high_level_black_24dp);
+                } else if (hazardLevel.equals("Moderate")) {
+                    mHazardLevelTextView.setTextColor(ContextCompat.getColor(getActivity(), R.color.moderateHazardLevel));
+                    mHazardLevelImageView.setImageResource(R.drawable.ic_moderate_level_black_24dp);
+                } else {
+                    mHazardLevelTextView.setTextColor(ContextCompat.getColor(getActivity(), R.color.lowHazardLevel));
+                    mHazardLevelImageView.setImageResource(R.drawable.ic_low_level_black_24dp);
+                }
             }
             else {
-                mHazardLevelTextView.setTextColor(ContextCompat.getColor(getActivity(), R.color.lowHazardLevel));
-                mHazardLevelImageView.setImageResource(R.drawable.ic_low_level_black_24dp);
+                mDateTextView.setText("");
+                mNumIssuesTextView.setText(R.string.no_inspection_info);
+                mHazardLevelTextView.setText("");
+                mHazardLevelImageView.setImageResource(R.drawable.ic_none_black_24dp);
             }
         }
 

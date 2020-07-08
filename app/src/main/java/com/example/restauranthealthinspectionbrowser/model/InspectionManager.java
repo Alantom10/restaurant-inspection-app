@@ -11,7 +11,6 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class InspectionManager {
 //    public static InspectionManager getInstance(){
@@ -22,7 +21,6 @@ public class InspectionManager {
 //    }
 
     private List<Inspection> mInspections;
-
     private static InspectionManager sInstance;
 
     public static InspectionManager getInstance(Context context) {
@@ -42,8 +40,77 @@ public class InspectionManager {
     }
 
     public Inspection getLatestInspection(String restaurantID) {
-        int i = ThreadLocalRandom.current().nextInt(mInspections.size());
-        return mInspections.get(i);
+
+        Inspection latestInspection = getFirstInspection(restaurantID);
+
+        if (latestInspection == null) {
+            return null;
+        }
+
+        for (Inspection inspection : mInspections) {
+
+            if (inspection.getTrackingNum().equals(restaurantID) &&
+            isNewerThan(inspection.getInspectionDate(), latestInspection.getInspectionDate())) {
+
+                latestInspection = inspection;
+            }
+        }
+
+        return latestInspection;
+    }
+
+    public List<Inspection> getAllInspections(String restaurantID) {
+
+        List<Inspection> inspectionList = new ArrayList<Inspection>();
+
+        for (Inspection inspection : mInspections) {
+
+            if (restaurantID.equals(inspection.getTrackingNum())) {
+                inspectionList.add(inspection);
+            }
+        }
+
+        return inspectionList;
+    }
+
+    private Inspection getFirstInspection(String restaurantID) {
+        for (Inspection inspection: mInspections) {
+            if (inspection.getTrackingNum().equals(restaurantID)) {
+                return inspection;
+            }
+        }
+
+        return null;
+    }
+
+    private boolean isNewerThan(String inspectionDate1, String inspectionDate2) {
+
+        int inspectionYear1 = Integer.parseInt(inspectionDate1.substring(0,4));
+        int inspectionYear2 = Integer.parseInt(inspectionDate2.substring(0,4));
+
+        if (inspectionYear1 > inspectionYear2) {
+            return true;
+        }
+
+        if (inspectionYear1 < inspectionYear2) {
+            return false;
+        }
+
+        int inspectionMonth1 = Integer.parseInt(inspectionDate1.substring(4,6));
+        int inspectionMonth2 = Integer.parseInt(inspectionDate2.substring(4,6));
+
+        if (inspectionMonth1 > inspectionMonth2) {
+            return true;
+        }
+
+        if (inspectionMonth1 < inspectionMonth2) {
+            return false;
+        }
+
+        int inspectionDay1 = Integer.parseInt(inspectionDate1.substring(6,8));
+        int inspectionDay2 = Integer.parseInt(inspectionDate2.substring(6,8));
+
+        return inspectionDay1 < inspectionDay2;
     }
 
     private void readData(Context context){
