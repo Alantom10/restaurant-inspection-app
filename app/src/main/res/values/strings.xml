@@ -4,8 +4,8 @@
     <string name="hazard_level">%1$s Hazard Level</string>
     <string name="num_issues">%1$d Issues Found</string>
     <string name="no_inspection_info">No inspection information</string>
-    <string name="address">Address: %1$s</string>
-    <string name="coordinates">GPS coordinates: %1$.8f, %2$.8f</string>
+    <string name="address">%1$s</string>
+    <string name="coordinates">%1$.8f, %2$.8f</string>
     <string name="txtTracking">Tracking Number: </string>
     <string name="txtInspDate">Inspection Date: </string>
     <string name="txtInspType">Inspection Type: </string>

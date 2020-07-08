@@ -59,7 +59,7 @@ public class InspectionManager {
         return latestInspection;
     }
 
-    public List<Inspection> getAllInspections(String restaurantID) {
+    public List<Inspection> getInspectionsForRestaurant(String restaurantID) {
 
         List<Inspection> inspectionList = new ArrayList<Inspection>();
 
