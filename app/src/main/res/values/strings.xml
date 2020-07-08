@@ -16,5 +16,5 @@
     <string name="txtHazRating">Hazard Rating: </string>
     <string name="txtViolation">Violations: </string>
     <string name="toolbar">Inspection</string>
-    <string name="txtViolationDetail">violation details</string>
+    <string name="txtViolationDetail">No violations!</string>
 </resources>
