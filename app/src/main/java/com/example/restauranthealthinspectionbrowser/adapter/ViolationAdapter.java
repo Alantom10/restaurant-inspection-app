@@ -12,6 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.restauranthealthinspectionbrowser.R;
+import com.example.restauranthealthinspectionbrowser.model.BriefViolation;
+import com.example.restauranthealthinspectionbrowser.model.BriefViolationManager;
 import com.example.restauranthealthinspectionbrowser.model.Inspection;
 
 import java.util.ArrayList;
@@ -33,28 +35,51 @@ public class ViolationAdapter extends ArrayAdapter {
         ImageView imageViolation = (ImageView) view.findViewById(R.id.imageViolation);
         ImageView imageSeverity = (ImageView) view.findViewById(R.id.imageSeverity);
 
-        if (violations.contains("food")) {
+        if(violations.contains("Foods") || violations.contains("Food") || violations.contains("foods")){
             imageViolation.setImageResource(R.drawable.food_icon);
-        } else if (violations.contains("pest")) {
+        }
+        else if(violations.contains("pest") ||violations.contains("pests")){
             imageViolation.setImageResource(R.drawable.pest_icon);
-        } else if (violations.contains("equipment")) {
+        }
+        else if(violations.contains("Equipment") || violations.contains("equipment")){
             imageViolation.setImageResource(R.drawable.equipment_icon);
-        } else if (violations.contains("handwashing")) {
+        }
+        else if(violations.contains("handwashing") || violations.contains("clean") || violations.contains("hygiene")){
             imageViolation.setImageResource(R.drawable.empoyee_hygine_icon);
-        } else {
+        }
+        else if(violations.contains("certificate") || violations.contains("animal") || violations.contains("manner") || violations.contains("FOODSAFE")){
+            imageViolation.setImageResource(R.drawable.certificat_icon);
+        }
+        else {
             imageViolation.setImageResource(R.drawable.blank_icon);
         }
 
-        if (violations.contains("Not Critical")) {
+        if(violations.contains("Not Critical")){
             imageSeverity.setImageResource(R.drawable.green_face);
-        } else if (violations.contains("Critical")) {
+        }
+        else if(violations.contains("Critical")){
             imageSeverity.setImageResource(R.drawable.red_face);
-        } else {
+        }
+        else{
             imageSeverity.setImageResource(R.drawable.blank_icon);
         }
 
         TextView textViewViolation = (TextView) view.findViewById(R.id.txtViolationDetail);
-        textViewViolation.setText(violations);
+        TextView textToast = (TextView) view.findViewById(R.id.txtToast);
+        String[] s = violations.split(",");
+
+        Integer index = Integer.valueOf(s[0]);
+        String toastStr = "";
+        for (BriefViolation briefViolation : BriefViolationManager.getInstance(view.getContext()).getListBriefViolation()) {
+            if(briefViolation.getIndex() == index){
+                toastStr = briefViolation.getViolationBriefDesc();
+                break;
+            }
+        }
+
+        textToast.setText(violations);
+
+        textViewViolation.setText(toastStr);
         return view;
     }
 
