@@ -135,7 +135,7 @@ public class InspectionManager {
                     if(i > 6){
                         violations += ",";
                     }
-                    violations += row[i];
+                    violations += row[i].replace("\"", "");
                 }
                 String[] vio = violations.split("\\|");
                 inspection.setViolation(vio);
