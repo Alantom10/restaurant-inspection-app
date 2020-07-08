@@ -38,14 +38,14 @@ public class RestaurantFragment extends Fragment {
 
         updateUI(view);
 
-        Button button = (Button) view.findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), InspectionActivity.class);
-                startActivity(intent);
-            }
-        });
+//        Button button = (Button) view.findViewById(R.id.button);
+//        button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(getActivity(), InspectionActivity.class);
+//                startActivity(intent);
+//            }
+//        });
 
         return view;
     }
