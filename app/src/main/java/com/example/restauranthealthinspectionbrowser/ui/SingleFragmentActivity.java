@@ -8,6 +8,9 @@ import android.os.Bundle;
 
 import com.example.restauranthealthinspectionbrowser.R;
 
+/**
+ * An abstract class that inflates an activity's view from a fragment.
+ */
 public abstract class SingleFragmentActivity extends AppCompatActivity {
 
     protected abstract Fragment createFragment();

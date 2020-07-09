@@ -2,6 +2,7 @@
     <string name="app_name">Surrey Restaurant Browser</string>
     <string name="restaurant_activity_title">Inspections</string>
     <string name="inspection_activity_title">Violations</string>
+    <string name="toolbar">Inspection</string>
     <string name="restaurant_name">%1$s</string>
     <string name="hazard_level">%1$s Hazard Level</string>
     <string name="num_issues">%1$d Issues Found</string>
@@ -19,6 +20,5 @@
     <string name="txtNonIssue"># Non Critical Issues: </string>
     <string name="txtHazRating">Hazard Rating: </string>
     <string name="txtViolation">Violations: </string>
-    <string name="toolbar">Inspection</string>
     <string name="txtViolationDetail">No violations!</string>
 </resources>

@@ -17,6 +17,9 @@ import com.example.restauranthealthinspectionbrowser.model.ViolationManager;
 
 import java.util.ArrayList;
 
+/**
+ * An adapter class used by InspectionActivity to set up a list of violations.
+ */
 public class ViolationAdapter extends ArrayAdapter {
     private int rid;
 

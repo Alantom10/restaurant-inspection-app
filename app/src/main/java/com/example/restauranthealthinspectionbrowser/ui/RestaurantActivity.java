@@ -10,6 +10,10 @@ import androidx.fragment.app.Fragment;
 
 import com.example.restauranthealthinspectionbrowser.R;
 
+/**
+ * RestaurantActivity initializes the Inspections screen through RestaurantFragment.
+ * The Inspections screen shows info on the restaurant and a list of inspections.
+ */
 public class RestaurantActivity extends SingleFragmentActivity {
 
     public static final String EXTRA_RESTAURANT_ID = "restaurant id";

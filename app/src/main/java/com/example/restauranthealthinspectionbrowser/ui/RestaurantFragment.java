@@ -24,6 +24,11 @@ import java.util.List;
 
 import static com.example.restauranthealthinspectionbrowser.ui.RestaurantActivity.EXTRA_RESTAURANT_ID;
 
+/**
+ * RestaurantFragment sets up the Inspections screen with info on the restaurant
+ * and a list of inspections. It starts InspectionActivity upon selection of an
+ * inspection in the list.
+ */
 public class RestaurantFragment extends Fragment {
     private TextView mTitleTextView;
     private TextView mAddressTextView;

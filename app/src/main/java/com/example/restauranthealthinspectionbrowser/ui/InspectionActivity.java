@@ -24,6 +24,10 @@ import com.example.restauranthealthinspectionbrowser.model.InspectionManager;
 import java.util.ArrayList;
 import java.util.Date;
 
+/**
+ * InspectionActivity sets up the Violations screen. The Violations screen shows
+ * info on the inspection and a list of violations.
+ */
 public class InspectionActivity extends AppCompatActivity {
     public static final String EXTRA_TRACKING_NUMBER = "tracking number";
     public static final String EXTRA_INSPECTION_DATE = "inspection date";
