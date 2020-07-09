@@ -12,19 +12,23 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BriefViolationManager {
-    private List<BriefViolation> listBriefViolation = new ArrayList<>();
-    private static BriefViolationManager sInstance;
+/**
+ * RestaurantManager class stores a collection of violations. It supports
+ * reading violation date from file.
+ */
+public class ViolationManager {
+    private List<Violation> listBriefViolation = new ArrayList<>();
+    private static ViolationManager sInstance;
 
-    public static BriefViolationManager getInstance(Context context) {
+    public static ViolationManager getInstance(Context context) {
         sInstance = null;
         if (sInstance == null) {
-            sInstance = new BriefViolationManager(context);
+            sInstance = new ViolationManager(context);
         }
         return sInstance;
     }
 
-    public List<BriefViolation> getListBriefViolation() {
+    public List<Violation> getListBriefViolation() {
         return listBriefViolation;
     }
 
@@ -35,7 +39,7 @@ public class BriefViolationManager {
             String line = "";
             while ((line = reader.readLine()) != null) {
                 String[] row = line.split(",");
-                BriefViolation briefViolation = new BriefViolation();
+                Violation briefViolation = new Violation();
                 briefViolation.setIndex(Integer.valueOf(row[0].replace("\"", "")));
                 briefViolation.setViolationBriefDesc(row[1].replace("\"", ""));
 //                inspection.setTest(row[6]);
@@ -50,7 +54,7 @@ public class BriefViolationManager {
         }
     }
 
-    private BriefViolationManager(Context context) {
+    private ViolationManager(Context context) {
         listBriefViolation = new ArrayList<>();
         readData(context);
     }

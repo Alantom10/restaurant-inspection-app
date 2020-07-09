@@ -1,5 +1,9 @@
 package com.example.restauranthealthinspectionbrowser.model;
 
+/**
+ * Restaurant class stores information about a single restaurant. Data include
+ * ID, name, address and GPS coordinates.
+ */
 public class Restaurant implements Comparable<Restaurant> {
     private String mID;
     private String mName;

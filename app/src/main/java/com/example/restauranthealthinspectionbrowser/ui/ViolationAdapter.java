@@ -12,9 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.restauranthealthinspectionbrowser.R;
-import com.example.restauranthealthinspectionbrowser.model.BriefViolation;
-import com.example.restauranthealthinspectionbrowser.model.BriefViolationManager;
-import com.example.restauranthealthinspectionbrowser.model.Inspection;
+import com.example.restauranthealthinspectionbrowser.model.Violation;
+import com.example.restauranthealthinspectionbrowser.model.ViolationManager;
 
 import java.util.ArrayList;
 
@@ -66,7 +65,7 @@ public class ViolationAdapter extends ArrayAdapter {
         if (s[0] != "") {
             Integer index = Integer.valueOf(s[0]);
             String toastStr = "";
-            for (BriefViolation briefViolation : BriefViolationManager.getInstance(view.getContext()).getListBriefViolation()) {
+            for (Violation briefViolation : ViolationManager.getInstance(view.getContext()).getListBriefViolation()) {
                 if (briefViolation.getIndex() == index) {
                     toastStr = briefViolation.getViolationBriefDesc();
                     break;
