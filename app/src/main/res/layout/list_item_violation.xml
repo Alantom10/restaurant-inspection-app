@@ -4,14 +4,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:paddingBottom="16dp">
 
     <TextView
         android:id="@+id/txtViolationDetail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="15dp"
         android:ellipsize="end"
         android:lines="1"
         android:maxEms="30"
@@ -19,29 +20,27 @@
         android:paddingRight="20dp"
         android:text="@string/txtViolationDetail"
         android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageViolation"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/imageViolation"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="36dp"
+        android:layout_height="32dp"
         android:layout_marginStart="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="10dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtViolationDetail"
-        app:layout_constraintVertical_bias="0.013"
+        app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
 
     <ImageView
         android:id="@+id/imageSeverity"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:layout_marginStart="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageViolation"
-        app:layout_constraintTop_toBottomOf="@+id/txtViolationDetail"
-        app:layout_constraintVertical_bias="0.012"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
@@ -50,6 +49,6 @@
         android:layout_height="wrap_content"
         android:text="TextView"
         android:visibility="invisible"
-        tools:layout_editor_absoluteX="83dp"
-        tools:layout_editor_absoluteY="81dp" />
+        tools:layout_editor_absoluteX="176dp"
+        tools:layout_editor_absoluteY="101dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

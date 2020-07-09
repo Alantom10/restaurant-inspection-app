@@ -100,13 +100,13 @@ public class RestaurantFragment extends Fragment {
             mHazardLevelTextView.setText(getString(R.string.hazard_level, hazardLevel));
             if (hazardLevel.equals("High")) {
                 mHazardLevelTextView.setTextColor(ContextCompat.getColor(getActivity(), R.color.highHazardLevel));
-                mHazardLevelImageView.setImageResource(R.drawable.ic_high_level_black_24dp);
+                mHazardLevelImageView.setImageResource(R.drawable.red_exclamation_circle);
             } else if (hazardLevel.equals("Moderate")) {
                 mHazardLevelTextView.setTextColor(ContextCompat.getColor(getActivity(), R.color.moderateHazardLevel));
-                mHazardLevelImageView.setImageResource(R.drawable.ic_moderate_level_black_24dp);
+                mHazardLevelImageView.setImageResource(R.drawable.yellow_exclamation_circle);
             } else {
                 mHazardLevelTextView.setTextColor(ContextCompat.getColor(getActivity(), R.color.lowHazardLevel));
-                mHazardLevelImageView.setImageResource(R.drawable.ic_low_level_black_24dp);
+                mHazardLevelImageView.setImageResource(R.drawable.green_exclamation_circle);
             }
         }
 
