@@ -1,6 +1,10 @@
 package com.example.restauranthealthinspectionbrowser.model;
 
-public class BriefViolation {
+/**
+ * Inspection class stores information about a single violation. Data include
+ * the index and a description.
+ */
+public class Violation {
     private int index;
     private String violationBriefDesc;
 
@@ -18,9 +22,5 @@ public class BriefViolation {
 
     public void setViolationBriefDesc(String violationBriefDesc) {
         this.violationBriefDesc = violationBriefDesc;
-    }
-
-    private void briefViolationManager(){
-
     }
 }

@@ -2,6 +2,11 @@ package com.example.restauranthealthinspectionbrowser.model;
 
 import java.util.Date;
 
+/**
+ * Inspection class stores information about a single inspection. Data include
+ * tracking number, date, type, hazard rating, number of issues, and associated
+ * violations.
+ */
 public class Inspection implements Comparable<Inspection> {
     private String trackingNum;
     private Date inspectionDate;
@@ -10,15 +15,6 @@ public class Inspection implements Comparable<Inspection> {
     private int numOfCritical;
     private int numOfNonCritical;
     private String[] violation;
-    private String test;
-
-    public String getTest() {
-        return test;
-    }
-
-    public void setTest(String test) {
-        this.test = test;
-    }
 
     public String getTrackingNum() {
         return trackingNum;

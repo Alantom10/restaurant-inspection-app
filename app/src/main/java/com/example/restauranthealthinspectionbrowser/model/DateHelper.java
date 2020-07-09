@@ -7,6 +7,10 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * A helper class that converts Date objects to formatted strings for display
+ * on UI.
+ */
 public class DateHelper {
 
     public static CharSequence getDisplayDate(Date inspectionDate) {

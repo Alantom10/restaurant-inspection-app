@@ -13,6 +13,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * RestaurantManager class stores a collection of restaurants. It supports
+ * reading restaurant date from file.
+ */
 public class RestaurantManager {
     private static RestaurantManager sInstance;
 

@@ -17,6 +17,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * InspectionManager class stores a collection of inspections. It supports
+ * reading inspection date from file.
+ */
 public class InspectionManager {
     private List<Inspection> mInspections;
     private static InspectionManager sInstance;
