@@ -1,10 +1,8 @@
 package com.example.restauranthealthinspectionbrowser.model;
 
-import com.example.restauranthealthinspectionbrowser.R;
-
 import java.util.Date;
 
-public class Inspection {
+public class Inspection implements Comparable<Inspection> {
     private String trackingNum;
     private Date inspectionDate;
     private String inspectionType;
@@ -13,7 +11,6 @@ public class Inspection {
     private int numOfNonCritical;
     private String[] violation;
     private String test;
-
 
     public String getTest() {
         return test;
@@ -94,4 +91,8 @@ public class Inspection {
         this.hazardRating = hazardRating;
     }
 
+    @Override
+    public int compareTo(Inspection o) {
+        return getInspectionDate().compareTo(o.getInspectionDate());
+    }
 }

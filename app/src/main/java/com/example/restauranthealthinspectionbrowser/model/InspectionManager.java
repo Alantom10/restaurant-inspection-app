@@ -12,19 +12,12 @@ import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Random;
 
 public class InspectionManager {
-//    public static InspectionManager getInstance(){
-//        if(instance==null){
-//            instance=new InspectionManager();
-//        }
-//        return instance;
-//    }
-
     private List<Inspection> mInspections;
     private static InspectionManager sInstance;
 
@@ -45,80 +38,28 @@ public class InspectionManager {
     }
 
     public Inspection getLatestInspection(String restaurantID) {
+        List<Inspection> inspectionList = getInspectionsForRestaurant(restaurantID);
 
-//        Inspection latestInspection = getFirstInspection(restaurantID);
-//
-//        if (latestInspection == null) {
-//            return null;
-//        }
-//
-//        for (Inspection inspection : mInspections) {
-//
-//            if (inspection.getTrackingNum().equals(restaurantID) &&
-//            isNewerThan(inspection.getInspectionDate(), latestInspection.getInspectionDate())) {
-//
-//                latestInspection = inspection;
-//            }
-//        }
+        if (inspectionList.size() == 0) {
+            return null;
+        }
 
-        Random rand = new Random();
-
-        return mInspections.get(rand.nextInt(mInspections.size()));
+        return inspectionList.get(0);
     }
 
     public List<Inspection> getInspectionsForRestaurant(String restaurantID) {
-
-        List<Inspection> inspectionList = new ArrayList<Inspection>();
-
+        List<Inspection> inspectionList = new ArrayList<>();
         for (Inspection inspection : mInspections) {
-
             if (restaurantID.equals(inspection.getTrackingNum())) {
                 inspectionList.add(inspection);
             }
         }
 
+        Collections.sort(inspectionList);
+        Collections.reverse(inspectionList);
+
         return inspectionList;
     }
-
-    private Inspection getFirstInspection(String restaurantID) {
-        for (Inspection inspection: mInspections) {
-            if (inspection.getTrackingNum().equals(restaurantID)) {
-                return inspection;
-            }
-        }
-
-        return null;
-    }
-
-//    private boolean isNewerThan(Date inspectionDate1, Date inspectionDate2) {
-//
-//        int inspectionYear1 = Integer.parseInt(inspectionDate1.substring(0,4));
-//        int inspectionYear2 = Integer.parseInt(inspectionDate2.substring(0,4));
-//
-//        if (inspectionYear1 > inspectionYear2) {
-//            return true;
-//        }
-//
-//        if (inspectionYear1 < inspectionYear2) {
-//            return false;
-//        }
-//
-//        int inspectionMonth1 = Integer.parseInt(inspectionDate1.substring(4,6));
-//        int inspectionMonth2 = Integer.parseInt(inspectionDate2.substring(4,6));
-//
-//        if (inspectionMonth1 > inspectionMonth2) {
-//            return true;
-//        }
-//
-//        if (inspectionMonth1 < inspectionMonth2) {
-//            return false;
-//        }
-//
-//        int inspectionDay1 = Integer.parseInt(inspectionDate1.substring(6,8));
-//        int inspectionDay2 = Integer.parseInt(inspectionDate2.substring(6,8));
-//
-//        return inspectionDay1 < inspectionDay2;
-//    }
 
     private void readData(Context context){
 
