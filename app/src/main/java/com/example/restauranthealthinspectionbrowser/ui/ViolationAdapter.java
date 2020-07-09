@@ -63,18 +63,18 @@ public class ViolationAdapter extends ArrayAdapter {
         TextView textToast = (TextView) view.findViewById(R.id.txtToast);
         String[] s = violations.split(",");
 
-        Integer index = Integer.valueOf(s[0]);
-        String toastStr = "";
-        for (BriefViolation briefViolation : BriefViolationManager.getInstance(view.getContext()).getListBriefViolation()) {
-            if(briefViolation.getIndex() == index){
-                toastStr = briefViolation.getViolationBriefDesc();
-                break;
+        if (s[0] != "") {
+            Integer index = Integer.valueOf(s[0]);
+            String toastStr = "";
+            for (BriefViolation briefViolation : BriefViolationManager.getInstance(view.getContext()).getListBriefViolation()) {
+                if (briefViolation.getIndex() == index) {
+                    toastStr = briefViolation.getViolationBriefDesc();
+                    break;
+                }
             }
+            textViewViolation.setText(toastStr);
         }
-
         textToast.setText(violations);
-
-        textViewViolation.setText(toastStr);
         return view;
     }
 
