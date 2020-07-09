@@ -42,9 +42,9 @@ public class ViolationAdapter extends ArrayAdapter {
         }
         else if(violations.contains("Equipment") || violations.contains("equipment")){
             imageViolation.setImageResource(R.drawable.equipment_icon);
-        } else if (violations.contains("handwashing") || violations.contains("clean") || violations.contains("hygiene")) {
+        } else if (violations.contains("handwashing") || violations.contains("clean") || violations.contains("hygiene") || violations.contains("wash")) {
             imageViolation.setImageResource(R.drawable.hygene_icon);
-        } else if (violations.contains("certificate") || violations.contains("animal") || violations.contains("manner") || violations.contains("FOODSAFE")) {
+        } else if (violations.contains("certificate") || violations.contains("animal") || violations.contains("manner") || violations.contains("FOODSAFE" ) || violations.contains("maintained")) {
             imageViolation.setImageResource(R.drawable.certificate_icon);
         } else {
             imageViolation.setImageResource(R.drawable.blank_icon);
