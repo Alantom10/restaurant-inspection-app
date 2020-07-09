@@ -84,13 +84,13 @@ public class InspectionActivity extends AppCompatActivity {
         ImageView hazardImage = findViewById(R.id.hazardLogo);
         if(mInspection.getHazardRating().equalsIgnoreCase("Low")){
             txtHazardRating.setTextColor(ContextCompat.getColor(this, R.color.lowHazardLevel));
-            hazardImage.setImageResource(R.drawable.green_face);
+            hazardImage.setImageResource(R.drawable.green_exclamation_circle);
         } else if (mInspection.getHazardRating().equalsIgnoreCase("Moderate")) {
             txtHazardRating.setTextColor(ContextCompat.getColor(this, R.color.moderateHazardLevel));
-            hazardImage.setImageResource(R.drawable.yellow_face);
+            hazardImage.setImageResource(R.drawable.yellow_exclamation_circle);
         } else if (mInspection.getHazardRating().equalsIgnoreCase("High")) {
             txtHazardRating.setTextColor(ContextCompat.getColor(this, R.color.highHazardLevel));
-            hazardImage.setImageResource(R.drawable.red_face);
+            hazardImage.setImageResource(R.drawable.red_exclamation_circle);
         }
     }
 

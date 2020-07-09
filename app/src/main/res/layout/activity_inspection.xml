@@ -8,187 +8,171 @@
     android:showDividers="middle"
     tools:context=".ui.InspectionActivity">
 
-    <TableLayout
-        android:id="@+id/tableLayout"
-        android:layout_width="395dp"
-        android:layout_height="141dp"
-        android:gravity="center_horizontal"
-        android:stretchColumns="1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="13dp">
-
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/txtTracking"
-                android:layout_width="162dp"
-                android:layout_height="wrap_content"
-                android:paddingLeft="5dp"
-                android:paddingRight="20dp"
-                android:text="@string/txtTracking"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/dataTracking"
-                android:layout_width="162dp"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:paddingLeft="5dp"
-                android:paddingRight="20dp" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/txtInspDate"
-                android:layout_width="162dp"
-                android:layout_height="wrap_content"
-                android:paddingLeft="5dp"
-                android:paddingRight="20dp"
-                android:text="@string/txtInspDate"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/dataInspDate"
-                android:layout_width="162dp"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:paddingLeft="5dp"
-                android:paddingRight="20dp" />/>
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/txtInspType"
-                android:layout_width="162dp"
-                android:layout_height="wrap_content"
-                android:paddingLeft="5dp"
-                android:paddingRight="20dp"
-                android:text="@string/txtInspType"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/dataInspType"
-                android:layout_width="162dp"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:paddingLeft="5dp"
-                android:paddingRight="20dp" />/>
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/txtNumIssue"
-                android:layout_width="162dp"
-                android:layout_height="wrap_content"
-                android:paddingLeft="5dp"
-                android:paddingRight="20dp"
-                android:text="@string/txtNumIssue"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/dataNumIssue"
-                android:layout_width="122dp"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:paddingLeft="5dp"
-                android:paddingRight="20dp" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/txtNonIssue"
-                android:layout_width="162dp"
-                android:layout_height="wrap_content"
-                android:paddingLeft="5dp"
-                android:paddingRight="20dp"
-                android:text="@string/txtNonIssue"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/dataNonIssue"
-                android:layout_width="162dp"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:paddingLeft="5dp"
-                android:paddingRight="20dp" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-
-            <TextView
-                android:id="@+id/txtHazRating"
-                android:layout_width="162dp"
-                android:layout_height="wrap_content"
-                android:paddingLeft="5dp"
-                android:paddingRight="20dp"
-                android:text="@string/txtHazRating"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/dataHazRating"
-                android:layout_width="162dp"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:paddingLeft="5dp"
-                android:paddingRight="20dp" />
-
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/txtViolation"
-                android:layout_width="162dp"
-                android:layout_height="wrap_content"
-                android:paddingLeft="5dp"
-                android:paddingRight="20dp"
-                android:text="@string/txtViolation"
-                android:textStyle="bold" />
-        </TableRow>
-
-    </TableLayout>
-
     <ListView
         android:id="@+id/listViolation"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
         android:gravity="start"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tableLayout"
-        app:layout_constraintVertical_bias="0.0"
-        tools:layout_editor_absoluteX="16dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtViolation"
+        app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
         android:id="@+id/hazardLogo"
         android:layout_width="15dp"
         android:layout_height="15dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.700"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.168"
+        android:layout_marginStart="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/dataHazRating"
+        app:layout_constraintStart_toEndOf="@+id/dataHazRating"
+        app:layout_constraintTop_toTopOf="@+id/dataHazRating"
         tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/txtViolation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/txtViolation"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtHazRating" />
+
+    <TextView
+        android:id="@+id/txtTracking"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/txtTracking"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txtInspDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/txtInspDate"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtTracking" />
+
+    <TextView
+        android:id="@+id/txtInspType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/txtInspType"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtInspDate" />
+
+    <TextView
+        android:id="@+id/txtNumIssue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/txtNumIssue"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtInspType" />
+
+    <TextView
+        android:id="@+id/txtNonIssue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/txtNonIssue"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtNumIssue" />
+
+    <TextView
+        android:id="@+id/txtHazRating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/txtHazRating"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtNonIssue" />
+
+    <TextView
+        android:id="@+id/dataTracking"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:gravity="start"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.382" />
+
+    <TextView
+        android:id="@+id/dataInspDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:gravity="start"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        app:layout_constraintTop_toBottomOf="@+id/dataTracking" />
+
+    <TextView
+        android:id="@+id/dataInspType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:gravity="start"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        app:layout_constraintTop_toBottomOf="@+id/dataInspDate" />
+
+    <TextView
+        android:id="@+id/dataNumIssue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:gravity="start"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        app:layout_constraintTop_toBottomOf="@+id/dataInspType" />
+
+    <TextView
+        android:id="@+id/dataNonIssue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:gravity="start"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        app:layout_constraintTop_toBottomOf="@+id/dataNumIssue" />
+
+    <TextView
+        android:id="@+id/dataHazRating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:gravity="start"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        app:layout_constraintTop_toBottomOf="@+id/dataNonIssue" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

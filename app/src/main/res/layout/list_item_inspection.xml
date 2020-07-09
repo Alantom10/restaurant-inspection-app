@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="11dp"
         android:text="# critical issues found"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -49,11 +49,23 @@
 
     <ImageView
         android:id="@+id/hazard_level_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginStart="16dp"
+        android:layout_width="33dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="13dp"
         app:layout_constraintBottom_toBottomOf="@+id/hazard_level"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/hazard_level"
-        app:srcCompat="@drawable/ic_low_level_black_24dp" />
+        app:srcCompat="@drawable/green_exclamation_circle" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="409dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="18dp"
+        android:background="#CCCACA"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inspection_date"
+        app:layout_constraintVertical_bias="0.222" />
 </androidx.constraintlayout.widget.ConstraintLayout>
