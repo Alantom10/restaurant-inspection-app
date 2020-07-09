@@ -43,24 +43,19 @@ public class ViolationAdapter extends ArrayAdapter {
         }
         else if(violations.contains("Equipment") || violations.contains("equipment")){
             imageViolation.setImageResource(R.drawable.equipment_icon);
-        }
-        else if(violations.contains("handwashing") || violations.contains("clean") || violations.contains("hygiene")){
+        } else if (violations.contains("handwashing") || violations.contains("clean") || violations.contains("hygiene")) {
             imageViolation.setImageResource(R.drawable.hygene_icon);
-        }
-        else if(violations.contains("certificate") || violations.contains("animal") || violations.contains("manner") || violations.contains("FOODSAFE")){
+        } else if (violations.contains("certificate") || violations.contains("animal") || violations.contains("manner") || violations.contains("FOODSAFE")) {
             imageViolation.setImageResource(R.drawable.certificate_icon);
-        }
-        else {
+        } else {
             imageViolation.setImageResource(R.drawable.blank_icon);
         }
 
-        if(violations.contains("Not Critical")){
+        if (violations.contains("Not Critical")) {
             imageSeverity.setImageResource(R.drawable.green_shield);
-        }
-        else if(violations.contains("Critical")){
+        } else if (violations.contains("Critical")) {
             imageSeverity.setImageResource(R.drawable.red_shield);
-        }
-        else{
+        } else {
             imageSeverity.setImageResource(R.drawable.blank_icon);
         }
 

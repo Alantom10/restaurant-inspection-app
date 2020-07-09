@@ -20,6 +20,7 @@ import com.example.restauranthealthinspectionbrowser.model.Inspection;
 import com.example.restauranthealthinspectionbrowser.model.InspectionManager;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class InspectionActivity extends AppCompatActivity {
     public static final String EXTRA_TRACKING_NUMBER = "tracking number";
@@ -32,7 +33,7 @@ public class InspectionActivity extends AppCompatActivity {
     public static Intent makeIntent(Context context, Inspection inspection) {
         Intent intent = new Intent(context, InspectionActivity.class);
         intent.putExtra(EXTRA_TRACKING_NUMBER, inspection.getTrackingNum());
-        intent.putExtra(EXTRA_INSPECTION_DATE, inspection.getInspectionDate());
+        intent.putExtra(EXTRA_INSPECTION_DATE, inspection.getInspectionDate().getTime());
         return intent;
     }
 
@@ -52,10 +53,13 @@ public class InspectionActivity extends AppCompatActivity {
     private void getInspection() {
         Intent intent = getIntent();
         final String trackingNum = intent.getStringExtra(EXTRA_TRACKING_NUMBER);
-        final String inspectionDate = intent.getStringExtra(EXTRA_INSPECTION_DATE);
+        final long inspectionTime = intent.getLongExtra(EXTRA_INSPECTION_DATE, -1);
+
+        Date inspectionDate = new Date();
+        inspectionDate.setTime(inspectionTime);
 
         for (Inspection inspection : InspectionManager.getInstance(this.getBaseContext()).getInspections()) {
-            if (inspection.getTrackingNum().equalsIgnoreCase(trackingNum) && inspection.getInspectionDate().equalsIgnoreCase(inspectionDate)) {
+            if (inspection.getTrackingNum().equalsIgnoreCase(trackingNum) && inspection.getInspectionDate().equals(inspectionDate)) {
                 mInspection = inspection;
             }
         }
