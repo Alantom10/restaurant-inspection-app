@@ -29,7 +29,9 @@ import com.example.restauranthealthinspectionbrowser.model.RestaurantManager;
 
 import org.json.JSONException;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 
 /**
@@ -38,15 +40,27 @@ import java.util.List;
  * restaurant in the list.
  */
 public class RestaurantListFragment extends Fragment {
+    public static final String FILE_NAME_RESTAURANTS = "restaurants.csv";
+    public static final String FILE_NAME_INSPECTION_REPORTS = "inspection_reports.csv";
     private static final String TAG = "RestaurantListFragment";
 
     private RecyclerView mRestaurantRecyclerView;
     private RestaurantAdapter mAdapter;
 
+    private RestaurantManager mRestaurantManager;
+    private InspectionManager mInspectionManager;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+
+        try {
+            mRestaurantManager = RestaurantManager.getInstance(getActivity());
+            mInspectionManager = InspectionManager.getInstance(getActivity());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
 
         new FetchDataTask().execute();
     }
@@ -65,11 +79,12 @@ public class RestaurantListFragment extends Fragment {
     }
 
     private void updateUI() {
-        RestaurantManager manager = RestaurantManager.getInstance(getActivity());
-        List<Restaurant> restaurants = manager.getRestaurants();
+        List<Restaurant> restaurants = mRestaurantManager.getRestaurants();
 
-        mAdapter = new RestaurantAdapter(restaurants);
-        mRestaurantRecyclerView.setAdapter(mAdapter);
+        if (isAdded()) {
+            mAdapter = new RestaurantAdapter(restaurants);
+            mRestaurantRecyclerView.setAdapter(mAdapter);
+        }
     }
 
     private class RestaurantHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -166,12 +181,31 @@ public class RestaurantListFragment extends Fragment {
             try {
                 DataFetcher dataFetcher = new DataFetcher();
                 byte[] restaurantData = dataFetcher.fetchRestaurantData();
-                Log.i(TAG, "Downloaded restaurant.csv: " + restaurantData);
+//                Log.i(TAG, "Downloaded restaurant.csv: " + restaurantData);
+                storeData(FILE_NAME_RESTAURANTS, restaurantData);
             } catch (JSONException | IOException e) {
                 e.printStackTrace();
             }
 
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            try {
+                mRestaurantManager.updateRestaurants(getActivity());
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+
+            updateUI();
+        }
+
+        private void storeData(String fileName, byte[] data) throws IOException {
+            OutputStream outputStream = getActivity()
+                    .openFileOutput(fileName, Context.MODE_PRIVATE);
+            outputStream.write(data);
+            outputStream.close();
         }
     }
 }
