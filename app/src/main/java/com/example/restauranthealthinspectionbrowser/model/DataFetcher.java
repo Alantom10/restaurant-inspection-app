@@ -15,6 +15,16 @@ import java.net.URL;
 public class DataFetcher {
     private static final String TAG = "DataFetcher";
 
+    public String fetchLastModifiedRestaurants() throws JSONException {
+        String metaDataUrl = "http://data.surrey.ca/api/3/action/package_show?id=restaurants";
+        return fetchResourceJsonObject(metaDataUrl).getString("last_modified");
+    }
+
+    public String fetchLastModifiedInspections() throws JSONException {
+        String metaDataUrl = "http://data.surrey.ca/api/3/action/package_show?id=fraser-health-restaurant-inspection-reports";
+        return fetchResourceJsonObject(metaDataUrl).getString("last_modified");
+    }
+
     public byte[] fetchRestaurantData() throws IOException, JSONException {
         String metaDataUrl = "http://data.surrey.ca/api/3/action/package_show?id=restaurants";
         String packageUrl = fetchResourceJsonObject(metaDataUrl).getString("url");

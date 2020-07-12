@@ -50,6 +50,9 @@ public class RestaurantListFragment extends Fragment {
     private RestaurantManager mRestaurantManager;
     private InspectionManager mInspectionManager;
 
+    private String mNewLastModifiedRestaurants;
+    private String mNewLastModifiedInspections;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -170,6 +173,27 @@ public class RestaurantListFragment extends Fragment {
         @Override
         public int getItemCount() {
             return mRestaurants.size();
+        }
+    }
+
+    private class FetchLastModifiedTask extends AsyncTask<Void,Void,String[]> {
+
+        @Override
+        protected String[] doInBackground(Void... params) {
+            String[] lastModified = {null, null};
+            try {
+                lastModified[0] = new DataFetcher().fetchLastModifiedRestaurants();
+                lastModified[1] = new DataFetcher().fetchLastModifiedInspections();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return lastModified;
+        }
+
+        @Override
+        protected void onPostExecute(String[] newLastModified) {
+            mNewLastModifiedRestaurants = newLastModified[0];
+            mNewLastModifiedInspections = newLastModified[1];
         }
     }
 
