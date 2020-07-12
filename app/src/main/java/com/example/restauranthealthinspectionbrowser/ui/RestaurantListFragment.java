@@ -1,7 +1,11 @@
 package com.example.restauranthealthinspectionbrowser.ui;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,18 +13,23 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.restauranthealthinspectionbrowser.R;
+import com.example.restauranthealthinspectionbrowser.model.DataFetcher;
 import com.example.restauranthealthinspectionbrowser.model.DateHelper;
 import com.example.restauranthealthinspectionbrowser.model.Inspection;
 import com.example.restauranthealthinspectionbrowser.model.InspectionManager;
 import com.example.restauranthealthinspectionbrowser.model.Restaurant;
 import com.example.restauranthealthinspectionbrowser.model.RestaurantManager;
 
+import org.json.JSONException;
+
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -29,8 +38,18 @@ import java.util.List;
  * restaurant in the list.
  */
 public class RestaurantListFragment extends Fragment {
+    private static final String TAG = "RestaurantListFragment";
+
     private RecyclerView mRestaurantRecyclerView;
     private RestaurantAdapter mAdapter;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+
+        new FetchDataTask().execute();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -137,6 +156,22 @@ public class RestaurantListFragment extends Fragment {
         @Override
         public int getItemCount() {
             return mRestaurants.size();
+        }
+    }
+
+    private class FetchDataTask extends AsyncTask<Void,Void,Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                DataFetcher dataFetcher = new DataFetcher();
+                byte[] restaurantData = dataFetcher.fetchRestaurantData();
+                Log.i(TAG, "Downloaded restaurant.csv: " + restaurantData);
+            } catch (JSONException | IOException e) {
+                e.printStackTrace();
+            }
+
+            return null;
         }
     }
 }
