@@ -11,7 +11,7 @@
         android:id="@+id/restaurant_icon"
         android:layout_width="53dp"
         android:layout_height="56dp"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -20,14 +20,17 @@
 
     <TextView
         android:id="@+id/title"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
+        android:layout_marginEnd="16dp"
         android:text="Restaurant Name"
         android:textAllCaps="false"
         android:textSize="18sp"
         android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/hazard_level_icon"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/restaurant_icon"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -64,7 +67,7 @@
         android:id="@+id/hazard_level_icon"
         android:layout_width="54dp"
         android:layout_height="49dp"
-        android:layout_marginEnd="5dp"
+        android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/hazard_level"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/hazard_level"
