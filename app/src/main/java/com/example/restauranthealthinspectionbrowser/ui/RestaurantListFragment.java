@@ -1,8 +1,8 @@
 package com.example.restauranthealthinspectionbrowser.ui;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -33,6 +34,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * RestaurantListFragment sets up the main screen with a list of restaurants.
@@ -42,7 +44,10 @@ import java.util.List;
 public class RestaurantListFragment extends Fragment {
     public static final String FILE_NAME_RESTAURANTS = "restaurants.csv";
     public static final String FILE_NAME_INSPECTION_REPORTS = "inspection_reports.csv";
+    private static final String DIALOG_UPDATE = "dialog update";
     private static final String TAG = "RestaurantListFragment";
+
+    private static final int REQUEST_DOWNLOAD = 11;
 
     private RecyclerView mRestaurantRecyclerView;
     private RestaurantAdapter mAdapter;
@@ -65,7 +70,21 @@ public class RestaurantListFragment extends Fragment {
             e.printStackTrace();
         }
 
-        new FetchDataTask().execute();
+        FragmentManager manager = getFragmentManager();
+        DataUpdateFragment dialog = new DataUpdateFragment();
+        dialog.setTargetFragment(RestaurantListFragment.this, REQUEST_DOWNLOAD);
+        dialog.show(manager, DIALOG_UPDATE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
+
+        if (requestCode == REQUEST_DOWNLOAD) {
+            new FetchDataTask().execute();
+        }
     }
 
     @Override
