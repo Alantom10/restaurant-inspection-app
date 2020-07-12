@@ -2,6 +2,7 @@ package com.example.restauranthealthinspectionbrowser.model;
 
 import android.text.format.DateUtils;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -33,6 +34,11 @@ public class DateHelper {
     public static CharSequence getFullDate(Date inspectionDate) {
         SimpleDateFormat sdf = new SimpleDateFormat("MMMM d, yyyy", Locale.CANADA);
         return sdf.format(inspectionDate);
+    }
+
+    public static Date parseInspectionDate(String inspectionDate) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd", Locale.CANADA);
+        return sdf.parse(inspectionDate);
     }
 }
 

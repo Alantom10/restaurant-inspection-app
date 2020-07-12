@@ -1,7 +1,11 @@
 package com.example.restauranthealthinspectionbrowser.ui;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,18 +13,25 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.restauranthealthinspectionbrowser.R;
+import com.example.restauranthealthinspectionbrowser.model.DataFetcher;
 import com.example.restauranthealthinspectionbrowser.model.DateHelper;
 import com.example.restauranthealthinspectionbrowser.model.Inspection;
 import com.example.restauranthealthinspectionbrowser.model.InspectionManager;
 import com.example.restauranthealthinspectionbrowser.model.Restaurant;
 import com.example.restauranthealthinspectionbrowser.model.RestaurantManager;
 
+import org.json.JSONException;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 
 /**
@@ -29,8 +40,33 @@ import java.util.List;
  * restaurant in the list.
  */
 public class RestaurantListFragment extends Fragment {
+    public static final String FILE_NAME_RESTAURANTS = "restaurants.csv";
+    public static final String FILE_NAME_INSPECTION_REPORTS = "inspection_reports.csv";
+    private static final String TAG = "RestaurantListFragment";
+
     private RecyclerView mRestaurantRecyclerView;
     private RestaurantAdapter mAdapter;
+
+    private RestaurantManager mRestaurantManager;
+    private InspectionManager mInspectionManager;
+
+    private String mNewLastModifiedRestaurants;
+    private String mNewLastModifiedInspections;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+
+        try {
+            mRestaurantManager = RestaurantManager.getInstance(getActivity());
+            mInspectionManager = InspectionManager.getInstance(getActivity());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        new FetchDataTask().execute();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,11 +82,12 @@ public class RestaurantListFragment extends Fragment {
     }
 
     private void updateUI() {
-        RestaurantManager manager = RestaurantManager.getInstance(getActivity());
-        List<Restaurant> restaurants = manager.getRestaurants();
+        List<Restaurant> restaurants = mRestaurantManager.getRestaurants();
 
-        mAdapter = new RestaurantAdapter(restaurants);
-        mRestaurantRecyclerView.setAdapter(mAdapter);
+        if (isAdded()) {
+            mAdapter = new RestaurantAdapter(restaurants);
+            mRestaurantRecyclerView.setAdapter(mAdapter);
+        }
     }
 
     private class RestaurantHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -77,8 +114,7 @@ public class RestaurantListFragment extends Fragment {
             mRestaurantID = restaurant.getID();
             mTitleTextView.setText(getString(R.string.restaurant_name, restaurant.getName()));
 
-            InspectionManager manager = InspectionManager.getInstance(getActivity());
-            Inspection inspection = manager.getLatestInspection(mRestaurantID);
+            Inspection inspection = mInspectionManager.getLatestInspection(mRestaurantID);
             if (inspection != null) {
                 mDateTextView.setText(DateHelper.getDisplayDate(inspection.getInspectionDate()));
 
@@ -137,6 +173,67 @@ public class RestaurantListFragment extends Fragment {
         @Override
         public int getItemCount() {
             return mRestaurants.size();
+        }
+    }
+
+    private class FetchLastModifiedTask extends AsyncTask<Void,Void,String[]> {
+
+        @Override
+        protected String[] doInBackground(Void... params) {
+            String[] lastModified = {null, null};
+            try {
+                lastModified[0] = new DataFetcher().fetchLastModifiedRestaurants();
+                lastModified[1] = new DataFetcher().fetchLastModifiedInspections();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return lastModified;
+        }
+
+        @Override
+        protected void onPostExecute(String[] newLastModified) {
+            mNewLastModifiedRestaurants = newLastModified[0];
+            mNewLastModifiedInspections = newLastModified[1];
+        }
+    }
+
+    private class FetchDataTask extends AsyncTask<Void,Void,Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                DataFetcher dataFetcher = new DataFetcher();
+                byte[] restaurantData = dataFetcher.fetchRestaurantData();
+//                Log.i(TAG, "Downloaded restaurant.csv: " + restaurantData);
+                storeData(FILE_NAME_RESTAURANTS, restaurantData);
+
+                byte[] inspectionData = dataFetcher.fetchInspectionData();
+                storeData(FILE_NAME_INSPECTION_REPORTS, inspectionData);
+
+            } catch (JSONException | IOException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            try {
+                mRestaurantManager.updateRestaurants(getActivity());
+                mInspectionManager.updateInspections(getActivity());
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+
+            updateUI();
+        }
+
+        private void storeData(String fileName, byte[] data) throws IOException {
+            OutputStream outputStream = getActivity()
+                    .openFileOutput(fileName, Context.MODE_PRIVATE);
+            outputStream.write(data);
+            outputStream.close();
         }
     }
 }
