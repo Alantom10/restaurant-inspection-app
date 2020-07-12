@@ -5,6 +5,8 @@ import android.content.Context;
 import com.example.restauranthealthinspectionbrowser.R;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -17,28 +19,29 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import static com.example.restauranthealthinspectionbrowser.ui.RestaurantListFragment.FILE_NAME_INSPECTION_REPORTS;
+
 /**
  * InspectionManager class stores a collection of inspections. It supports
  * reading inspection date from file.
  */
 public class InspectionManager {
-    private List<Inspection> mInspections;
+    private static final String TAG = "RestaurantManager";
+
     private static InspectionManager sInstance;
 
-    public static InspectionManager getInstance(Context context) {
+    private List<Inspection> mInspections;
+
+    public static InspectionManager getInstance(Context context) throws FileNotFoundException {
         if (sInstance == null) {
             sInstance = new InspectionManager(context);
         }
         return sInstance;
     }
 
-    private InspectionManager(Context context) {
+    private InspectionManager(Context context) throws FileNotFoundException {
         mInspections = new ArrayList<>();
         readData(context);
-    }
-
-    public List<Inspection> getInspections(){
-        return mInspections;
     }
 
     public Inspection getLatestInspection(String restaurantID) {
@@ -65,29 +68,46 @@ public class InspectionManager {
         return inspectionList;
     }
 
-    private void readData(Context context){
+    public List<Inspection> getInspections(){
+        return mInspections;
+    }
 
-        try( InputStream is = context.getResources().openRawResource(R.raw.inspectionreports_itr1);
-             BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))
-        ){
+    public void updateInspections(Context context) throws FileNotFoundException {
+        mInspections.clear();
+        readData(context);
+    }
+
+    private void readData(Context context) throws FileNotFoundException {
+        File file = new File(context.getFilesDir() + "/" + FILE_NAME_INSPECTION_REPORTS);
+        InputStream inputStream;
+        if (file.exists()) {
+            inputStream = context.openFileInput(FILE_NAME_INSPECTION_REPORTS);
+        }
+        else {
+            inputStream = context.getResources().openRawResource(R.raw.inspectionreports_itr1);
+        }
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+        try {
             String line = reader.readLine();
             while ((line = reader.readLine()) != null) {
                 String[] row = line.split(",");
+                if (row.length == 0) {
+                    return;
+                }
+
                 Inspection inspection = new Inspection();
                 inspection.setTrackingNum(row[0].replace("\"", ""));
                 inspection.setInspectionType(row[2].replace("\"", ""));
-                inspection.setNumOfCritical(Integer.valueOf(row[3].replace("\"", "")));
-                inspection.setNumOfNonCritical(Integer.valueOf(row[4].replace("\"", "")));
-                inspection.setHazardRating(row[5].replace("\"",""));
-
-                String inspectionDate = row[1].replace("\"", "");
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd", Locale.CANADA);
-                Date date = sdf.parse(inspectionDate);
-                inspection.setInspectionDate(date);
+                inspection.setHazardRating(row[row.length - 1].replace("\"",""));
+                inspection.setNumOfCritical(Integer.parseInt(row[3].replace("\"", "")));
+                inspection.setNumOfNonCritical(Integer.parseInt(row[4].replace("\"", "")));
+                inspection.setInspectionDate(DateHelper
+                        .parseInspectionDate(row[1].replace("\"", "")));
 
                 String violations = "";
-                for (int i = 6;i< row.length;i++){
-                    if(i > 6){
+                for (int i = 5; i < row.length - 1; i++) {
+                    if (i > 6) {
                         violations += ",";
                     }
                     violations += row[i].replace("\"", "");

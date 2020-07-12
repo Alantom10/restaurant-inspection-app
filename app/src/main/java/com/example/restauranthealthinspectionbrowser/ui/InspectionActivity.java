@@ -21,6 +21,7 @@ import com.example.restauranthealthinspectionbrowser.model.DateHelper;
 import com.example.restauranthealthinspectionbrowser.model.Inspection;
 import com.example.restauranthealthinspectionbrowser.model.InspectionManager;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -54,12 +55,17 @@ public class InspectionActivity extends AppCompatActivity {
         ListView listView = (ListView) findViewById(R.id.listViolation);
         setListItemClick(listView);
 
-        getInspection();
+        try {
+            getInspection();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
         showInfo();
         showViolation();
     }
 
-    private void getInspection() {
+    private void getInspection() throws FileNotFoundException {
         Intent intent = getIntent();
         final String trackingNum = intent.getStringExtra(EXTRA_TRACKING_NUMBER);
         final long inspectionTime = intent.getLongExtra(EXTRA_INSPECTION_DATE, -1);

@@ -61,7 +61,12 @@ public class RestaurantFragment extends Fragment {
         mInspectionRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         updateTextViews();
-        updateRecyclerView();
+
+        try {
+            updateRecyclerView();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
 
         return view;
     }
@@ -72,7 +77,7 @@ public class RestaurantFragment extends Fragment {
         mCoordinatesTextView.setText(getString(R.string.coordinates, mRestaurant.getLatitude(), mRestaurant.getLongitude()));
     }
 
-    private void updateRecyclerView() {
+    private void updateRecyclerView() throws FileNotFoundException {
         InspectionManager manager = InspectionManager.getInstance(getActivity());
         List<Inspection> inspections = manager.getInspectionsForRestaurant(mRestaurantID);
         mAdapter = new InspectionAdapter(inspections);

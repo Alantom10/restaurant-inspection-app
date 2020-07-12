@@ -62,10 +62,9 @@ public class RestaurantManager {
 
     private void readData(Context context) throws FileNotFoundException {
         // Adapted from https://www.youtube.com/watch?v=i-TqNzUryn8
-
         File file = new File(context.getFilesDir() + "/" + FILE_NAME_RESTAURANTS);
         InputStream inputStream;
-        if(file.exists()) {
+        if (file.exists()) {
             inputStream = context.openFileInput(FILE_NAME_RESTAURANTS);
         }
         else {

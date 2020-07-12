@@ -22,6 +22,13 @@ public class DataFetcher {
         return getUrlBytes(packageUrl);
     }
 
+    public byte[] fetchInspectionData() throws IOException, JSONException {
+        String metaDataUrl = "http://data.surrey.ca/api/3/action/package_show?id=fraser-health-restaurant-inspection-reports";
+        String packageUrl = fetchResourceJsonObject(metaDataUrl).getString("url");
+//        Log.i(TAG, "Received inspection package url: " + packageUrl);
+        return getUrlBytes(packageUrl);
+    }
+
     private JSONObject fetchResourceJsonObject(String urlSpec) throws JSONException {
         JSONObject result = null;
         try {

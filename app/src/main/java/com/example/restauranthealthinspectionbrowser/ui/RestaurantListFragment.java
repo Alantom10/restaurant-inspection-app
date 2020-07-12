@@ -111,8 +111,7 @@ public class RestaurantListFragment extends Fragment {
             mRestaurantID = restaurant.getID();
             mTitleTextView.setText(getString(R.string.restaurant_name, restaurant.getName()));
 
-            InspectionManager manager = InspectionManager.getInstance(getActivity());
-            Inspection inspection = manager.getLatestInspection(mRestaurantID);
+            Inspection inspection = mInspectionManager.getLatestInspection(mRestaurantID);
             if (inspection != null) {
                 mDateTextView.setText(DateHelper.getDisplayDate(inspection.getInspectionDate()));
 
@@ -183,6 +182,10 @@ public class RestaurantListFragment extends Fragment {
                 byte[] restaurantData = dataFetcher.fetchRestaurantData();
 //                Log.i(TAG, "Downloaded restaurant.csv: " + restaurantData);
                 storeData(FILE_NAME_RESTAURANTS, restaurantData);
+
+                byte[] inspectionData = dataFetcher.fetchInspectionData();
+                storeData(FILE_NAME_INSPECTION_REPORTS, inspectionData);
+
             } catch (JSONException | IOException e) {
                 e.printStackTrace();
             }
@@ -194,6 +197,7 @@ public class RestaurantListFragment extends Fragment {
         protected void onPostExecute(Void aVoid) {
             try {
                 mRestaurantManager.updateRestaurants(getActivity());
+                mInspectionManager.updateInspections(getActivity());
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
