@@ -3,6 +3,7 @@ package com.example.restauranthealthinspectionbrowser.ui;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -44,6 +45,10 @@ import java.util.concurrent.TimeUnit;
 public class RestaurantListFragment extends Fragment {
     public static final String FILE_NAME_RESTAURANTS = "restaurants.csv";
     public static final String FILE_NAME_INSPECTION_REPORTS = "inspection_reports.csv";
+    private static final String PREFERENCES = "restaurant list";
+    private static final String PREFERENCES_LAST_UPDATED = "last updated";
+    private static final String PREFERENCES_LAST_MODIFIED_RESTAURANTS = "last modified restaurants";
+    private static final String PREFERENCES_LAST_MODIFIED_INSPECTIONS = "last modified inspections";
     private static final String DIALOG_UPDATE = "dialog update";
     private static final String TAG = "RestaurantListFragment";
 
@@ -70,10 +75,12 @@ public class RestaurantListFragment extends Fragment {
             e.printStackTrace();
         }
 
-        FragmentManager manager = getFragmentManager();
-        DataUpdateFragment dialog = new DataUpdateFragment();
-        dialog.setTargetFragment(RestaurantListFragment.this, REQUEST_DOWNLOAD);
-        dialog.show(manager, DIALOG_UPDATE);
+        SharedPreferences sp = getActivity().getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
+        long lastUpdated = sp.getLong(PREFERENCES_LAST_UPDATED, 0);
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - lastUpdated > TimeUnit.HOURS.toMillis(20)) {
+            new FetchLastModifiedTask().execute();
+        }
     }
 
     @Override
@@ -213,6 +220,19 @@ public class RestaurantListFragment extends Fragment {
         protected void onPostExecute(String[] newLastModified) {
             mNewLastModifiedRestaurants = newLastModified[0];
             mNewLastModifiedInspections = newLastModified[1];
+
+            SharedPreferences sp = getActivity()
+                    .getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
+            String lastModifiedRestaurants = sp.getString(PREFERENCES_LAST_MODIFIED_RESTAURANTS, "");
+            String lastModifiedInspections = sp.getString(PREFERENCES_LAST_MODIFIED_INSPECTIONS, "");
+            if (!mNewLastModifiedRestaurants.equals(lastModifiedRestaurants) ||
+                    !mNewLastModifiedInspections.equals(lastModifiedInspections))
+            {
+                FragmentManager manager = getFragmentManager();
+                DataUpdateFragment dialog = new DataUpdateFragment();
+                dialog.setTargetFragment(RestaurantListFragment.this, REQUEST_DOWNLOAD);
+                dialog.show(manager, DIALOG_UPDATE);
+            }
         }
     }
 
@@ -241,6 +261,15 @@ public class RestaurantListFragment extends Fragment {
             try {
                 mRestaurantManager.updateRestaurants(getActivity());
                 mInspectionManager.updateInspections(getActivity());
+
+                SharedPreferences sp = getActivity()
+                        .getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sp.edit();
+                editor.putString(PREFERENCES_LAST_MODIFIED_RESTAURANTS, mNewLastModifiedRestaurants);
+                editor.putString(PREFERENCES_LAST_MODIFIED_INSPECTIONS, mNewLastModifiedInspections);
+                editor.putLong(PREFERENCES_LAST_UPDATED, System.currentTimeMillis());
+                editor.apply();
+
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
