@@ -1,5 +1,6 @@
 package com.example.restauranthealthinspectionbrowser.ui;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -33,6 +35,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * RestaurantListFragment sets up the main screen with a list of restaurants.
@@ -42,7 +45,14 @@ import java.util.List;
 public class RestaurantListFragment extends Fragment {
     public static final String FILE_NAME_RESTAURANTS = "restaurants.csv";
     public static final String FILE_NAME_INSPECTION_REPORTS = "inspection_reports.csv";
+    private static final String PREFERENCES = "restaurant list";
+    private static final String PREFERENCES_LAST_UPDATED = "last updated";
+    private static final String PREFERENCES_LAST_MODIFIED_RESTAURANTS = "last modified restaurants";
+    private static final String PREFERENCES_LAST_MODIFIED_INSPECTIONS = "last modified inspections";
+    private static final String DIALOG_UPDATE = "dialog update";
     private static final String TAG = "RestaurantListFragment";
+
+    private static final int REQUEST_DOWNLOAD = 11;
 
     private RecyclerView mRestaurantRecyclerView;
     private RestaurantAdapter mAdapter;
@@ -65,7 +75,23 @@ public class RestaurantListFragment extends Fragment {
             e.printStackTrace();
         }
 
-        new FetchDataTask().execute();
+        SharedPreferences sp = getActivity().getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
+        long lastUpdated = sp.getLong(PREFERENCES_LAST_UPDATED, 0);
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - lastUpdated > TimeUnit.HOURS.toMillis(20)) {
+            new FetchLastModifiedTask().execute();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
+
+        if (requestCode == REQUEST_DOWNLOAD) {
+            new FetchDataTask().execute();
+        }
     }
 
     @Override
@@ -194,6 +220,19 @@ public class RestaurantListFragment extends Fragment {
         protected void onPostExecute(String[] newLastModified) {
             mNewLastModifiedRestaurants = newLastModified[0];
             mNewLastModifiedInspections = newLastModified[1];
+
+            SharedPreferences sp = getActivity()
+                    .getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
+            String lastModifiedRestaurants = sp.getString(PREFERENCES_LAST_MODIFIED_RESTAURANTS, "");
+            String lastModifiedInspections = sp.getString(PREFERENCES_LAST_MODIFIED_INSPECTIONS, "");
+            if (!mNewLastModifiedRestaurants.equals(lastModifiedRestaurants) ||
+                    !mNewLastModifiedInspections.equals(lastModifiedInspections))
+            {
+                FragmentManager manager = getFragmentManager();
+                DataUpdateFragment dialog = new DataUpdateFragment();
+                dialog.setTargetFragment(RestaurantListFragment.this, REQUEST_DOWNLOAD);
+                dialog.show(manager, DIALOG_UPDATE);
+            }
         }
     }
 
@@ -222,6 +261,15 @@ public class RestaurantListFragment extends Fragment {
             try {
                 mRestaurantManager.updateRestaurants(getActivity());
                 mInspectionManager.updateInspections(getActivity());
+
+                SharedPreferences sp = getActivity()
+                        .getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sp.edit();
+                editor.putString(PREFERENCES_LAST_MODIFIED_RESTAURANTS, mNewLastModifiedRestaurants);
+                editor.putString(PREFERENCES_LAST_MODIFIED_INSPECTIONS, mNewLastModifiedInspections);
+                editor.putLong(PREFERENCES_LAST_UPDATED, System.currentTimeMillis());
+                editor.apply();
+
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }

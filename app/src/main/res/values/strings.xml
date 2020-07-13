@@ -2,7 +2,9 @@
     <string name="app_name">Surrey Restaurant Browser</string>
     <string name="restaurant_activity_title">Inspections</string>
     <string name="inspection_activity_title">Violations</string>
-    <string name="toolbar">Inspection</string>
+    <string name="data_update_title">Update Data</string>
+    <string name="data_update_message">There is new data available. Do you want to download?</string>
+    <string name="download">Download</string>
     <string name="restaurant_name">%1$s</string>
     <string name="hazard_level">%1$s Hazard Level</string>
     <string name="num_issues">%1$d Issues Found</string>
