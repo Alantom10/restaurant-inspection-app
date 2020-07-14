@@ -1,7 +1,9 @@
 package com.example.restauranthealthinspectionbrowser.ui;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -236,7 +238,18 @@ public class RestaurantListFragment extends Fragment {
         }
     }
 
-    private class FetchDataTask extends AsyncTask<Void,Void,Void> {
+    private class FetchDataTask extends AsyncTask<Void,Integer,Void> {
+        ProgressDialog progressDialog;
+
+        @Override
+        protected void onPreExecute() {
+            progressDialog = new ProgressDialog(getActivity());
+            progressDialog.setMessage(getString(R.string.downloading));
+            progressDialog.setIndeterminate(false);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            progressDialog.show();
+        }
+
 
         @Override
         protected Void doInBackground(Void... params) {
@@ -246,8 +259,12 @@ public class RestaurantListFragment extends Fragment {
 //                Log.i(TAG, "Downloaded restaurant.csv: " + restaurantData);
                 storeData(FILE_NAME_RESTAURANTS, restaurantData);
 
+                publishProgress(50);
+
                 byte[] inspectionData = dataFetcher.fetchInspectionData();
                 storeData(FILE_NAME_INSPECTION_REPORTS, inspectionData);
+
+                publishProgress(100);
 
             } catch (JSONException | IOException e) {
                 e.printStackTrace();
@@ -256,8 +273,14 @@ public class RestaurantListFragment extends Fragment {
             return null;
         }
 
+        public void onProgressUpdate(Integer... progress) {
+            progressDialog.setProgress(progress[0]);
+        }
+
         @Override
         protected void onPostExecute(Void aVoid) {
+            progressDialog.dismiss();
+
             try {
                 mRestaurantManager.updateRestaurants(getActivity());
                 mInspectionManager.updateInspections(getActivity());
