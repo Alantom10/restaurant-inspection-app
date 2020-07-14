@@ -1,7 +1,9 @@
 package com.example.restauranthealthinspectionbrowser.ui;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -236,29 +238,75 @@ public class RestaurantListFragment extends Fragment {
         }
     }
 
-    private class FetchDataTask extends AsyncTask<Void,Void,Void> {
+    private class FetchDataTask extends AsyncTask<Void,Integer,byte[][]> {
+        ProgressDialog progressDialog;
 
         @Override
-        protected Void doInBackground(Void... params) {
+        protected void onPreExecute() {
+            progressDialog = new ProgressDialog(getActivity());
+            progressDialog.setMessage(getString(R.string.downloading));
+            progressDialog.setIndeterminate(false);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            progressDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
+                    getString(android.R.string.cancel),
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            cancel(true);
+                        }
+                    });
+            progressDialog.show();
+        }
+
+
+        @Override
+        protected byte[][] doInBackground(Void... params) {
+            byte[][] dataArrays = { null, null };
+
             try {
                 DataFetcher dataFetcher = new DataFetcher();
                 byte[] restaurantData = dataFetcher.fetchRestaurantData();
 //                Log.i(TAG, "Downloaded restaurant.csv: " + restaurantData);
-                storeData(FILE_NAME_RESTAURANTS, restaurantData);
+                dataArrays[0] = restaurantData;
+
+                if (isCancelled()) {
+                    return null;
+                }
+
+                publishProgress(50);
 
                 byte[] inspectionData = dataFetcher.fetchInspectionData();
-                storeData(FILE_NAME_INSPECTION_REPORTS, inspectionData);
+                dataArrays[1] = inspectionData;
+
+                if (isCancelled()) {
+                    return null;
+                }
+
+                publishProgress(100);
 
             } catch (JSONException | IOException e) {
                 e.printStackTrace();
             }
 
-            return null;
+            return dataArrays;
+        }
+
+        public void onProgressUpdate(Integer... progress) {
+            progressDialog.setProgress(progress[0]);
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
+        protected void onPostExecute(byte[][] arrays) {
+            progressDialog.dismiss();
+
+            if (arrays == null || arrays[0] == null || arrays[1] == null) {
+                return;
+            }
+
             try {
+                storeData(FILE_NAME_RESTAURANTS, arrays[0]);
+                storeData(FILE_NAME_INSPECTION_REPORTS, arrays[1]);
+
                 mRestaurantManager.updateRestaurants(getActivity());
                 mInspectionManager.updateInspections(getActivity());
 
@@ -270,7 +318,7 @@ public class RestaurantListFragment extends Fragment {
                 editor.putLong(PREFERENCES_LAST_UPDATED, System.currentTimeMillis());
                 editor.apply();
 
-            } catch (FileNotFoundException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
 
