@@ -24,4 +24,5 @@
     <string name="txtHazardRating">Hazard Rating: </string>
     <string name="txtViolation">Violations: </string>
     <string name="txtViolationDetail">No violations!</string>
+    <string name="title_activity_maps">Map</string>
 </resources>
