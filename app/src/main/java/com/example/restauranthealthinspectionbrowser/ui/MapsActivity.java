@@ -51,6 +51,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Toast.makeText(this, "Map is ready", Toast.LENGTH_SHORT).show();
         mMap = googleMap;
 
+        //setUpClusterer();
+
         if (mLocationPermissionsGranted) {
             getDeviceLocation();
 
@@ -141,4 +143,45 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void moveCamera(LatLng latLng, float zoom){
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,zoom));
     }
+
+    //    private void setUpClusterer() {
+//        // Initialize new clusterManager
+//        mClusterManager = new ClusterManager<PegItem>(this, mMap);
+//
+//        mMap.setOnCameraIdleListener(mClusterManager);
+//        mMap.setOnMarkerClickListener(mClusterManager);
+//
+//        getPegs();
+//    }
+
+//    private void getPegs() {
+//        RestaurantManager manager = RestaurantManager.getInstance(getActivity());
+//        List<Restaurant> restaurants = manager.getRestaurants();
+//        int i = 0;
+//        for (Restaurant restaurant : restaurants) {
+//
+//            String temp = restaurant.getName();
+//
+//            //change first two terms into name and address
+////            PegItem newItem = new PegItem(restaurant.getLatitude(),
+////                    restaurant.getLongitude(),
+////                    temp, getHazardIcon(restaurant));
+//
+//            PegItem peg = new PegItem(
+//                    restaurant.getLatitude(),
+//                    restaurant.getLongitude()
+//            );
+//
+//            mClusterManager.addItem(peg);
+//        }
+//    }
+//    private BitmapDescriptor getHazardIcon(Restaurant restaurant) {
+//        //Inspection inspection = restaurant.getInspection();
+//        BitmapDescriptor hazardRating;
+//        String hazardLevel = "";
+//        if(hazardLevel == "Low"){
+//            hazardRating = ;
+//        }
+//        return hazardRating;
+//    }
 }
