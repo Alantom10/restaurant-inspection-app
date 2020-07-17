@@ -25,4 +25,5 @@
     <string name="txtViolation">Violations: </string>
     <string name="txtViolationDetail">No violations!</string>
     <string name="title_activity_maps">Map</string>
+    <string name="hintSearch">Enter Address, City or Zip code</string>
 </resources>
