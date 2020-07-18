@@ -65,6 +65,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         Toast.makeText(this, "Map is ready", Toast.LENGTH_SHORT).show();
         mMap = googleMap;
+        mMap.getUiSettings().setZoomControlsEnabled(true);
 
         //setUpClusterer();
 
@@ -103,6 +104,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         permissions,
                         LOCATION_PERMISSION_REQUEST_CODE);
             }
+        }
+        else{
+            ActivityCompat.requestPermissions(this,
+                    permissions,
+                    LOCATION_PERMISSION_REQUEST_CODE);
         }
     }
 
@@ -159,6 +165,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void moveCamera(LatLng latLng, float zoom){
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,zoom));
+
+        //drop a pin
+        MarkerOptions options = new MarkerOptions().position(latLng);
+        mMap.addMarker(options);
     }
 
     private void init(){
