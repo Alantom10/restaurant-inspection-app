@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -77,8 +78,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
-
-            init();
         }
     }
 
@@ -171,7 +170,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.addMarker(options);
     }
 
-    private void init(){
+    private void initSearch(){
         //override ENTER key as getting result
         mSearchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -185,6 +184,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 return false;
             }
         });
+        hideKeyboard();
     }
 
     private void geoLocate() {
@@ -203,6 +203,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Log.e(TAG,"geoLocate: found a location: " + address.toString());
             //Toast.makeText(this, address.toString(), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void hideKeyboard(){
+        this.getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
+        );
     }
 
     private void setItemOnClick(){
