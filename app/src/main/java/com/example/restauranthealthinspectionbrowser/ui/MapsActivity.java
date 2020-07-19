@@ -1,19 +1,28 @@
 package com.example.restauranthealthinspectionbrowser.ui;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 
 import android.Manifest;
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
@@ -24,6 +33,9 @@ import android.widget.Toast;
 
 import com.example.restauranthealthinspectionbrowser.R;
 
+import com.example.restauranthealthinspectionbrowser.model.DataFetcher;
+import com.example.restauranthealthinspectionbrowser.model.InspectionManager;
+import com.example.restauranthealthinspectionbrowser.model.RestaurantManager;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -35,12 +47,31 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import org.json.JSONException;
+
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
     private static final String TAG = "MapActivity";
+
+    public static final String FILE_NAME_RESTAURANTS = "restaurants.csv";
+    public static final String FILE_NAME_INSPECTION_REPORTS = "inspection_reports.csv";
+
+    private static final String PREFERENCES = "restaurant list";
+    private static final String PREFERENCES_LAST_UPDATED = "last updated";
+    private static final String PREFERENCES_LAST_MODIFIED_RESTAURANTS = "last modified restaurants";
+    private static final String PREFERENCES_LAST_MODIFIED_INSPECTIONS = "last modified inspections";
+
+    private String mNewLastModifiedRestaurants;
+    private String mNewLastModifiedInspections;
+
+    private RestaurantManager mRestaurantManager;
+    private InspectionManager mInspectionManager;
 
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
@@ -59,6 +90,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         getLocationPermission();
         setItemOnClick();
+
+        try {
+            mRestaurantManager = RestaurantManager.getInstance(this);
+            mInspectionManager = InspectionManager.getInstance(this);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        SharedPreferences sp = getSharedPreferences(PREFERENCES, MODE_PRIVATE);
+        long lastUpdated = sp.getLong(PREFERENCES_LAST_UPDATED, 0);
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - lastUpdated > TimeUnit.HOURS.toMillis(20)) {
+            new FetchLastModifiedTask().execute();
+        }
     }
 
     // Adapted from: https://www.youtube.com/watch?v=Vt6H9TOmsuo&list=PLgCYzUzKIBE-vInwQhGSdnbyJ62nixHCt&index=4
@@ -73,9 +118,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (mLocationPermissionsGranted) {
             getDeviceLocation();
 
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                    ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+            {
                 return;
             }
+
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
         }
@@ -216,8 +264,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         list.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent (MapsActivity.this, MainActivity.class);
+                Intent intent = new Intent (MapsActivity.this, RestaurantListActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -270,4 +319,149 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 //        }
 //        return hazardRating;
 //    }
+
+
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.activity_maps, menu);
+//        return super.onCreateOptionsMenu(menu);
+//    }
+
+    private class FetchLastModifiedTask extends AsyncTask<Void,Void,String[]> {
+
+        @Override
+        protected String[] doInBackground(Void... params) {
+            String[] lastModified = {null, null};
+            try {
+                lastModified[0] = new DataFetcher().fetchLastModifiedRestaurants();
+                lastModified[1] = new DataFetcher().fetchLastModifiedInspections();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return lastModified;
+        }
+
+        @Override
+        protected void onPostExecute(String[] newLastModified) {
+            mNewLastModifiedRestaurants = newLastModified[0];
+            mNewLastModifiedInspections = newLastModified[1];
+
+            SharedPreferences sp = getSharedPreferences(PREFERENCES, MODE_PRIVATE);
+            String lastModifiedRestaurants = sp.getString(PREFERENCES_LAST_MODIFIED_RESTAURANTS, "");
+            String lastModifiedInspections = sp.getString(PREFERENCES_LAST_MODIFIED_INSPECTIONS, "");
+            if (!mNewLastModifiedRestaurants.equals(lastModifiedRestaurants) ||
+                    !mNewLastModifiedInspections.equals(lastModifiedInspections))
+            {
+                new AlertDialog.Builder(MapsActivity.this)
+                        .setTitle(R.string.data_update_title)
+                        .setMessage(R.string.data_update_message)
+                        .setPositiveButton(R.string.download, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                new FetchDataTask().execute();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .show();
+            }
+        }
+    }
+
+    private class FetchDataTask extends AsyncTask<Void,Integer,byte[][]> {
+        ProgressDialog progressDialog;
+
+        @Override
+        protected void onPreExecute() {
+            progressDialog = new ProgressDialog(MapsActivity.this);
+            progressDialog.setMessage(getString(R.string.downloading));
+            progressDialog.setIndeterminate(false);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            progressDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
+                    getString(android.R.string.cancel),
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            cancel(true);
+                        }
+                    });
+            progressDialog.show();
+        }
+
+
+        @Override
+        protected byte[][] doInBackground(Void... params) {
+            byte[][] dataArrays = { null, null };
+
+            try {
+                DataFetcher dataFetcher = new DataFetcher();
+                byte[] restaurantData = dataFetcher.fetchRestaurantData();
+//                Log.i(TAG, "Downloaded restaurant.csv: " + restaurantData);
+                dataArrays[0] = restaurantData;
+
+                if (isCancelled()) {
+                    return null;
+                }
+
+                publishProgress(50);
+
+                byte[] inspectionData = dataFetcher.fetchInspectionData();
+                dataArrays[1] = inspectionData;
+
+                if (isCancelled()) {
+                    return null;
+                }
+
+                publishProgress(100);
+
+            } catch (JSONException | IOException e) {
+                e.printStackTrace();
+            }
+
+            return dataArrays;
+        }
+
+        public void onProgressUpdate(Integer... progress) {
+            progressDialog.setProgress(progress[0]);
+        }
+
+        @Override
+        protected void onPostExecute(byte[][] arrays) {
+            progressDialog.dismiss();
+
+            if (arrays == null || arrays[0] == null || arrays[1] == null) {
+                return;
+            }
+
+            try {
+                storeData(FILE_NAME_RESTAURANTS, arrays[0]);
+                storeData(FILE_NAME_INSPECTION_REPORTS, arrays[1]);
+
+                mRestaurantManager.updateRestaurants(MapsActivity.this);
+                mInspectionManager.updateInspections(MapsActivity.this);
+
+                SharedPreferences sp = getSharedPreferences(PREFERENCES, MODE_PRIVATE);
+                SharedPreferences.Editor editor = sp.edit();
+                editor.putString(PREFERENCES_LAST_MODIFIED_RESTAURANTS, mNewLastModifiedRestaurants);
+                editor.putString(PREFERENCES_LAST_MODIFIED_INSPECTIONS, mNewLastModifiedInspections);
+                editor.putLong(PREFERENCES_LAST_UPDATED, System.currentTimeMillis());
+                editor.apply();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+//            updateUI();
+        }
+
+        private void storeData(String fileName, byte[] data) throws IOException {
+            OutputStream outputStream = openFileOutput(fileName, MODE_PRIVATE);
+            outputStream.write(data);
+            outputStream.close();
+        }
+    }
 }

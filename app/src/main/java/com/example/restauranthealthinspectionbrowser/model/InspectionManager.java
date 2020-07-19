@@ -19,7 +19,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import static com.example.restauranthealthinspectionbrowser.ui.RestaurantListFragment.FILE_NAME_INSPECTION_REPORTS;
+import static com.example.restauranthealthinspectionbrowser.ui.MapsActivity.FILE_NAME_INSPECTION_REPORTS;
 
 /**
  * InspectionManager class stores a collection of inspections. It supports

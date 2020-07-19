@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static com.example.restauranthealthinspectionbrowser.ui.RestaurantListFragment.FILE_NAME_RESTAURANTS;
+import static com.example.restauranthealthinspectionbrowser.ui.MapsActivity.FILE_NAME_RESTAURANTS;
 
 /**
  * RestaurantManager class stores a collection of restaurants. It supports

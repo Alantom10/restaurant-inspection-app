@@ -39,7 +39,7 @@ public class DataFetcher {
         return getUrlBytes(packageUrl);
     }
 
-    private JSONObject fetchResourceJsonObject(String urlSpec) throws JSONException {
+    private JSONObject fetchResourceJsonObject(String urlSpec) {
         JSONObject result = null;
         try {
             String jsonString = getUrlString(urlSpec);
