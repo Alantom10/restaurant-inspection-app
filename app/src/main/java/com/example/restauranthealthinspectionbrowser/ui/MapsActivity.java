@@ -22,6 +22,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
@@ -265,6 +266,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onClick(View v) {
                 Intent intent = new Intent (MapsActivity.this, RestaurantListActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -318,6 +320,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 //        return hazardRating;
 //    }
 
+
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.activity_maps, menu);
+//        return super.onCreateOptionsMenu(menu);
+//    }
 
     private class FetchLastModifiedTask extends AsyncTask<Void,Void,String[]> {
 

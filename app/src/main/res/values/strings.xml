@@ -2,6 +2,8 @@
     <string name="app_name">Surrey Restaurant Browser</string>
     <string name="restaurant_activity_title">Inspections</string>
     <string name="inspection_activity_title">Violations</string>
+    <string name="map_view">Map View</string>
+    <string name="list_view">Restaurant List View</string>
     <string name="data_update_title">Update Data</string>
     <string name="data_update_message">There is new data available. Do you want to download?</string>
     <string name="download">Download</string>

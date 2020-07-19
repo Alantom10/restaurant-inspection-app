@@ -3,6 +3,9 @@ package com.example.restauranthealthinspectionbrowser.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -42,6 +45,7 @@ public class RestaurantListFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         setRetainInstance(true);
 
         try {
@@ -49,6 +53,25 @@ public class RestaurantListFragment extends Fragment {
             mInspectionManager = InspectionManager.getInstance(getActivity());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_restaurant_list, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.map_view:
+                Intent intent = new Intent (getActivity(), MapsActivity.class);
+                startActivity(intent);
+                getActivity().finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
