@@ -1,14 +1,7 @@
 package com.example.restauranthealthinspectionbrowser.ui;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,25 +12,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.restauranthealthinspectionbrowser.R;
-import com.example.restauranthealthinspectionbrowser.model.DataFetcher;
 import com.example.restauranthealthinspectionbrowser.model.DateHelper;
 import com.example.restauranthealthinspectionbrowser.model.Inspection;
 import com.example.restauranthealthinspectionbrowser.model.InspectionManager;
 import com.example.restauranthealthinspectionbrowser.model.Restaurant;
 import com.example.restauranthealthinspectionbrowser.model.RestaurantManager;
 
-import org.json.JSONException;
-
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * RestaurantListFragment sets up the main screen with a list of restaurants.
@@ -45,25 +31,13 @@ import java.util.concurrent.TimeUnit;
  * restaurant in the list.
  */
 public class RestaurantListFragment extends Fragment {
-    public static final String FILE_NAME_RESTAURANTS = "restaurants.csv";
-    public static final String FILE_NAME_INSPECTION_REPORTS = "inspection_reports.csv";
-    private static final String PREFERENCES = "restaurant list";
-    private static final String PREFERENCES_LAST_UPDATED = "last updated";
-    private static final String PREFERENCES_LAST_MODIFIED_RESTAURANTS = "last modified restaurants";
-    private static final String PREFERENCES_LAST_MODIFIED_INSPECTIONS = "last modified inspections";
-    private static final String DIALOG_UPDATE = "dialog update";
     private static final String TAG = "RestaurantListFragment";
-
-    private static final int REQUEST_DOWNLOAD = 11;
 
     private RecyclerView mRestaurantRecyclerView;
     private RestaurantAdapter mAdapter;
 
     private RestaurantManager mRestaurantManager;
     private InspectionManager mInspectionManager;
-
-    private String mNewLastModifiedRestaurants;
-    private String mNewLastModifiedInspections;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -75,24 +49,6 @@ public class RestaurantListFragment extends Fragment {
             mInspectionManager = InspectionManager.getInstance(getActivity());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-        }
-
-        SharedPreferences sp = getActivity().getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
-        long lastUpdated = sp.getLong(PREFERENCES_LAST_UPDATED, 0);
-        long currentTime = System.currentTimeMillis();
-        if (currentTime - lastUpdated > TimeUnit.HOURS.toMillis(20)) {
-            new FetchLastModifiedTask().execute();
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (resultCode != Activity.RESULT_OK) {
-            return;
-        }
-
-        if (requestCode == REQUEST_DOWNLOAD) {
-            new FetchDataTask().execute();
         }
     }
 
@@ -204,132 +160,4 @@ public class RestaurantListFragment extends Fragment {
         }
     }
 
-    private class FetchLastModifiedTask extends AsyncTask<Void,Void,String[]> {
-
-        @Override
-        protected String[] doInBackground(Void... params) {
-            String[] lastModified = {null, null};
-            try {
-                lastModified[0] = new DataFetcher().fetchLastModifiedRestaurants();
-                lastModified[1] = new DataFetcher().fetchLastModifiedInspections();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return lastModified;
-        }
-
-        @Override
-        protected void onPostExecute(String[] newLastModified) {
-            mNewLastModifiedRestaurants = newLastModified[0];
-            mNewLastModifiedInspections = newLastModified[1];
-
-            SharedPreferences sp = getActivity()
-                    .getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
-            String lastModifiedRestaurants = sp.getString(PREFERENCES_LAST_MODIFIED_RESTAURANTS, "");
-            String lastModifiedInspections = sp.getString(PREFERENCES_LAST_MODIFIED_INSPECTIONS, "");
-            if (!mNewLastModifiedRestaurants.equals(lastModifiedRestaurants) ||
-                    !mNewLastModifiedInspections.equals(lastModifiedInspections))
-            {
-                FragmentManager manager = getFragmentManager();
-                DataUpdateFragment dialog = new DataUpdateFragment();
-                dialog.setTargetFragment(RestaurantListFragment.this, REQUEST_DOWNLOAD);
-                dialog.show(manager, DIALOG_UPDATE);
-            }
-        }
-    }
-
-    private class FetchDataTask extends AsyncTask<Void,Integer,byte[][]> {
-        ProgressDialog progressDialog;
-
-        @Override
-        protected void onPreExecute() {
-            progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setMessage(getString(R.string.downloading));
-            progressDialog.setIndeterminate(false);
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-            progressDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
-                    getString(android.R.string.cancel),
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            cancel(true);
-                        }
-                    });
-            progressDialog.show();
-        }
-
-
-        @Override
-        protected byte[][] doInBackground(Void... params) {
-            byte[][] dataArrays = { null, null };
-
-            try {
-                DataFetcher dataFetcher = new DataFetcher();
-                byte[] restaurantData = dataFetcher.fetchRestaurantData();
-//                Log.i(TAG, "Downloaded restaurant.csv: " + restaurantData);
-                dataArrays[0] = restaurantData;
-
-                if (isCancelled()) {
-                    return null;
-                }
-
-                publishProgress(50);
-
-                byte[] inspectionData = dataFetcher.fetchInspectionData();
-                dataArrays[1] = inspectionData;
-
-                if (isCancelled()) {
-                    return null;
-                }
-
-                publishProgress(100);
-
-            } catch (JSONException | IOException e) {
-                e.printStackTrace();
-            }
-
-            return dataArrays;
-        }
-
-        public void onProgressUpdate(Integer... progress) {
-            progressDialog.setProgress(progress[0]);
-        }
-
-        @Override
-        protected void onPostExecute(byte[][] arrays) {
-            progressDialog.dismiss();
-
-            if (arrays == null || arrays[0] == null || arrays[1] == null) {
-                return;
-            }
-
-            try {
-                storeData(FILE_NAME_RESTAURANTS, arrays[0]);
-                storeData(FILE_NAME_INSPECTION_REPORTS, arrays[1]);
-
-                mRestaurantManager.updateRestaurants(getActivity());
-                mInspectionManager.updateInspections(getActivity());
-
-                SharedPreferences sp = getActivity()
-                        .getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sp.edit();
-                editor.putString(PREFERENCES_LAST_MODIFIED_RESTAURANTS, mNewLastModifiedRestaurants);
-                editor.putString(PREFERENCES_LAST_MODIFIED_INSPECTIONS, mNewLastModifiedInspections);
-                editor.putLong(PREFERENCES_LAST_UPDATED, System.currentTimeMillis());
-                editor.apply();
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            updateUI();
-        }
-
-        private void storeData(String fileName, byte[] data) throws IOException {
-            OutputStream outputStream = getActivity()
-                    .openFileOutput(fileName, Context.MODE_PRIVATE);
-            outputStream.write(data);
-            outputStream.close();
-        }
-    }
 }

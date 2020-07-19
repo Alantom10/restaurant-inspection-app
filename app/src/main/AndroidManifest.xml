@@ -34,8 +34,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".ui.MapsActivity"
-            android:label="@string/title_activity_maps">
+            android:name=".ui.MapsActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -45,7 +44,7 @@
         <activity android:name=".ui.SingleFragmentActivity" />
         <activity android:name=".ui.InspectionActivity" />
         <activity android:name=".ui.RestaurantActivity" />
-        <activity android:name=".ui.MainActivity" />
+        <activity android:name=".ui.RestaurantListActivity" />
     </application>
 
 </manifest>
