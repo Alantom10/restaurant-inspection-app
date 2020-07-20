@@ -29,14 +29,14 @@ public class RestaurantManager {
 
     private List<Restaurant> mRestaurants;
 
-    public static RestaurantManager getInstance(Context context) throws FileNotFoundException {
+    public static RestaurantManager getInstance(Context context) {
         if (sInstance == null) {
             sInstance = new RestaurantManager(context);
         }
         return sInstance;
     }
 
-    private RestaurantManager(Context context) throws FileNotFoundException {
+    private RestaurantManager(Context context)  {
         mRestaurants = new ArrayList<>();
         readData(context);
         Collections.sort(mRestaurants);
@@ -61,15 +61,23 @@ public class RestaurantManager {
         Collections.sort(mRestaurants);
     }
 
-    private void readData(Context context) throws FileNotFoundException {
+    private void readData(Context context)  {
         // Adapted from https://www.youtube.com/watch?v=i-TqNzUryn8
         File file = new File(context.getFilesDir() + "/" + FILE_NAME_RESTAURANTS);
-        InputStream inputStream;
+        InputStream inputStream = null;
         if (file.exists()) {
-            inputStream = context.openFileInput(FILE_NAME_RESTAURANTS);
+            try {
+                inputStream = context.openFileInput(FILE_NAME_RESTAURANTS);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
         }
         else {
             inputStream = context.getResources().openRawResource(R.raw.restaurants_itr1);
+        }
+
+        if(inputStream == null){
+            return;
         }
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));

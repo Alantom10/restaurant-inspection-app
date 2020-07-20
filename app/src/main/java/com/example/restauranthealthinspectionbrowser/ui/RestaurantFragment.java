@@ -47,11 +47,7 @@ public class RestaurantFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_restaurant, container, false);
 
         mRestaurantID = getActivity().getIntent().getStringExtra(EXTRA_RESTAURANT_ID);
-        try {
-            mRestaurant = RestaurantManager.getInstance(getActivity()).getRestaurant(mRestaurantID);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        mRestaurant = RestaurantManager.getInstance(getActivity()).getRestaurant(mRestaurantID);
 
         mTitleTextView = (TextView) view.findViewById(R.id.title);
         mAddressTextView = (TextView) view.findViewById(R.id.address);

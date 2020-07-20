@@ -48,12 +48,9 @@ public class RestaurantListFragment extends Fragment {
         setHasOptionsMenu(true);
         setRetainInstance(true);
 
-        try {
             mRestaurantManager = RestaurantManager.getInstance(getActivity());
             mInspectionManager = InspectionManager.getInstance(getActivity());
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+
     }
 
     @Override

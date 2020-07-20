@@ -26,19 +26,18 @@ public class MapInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
 
     private void renderWindowText(Marker marker, View view){
         TextView restaurantName = (TextView) view.findViewById(R.id.txtMapResName);
+        TextView restaurantAddress = (TextView) view.findViewById(R.id.txtMapAddress);
         ImageView restaurantIcon = (ImageView) view.findViewById(R.id.imageMapIcon);
         ImageView restaurantHazard = (ImageView) view.findViewById(R.id.imageMapHazard);
 
 
-        try {
             this.restaurant = RestaurantManager.getInstance(context).getRestaurant(marker.getPosition());
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+
         if(this.restaurant == null) {
             return;
         }
         restaurantName.setText(restaurant.getName());
+        restaurantAddress.setText(restaurant.getAddress());
         restaurantIcon.setImageResource(restaurant.getHazardIcon());
         restaurantHazard.setImageResource(restaurant.getHazardIcon()); //todo
     }

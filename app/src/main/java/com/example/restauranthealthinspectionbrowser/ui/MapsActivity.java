@@ -34,6 +34,7 @@ import android.widget.Toast;
 import com.example.restauranthealthinspectionbrowser.R;
 
 import com.example.restauranthealthinspectionbrowser.model.DataFetcher;
+import com.example.restauranthealthinspectionbrowser.model.Inspection;
 import com.example.restauranthealthinspectionbrowser.model.InspectionManager;
 import com.example.restauranthealthinspectionbrowser.model.PegItem;
 import com.example.restauranthealthinspectionbrowser.model.Restaurant;
@@ -100,12 +101,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setItemOnClick();
         initSearch();
 
-        try {
             mRestaurantManager = RestaurantManager.getInstance(this);
             mInspectionManager = InspectionManager.getInstance(this);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+
 
         SharedPreferences sp = getSharedPreferences(PREFERENCES, MODE_PRIVATE);
         long lastUpdated = sp.getLong(PREFERENCES_LAST_UPDATED, 0);
@@ -125,6 +123,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setUpClusterer();
 
         mMap.setInfoWindowAdapter(new MapInfoWindowAdapter(MapsActivity.this));
+        setOnMapsListener();
 
         if (mLocationPermissionsGranted) {
             getDeviceLocation();
@@ -280,7 +279,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onClick(View v) {
                 Intent intent = new Intent (MapsActivity.this, RestaurantListActivity.class);
                 startActivity(intent);
-                finish();
             }
         });
 
@@ -304,25 +302,31 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mMap.setOnCameraIdleListener(mClusterManager);
 //        mMap.setOnMarkerClickListener(mClusterManager);
 
-            try {
                 addItems();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+
             mClusterManager.cluster();
         }
 
-    private void addItems() throws FileNotFoundException {
+    private void addItems() {
         RestaurantManager manager = RestaurantManager.getInstance(getBaseContext());
         List<Restaurant> restaurants = manager.getRestaurants();
+
+        InspectionManager inspectionManager = InspectionManager.getInstance(this);
+
         int i = 0;
         for (Restaurant restaurant : restaurants) {
             String name = restaurant.getName();
+            String mRestaurantID = restaurant.getID();
+            Inspection inspection = inspectionManager.getLatestInspection(mRestaurantID);
+            String hazardLevel = "";
 
-            //change first two terms into name and address
+            if (inspection != null) {
+                hazardLevel = inspection.getHazardRating();
+            }
+
             PegItem peg = new PegItem(restaurant.getLatitude(),
                     restaurant.getLongitude(),
-                    name,"Low");
+                    name, hazardLevel);
 
             mClusterManager.addItem(peg);
         }
@@ -338,22 +342,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             return true;
         });
 
-        this.mMap.setOnMarkerClickListener((marker) -> {
+        mMap.setOnInfoWindowClickListener(marker -> {
             LatLng position = marker.getPosition();
 
-            Restaurant restaurant = null;
-            try {
-                restaurant = RestaurantManager.getInstance(MapsActivity.this).getRestaurant(position);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+            Restaurant restaurant = RestaurantManager.getInstance(MapsActivity.this).getRestaurant(position);
 
-            if(restaurant == null) {
-                return false;
+            if (restaurant == null) {
+                return;
             }
 
             //TODO goto restaurant detail activity
-            return false;
+            Intent intent = new Intent(MapsActivity.this, RestaurantActivity.class);
+            intent.putExtra(RestaurantActivity.EXTRA_RESTAURANT_ID,restaurant.getID());
+            startActivity(intent);
         });
 
 
@@ -372,32 +373,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             return true;
         });
 
-    }
-
-    //    private BitmapDescriptor getMarkerIconFromDrawable(Drawable drawable) {
-//        Canvas canvas = new Canvas();
-//        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-//        canvas.setBitmap(bitmap);
-//        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
-//        drawable.draw(canvas);
-//
-//
-//        return BitmapDescriptorFactory.fromBitmap(bitmap);
-//    }
-
-    private BitmapDescriptor getHazardIcon(Restaurant restaurant) {
-        //Inspection inspection = restaurant.getInspection();
-
-        BitmapDescriptor hazardRating = null;
-
-        String hazardLevel = "Low";//restaurant.getHazardIcon()
-        if(hazardLevel == "Low"){
-            hazardRating = BitmapDescriptorFactory.fromResource(R.drawable.yellow);
-        }
-        if(hazardLevel == "high"){
-            hazardRating = BitmapDescriptorFactory.fromResource(R.drawable.yellow);
-        }
-        return hazardRating;
     }
 
     //----------------------------------------------------------------------------------------------
