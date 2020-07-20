@@ -95,11 +95,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
+        mSearchText = (EditText) findViewById(R.id.editSearch);
         getLocationPermission();
         setItemOnClick();
         initSearch();
-
-        mSearchText = (EditText) findViewById(R.id.editSearch);
 
         try {
             mRestaurantManager = RestaurantManager.getInstance(this);
@@ -123,11 +122,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
         mMap.getUiSettings().setZoomControlsEnabled(true);
 
-        try {
-            setUpClusterer();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        setUpClusterer();
 
         mMap.setInfoWindowAdapter(new MapInfoWindowAdapter(MapsActivity.this));
 
@@ -299,7 +294,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     //Adapted from: https://developers.google.com/maps/documentation/android-sdk/utility/marker-clustering
-        private void setUpClusterer() throws FileNotFoundException {
+        private void setUpClusterer() {
         // Initialize new clusterManager
             mClusterManager = new ClusterManager<PegItem>(this, mMap);
 
@@ -309,7 +304,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mMap.setOnCameraIdleListener(mClusterManager);
 //        mMap.setOnMarkerClickListener(mClusterManager);
 
-            addItems();
+            try {
+                addItems();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
             mClusterManager.cluster();
         }
 
@@ -362,11 +361,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mClusterManager.clearItems();
             mMap.clear();
 
-            try {
-                setUpClusterer();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+            setUpClusterer();
 
             moveCamera(latLng, 15f);
         });

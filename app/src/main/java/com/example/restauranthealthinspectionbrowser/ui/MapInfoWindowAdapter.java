@@ -24,13 +24,17 @@ public class MapInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
         mWindow = LayoutInflater.from(context).inflate(R.layout.fragment_map_info_pop_window, null);
     }
 
-    private void renderWindowText(Marker marker, View view) throws FileNotFoundException {
+    private void renderWindowText(Marker marker, View view){
         TextView restaurantName = (TextView) view.findViewById(R.id.txtMapResName);
         ImageView restaurantIcon = (ImageView) view.findViewById(R.id.imageMapIcon);
         ImageView restaurantHazard = (ImageView) view.findViewById(R.id.imageMapHazard);
 
 
-        this.restaurant = RestaurantManager.getInstance(context).getRestaurant(marker.getPosition());
+        try {
+            this.restaurant = RestaurantManager.getInstance(context).getRestaurant(marker.getPosition());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         if(this.restaurant == null) {
             return;
         }
@@ -51,11 +55,7 @@ public class MapInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
      */
     @Override
     public View getInfoContents(Marker marker) {
-        try {
-            renderWindowText(marker, mWindow);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        renderWindowText(marker, mWindow);
         return  mWindow;
     }
 

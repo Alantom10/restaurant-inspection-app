@@ -17,12 +17,18 @@ public class SimpleClusterRender extends DefaultClusterRenderer<PegItem> {
 
     @Override
     protected void onBeforeClusterItemRendered(PegItem item, MarkerOptions markerOptions) {
-        BitmapDescriptor bitmapDescriptor=null;
+        BitmapDescriptor bitmapDescriptor = null;
         if("Low".equalsIgnoreCase(item.getmHazardLevel())){
-            bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.yellow);
+            bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.green_peg);
         }
-        if("high".equalsIgnoreCase(item.getmHazardLevel())){
-            bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.yellow);
+        else if("Moderate".equalsIgnoreCase(item.getmHazardLevel())){
+            bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.yellow_peg);
+        }
+        else if("High".equalsIgnoreCase(item.getmHazardLevel())){
+            bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.orange_peg);
+        }
+        else{
+            bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.grey_peg);
         }
         markerOptions.title(item.getTitle()).icon(bitmapDescriptor);
 
