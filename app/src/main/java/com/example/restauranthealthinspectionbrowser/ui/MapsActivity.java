@@ -96,10 +96,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
         mDataPackageManager = DataPackageManager.getInstance(this);
-        long lastUpdated = mDataPackageManager.getLastUpdated();
-        long currentTime = System.currentTimeMillis();
-        if (currentTime - lastUpdated > TimeUnit.HOURS.toMillis(20)) {
-            new FetchLastModifiedTask().execute();
+
+        if (!mDataPackageManager.isHasRequestedDownloadPermission()) {
+            long lastUpdated = mDataPackageManager.getLastUpdated();
+            long currentTime = System.currentTimeMillis();
+            if (currentTime - lastUpdated > TimeUnit.HOURS.toMillis(20)) {
+                new FetchLastModifiedTask().execute();
+            }
         }
     }
 
@@ -354,12 +357,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         .setPositiveButton(R.string.download, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                mDataPackageManager.setHasRequestedDownloadPermission(true);
                                 new FetchDataTask().execute();
                             }
                         })
                         .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                mDataPackageManager.setHasRequestedDownloadPermission(true);
                                 dialog.dismiss();
                             }
                         })

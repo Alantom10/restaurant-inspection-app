@@ -14,6 +14,7 @@ public class DataPackageManager {
     private long mLastUpdated;
     private String mLastModifiedRestaurants;
     private String mLastModifiedInspections;
+    private boolean mHasRequestedDownloadPermission;
 
     private static DataPackageManager sInstance;
 
@@ -29,6 +30,8 @@ public class DataPackageManager {
         mLastUpdated = sp.getLong(PREFERENCES_LAST_UPDATED, 0);
         mLastModifiedRestaurants = sp.getString(PREFERENCES_LAST_MODIFIED_RESTAURANTS, "");
         mLastModifiedInspections = sp.getString(PREFERENCES_LAST_MODIFIED_INSPECTIONS, "");
+
+        mHasRequestedDownloadPermission = false;
     }
 
     public long getLastUpdated() {
@@ -41,6 +44,14 @@ public class DataPackageManager {
 
     public String getLastModifiedInspections() {
         return mLastModifiedInspections;
+    }
+
+    public boolean isHasRequestedDownloadPermission() {
+        return mHasRequestedDownloadPermission;
+    }
+
+    public void setHasRequestedDownloadPermission(boolean hasRequestedDownloadPermission) {
+        mHasRequestedDownloadPermission = hasRequestedDownloadPermission;
     }
 
     public void updateLastModified(Context context, String lastModifiedRestaurants, String lastModifiedInspections) {
