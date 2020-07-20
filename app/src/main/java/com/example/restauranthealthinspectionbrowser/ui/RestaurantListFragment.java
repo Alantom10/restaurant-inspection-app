@@ -99,6 +99,7 @@ public class RestaurantListFragment extends Fragment {
 
     private class RestaurantHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView mTitleTextView;
+        private ImageView mRestaurantIcon;
         private TextView mDateTextView;
         private TextView mNumIssuesTextView;
         private TextView mHazardLevelTextView;
@@ -111,6 +112,7 @@ public class RestaurantListFragment extends Fragment {
             itemView.setOnClickListener(this);
 
             mTitleTextView = (TextView) itemView.findViewById(R.id.title);
+            mRestaurantIcon = (ImageView) itemView.findViewById(R.id.restaurant_icon);
             mDateTextView = (TextView) itemView.findViewById(R.id.inspection_date);
             mNumIssuesTextView = (TextView) itemView.findViewById(R.id.num_issues);
             mHazardLevelTextView = (TextView) itemView.findViewById(R.id.hazard_level);
@@ -146,6 +148,73 @@ public class RestaurantListFragment extends Fragment {
                 mNumIssuesTextView.setText(R.string.no_inspection_info);
                 mHazardLevelTextView.setText("");
                 mHazardLevelImageView.setImageResource(R.drawable.blank_icon);
+            }
+
+            restaurantIconSetter(restaurant);
+        }
+
+        public void restaurantIconSetter(Restaurant restaurant) {
+            String restaurantTitle = getString(R.string.restaurant_name, restaurant.getName());
+
+            if (restaurantTitle.contains("A&W")) {
+                mRestaurantIcon.setImageResource(R.drawable.aandw);
+            }
+            else if (restaurantTitle.contains("7-Eleven")) {
+                mRestaurantIcon.setImageResource(R.drawable.seven_eleven);
+            }
+            else if (restaurantTitle.contains("Blenz")) {
+                mRestaurantIcon.setImageResource(R.drawable.blenz_coffee);
+            }
+            else if (restaurantTitle.contains("Booster Juice")) {
+                mRestaurantIcon.setImageResource(R.drawable.booster_juice);
+            }
+            else if (restaurantTitle.contains("Boston Pizza")) {
+                mRestaurantIcon.setImageResource(R.drawable.boston_pizza);
+            }
+            else if (restaurantTitle.contains("Burger King")) {
+                mRestaurantIcon.setImageResource(R.drawable.burger_king);
+            }
+            else if (restaurantTitle.contains("Church's Chicken")) {
+                mRestaurantIcon.setImageResource(R.drawable.churchs_chicken);
+            }
+            else if (restaurantTitle.contains("COBS Bread")) {
+                mRestaurantIcon.setImageResource(R.drawable.cobs_bread);
+            }
+            else if (restaurantTitle.contains("Dairy Queen")) {
+                mRestaurantIcon.setImageResource(R.drawable.dairy_queen);
+            }
+            else if (restaurantTitle.contains("Domino's Pizza")) {
+                mRestaurantIcon.setImageResource(R.drawable.dominos_pizza);
+            }
+//            else if (restaurantTitle.contains("Elements Casino")) {
+//                mRestaurantIcon.setImageResource(R.drawable.elements_casino);
+//            }
+            else if (restaurantTitle.contains("Freshslice")) {
+                mRestaurantIcon.setImageResource(R.drawable.fresh_slice);
+            }
+            else if (restaurantTitle.contains("McDonald's")) {
+                mRestaurantIcon.setImageResource(R.drawable.mcdonalds);
+            }
+            else if (restaurantTitle.contains("Panago")) {
+                mRestaurantIcon.setImageResource(R.drawable.panago);
+            }
+            else if (restaurantTitle.contains("Pizza Hut")) {
+                mRestaurantIcon.setImageResource(R.drawable.pizza_hut);
+            }
+            else if (restaurantTitle.contains("Safeway")) {
+                mRestaurantIcon.setImageResource(R.drawable.safeway);
+            }
+            else if (restaurantTitle.contains("Starbucks")) {
+                mRestaurantIcon.setImageResource(R.drawable.starbucks);
+            }
+            else if (restaurantTitle.contains("Subway")) {
+                mRestaurantIcon.setImageResource(R.drawable.subway);
+            }
+            else if (restaurantTitle.contains("Tim horton's")) {
+                mRestaurantIcon.setImageResource(R.drawable.tim_hortons);
+            }
+            else {
+                mRestaurantIcon.setImageResource(R.drawable.restaurant_icon);
             }
         }
 
