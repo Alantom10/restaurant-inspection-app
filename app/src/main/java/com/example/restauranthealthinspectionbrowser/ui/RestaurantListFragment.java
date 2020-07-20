@@ -23,6 +23,7 @@ import com.example.restauranthealthinspectionbrowser.model.DateHelper;
 import com.example.restauranthealthinspectionbrowser.model.Inspection;
 import com.example.restauranthealthinspectionbrowser.model.InspectionManager;
 import com.example.restauranthealthinspectionbrowser.model.Restaurant;
+import com.example.restauranthealthinspectionbrowser.model.RestaurantIconHelper;
 import com.example.restauranthealthinspectionbrowser.model.RestaurantManager;
 
 import java.io.FileNotFoundException;
@@ -99,6 +100,7 @@ public class RestaurantListFragment extends Fragment {
 
     private class RestaurantHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView mTitleTextView;
+        private ImageView mRestaurantIcon;
         private TextView mDateTextView;
         private TextView mNumIssuesTextView;
         private TextView mHazardLevelTextView;
@@ -111,6 +113,7 @@ public class RestaurantListFragment extends Fragment {
             itemView.setOnClickListener(this);
 
             mTitleTextView = (TextView) itemView.findViewById(R.id.title);
+            mRestaurantIcon = (ImageView) itemView.findViewById(R.id.restaurant_icon);
             mDateTextView = (TextView) itemView.findViewById(R.id.inspection_date);
             mNumIssuesTextView = (TextView) itemView.findViewById(R.id.num_issues);
             mHazardLevelTextView = (TextView) itemView.findViewById(R.id.hazard_level);
@@ -147,6 +150,9 @@ public class RestaurantListFragment extends Fragment {
                 mHazardLevelTextView.setText("");
                 mHazardLevelImageView.setImageResource(R.drawable.blank_icon);
             }
+
+            int iconResId = new RestaurantIconHelper().getIconResId(restaurant.getName());
+            mRestaurantIcon.setImageResource(iconResId);
         }
 
         @Override
