@@ -351,7 +351,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 return;
             }
 
-            //TODO goto restaurant detail activity
             Intent intent = new Intent(MapsActivity.this, RestaurantActivity.class);
             intent.putExtra(RestaurantActivity.EXTRA_RESTAURANT_ID,restaurant.getID());
             startActivity(intent);
