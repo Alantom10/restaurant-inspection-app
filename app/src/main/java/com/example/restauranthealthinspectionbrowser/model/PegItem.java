@@ -7,12 +7,12 @@ import com.google.maps.android.clustering.ClusterItem;
 public class PegItem implements ClusterItem{
     private LatLng mPosition;
     private String mTitle;
-    private BitmapDescriptor mHazard;
+    private String mHazardLevel;
 
-    public PegItem(double lat, double lng, String mTitle, BitmapDescriptor mHazard) {
+    public PegItem(double lat, double lng, String mTitle, String mHazardLevel) {
         this.mPosition = new LatLng(lat, lng);
         this.mTitle = mTitle;
-        this.mHazard = mHazard;
+        this.mHazardLevel = mHazardLevel;
     }
 
     public PegItem(double lat, double lng) {
@@ -29,12 +29,13 @@ public class PegItem implements ClusterItem{
         return mTitle;
     }
 
-    public BitmapDescriptor getHazard() {
-        return mHazard;
-    }
-
     @Override
     public String getSnippet() {
         return "";
     }
+
+    public String getmHazardLevel() {
+        return mHazardLevel;
+    }
+
 }

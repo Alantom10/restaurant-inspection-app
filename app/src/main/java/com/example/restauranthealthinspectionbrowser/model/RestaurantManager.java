@@ -3,6 +3,7 @@ package com.example.restauranthealthinspectionbrowser.model;
 import android.content.Context;
 
 import com.example.restauranthealthinspectionbrowser.R;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -98,5 +99,14 @@ public class RestaurantManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public Restaurant getRestaurant(LatLng latLng) {
+        for (Restaurant mRestaurant : mRestaurants) {
+            if (mRestaurant.getLatitude() == latLng.latitude && mRestaurant.getLongitude() == latLng.longitude){
+                return mRestaurant;
+            }
+        }
+        return null;
     }
 }
