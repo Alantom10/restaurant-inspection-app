@@ -28,8 +28,6 @@ import static com.example.restauranthealthinspectionbrowser.ui.MapsActivity.FILE
 public class InspectionManager {
     private static final String TAG = "RestaurantManager";
 
-    private static InspectionManager sInstance;
-
     private List<Inspection> mInspections;
 
     public static InspectionManager getInstance(Context context)  {
