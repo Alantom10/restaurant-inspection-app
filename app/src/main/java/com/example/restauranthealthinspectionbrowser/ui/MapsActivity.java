@@ -72,16 +72,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public static final String FILE_NAME_RESTAURANTS = "restaurants.csv";
     public static final String FILE_NAME_INSPECTION_REPORTS = "inspection_reports.csv";
 
-    private static final String PREFERENCES = "restaurant list";
-    private static final String PREFERENCES_LAST_UPDATED = "last updated";
-    private static final String PREFERENCES_LAST_MODIFIED_RESTAURANTS = "last modified restaurants";
-    private static final String PREFERENCES_LAST_MODIFIED_INSPECTIONS = "last modified inspections";
-
     private String mNewLastModifiedRestaurants;
     private String mNewLastModifiedInspections;
 
     private RestaurantManager mRestaurantManager;
     private InspectionManager mInspectionManager;
+    private DataPackageManager mDataPackageManager;
 
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
@@ -108,11 +104,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mInspectionManager = InspectionManager.getInstance(this);
 
 
-        SharedPreferences sp = getSharedPreferences(PREFERENCES, MODE_PRIVATE);
-        long lastUpdated = sp.getLong(PREFERENCES_LAST_UPDATED, 0);
-        long currentTime = System.currentTimeMillis();
-        if (currentTime - lastUpdated > TimeUnit.HOURS.toMillis(20)) {
-            new FetchLastModifiedTask().execute();
+        mDataPackageManager = DataPackageManager.getInstance(this);
+
+        if (!mDataPackageManager.isHasRequestedDownloadPermission()) {
+            long lastUpdated = mDataPackageManager.getLastUpdated();
+            long currentTime = System.currentTimeMillis();
+            if (currentTime - lastUpdated > TimeUnit.HOURS.toMillis(20)) {
+                new FetchLastModifiedTask().execute();
+            }
         }
     }
 
@@ -422,9 +421,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mNewLastModifiedRestaurants = newLastModified[0];
             mNewLastModifiedInspections = newLastModified[1];
 
-            SharedPreferences sp = getSharedPreferences(PREFERENCES, MODE_PRIVATE);
-            String lastModifiedRestaurants = sp.getString(PREFERENCES_LAST_MODIFIED_RESTAURANTS, "");
-            String lastModifiedInspections = sp.getString(PREFERENCES_LAST_MODIFIED_INSPECTIONS, "");
+            String lastModifiedRestaurants = mDataPackageManager.getLastModifiedRestaurants();
+            String lastModifiedInspections = mDataPackageManager.getLastModifiedInspections();
             if (!mNewLastModifiedRestaurants.equals(lastModifiedRestaurants) ||
                     !mNewLastModifiedInspections.equals(lastModifiedInspections))
             {
@@ -434,12 +432,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         .setPositiveButton(R.string.download, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                mDataPackageManager.setHasRequestedDownloadPermission(true);
                                 new FetchDataTask().execute();
                             }
                         })
                         .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                mDataPackageManager.setHasRequestedDownloadPermission(true);
                                 dialog.dismiss();
                             }
                         })
@@ -520,12 +520,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 mRestaurantManager.updateRestaurants(MapsActivity.this);
                 mInspectionManager.updateInspections(MapsActivity.this);
 
-                SharedPreferences sp = getSharedPreferences(PREFERENCES, MODE_PRIVATE);
-                SharedPreferences.Editor editor = sp.edit();
-                editor.putString(PREFERENCES_LAST_MODIFIED_RESTAURANTS, mNewLastModifiedRestaurants);
-                editor.putString(PREFERENCES_LAST_MODIFIED_INSPECTIONS, mNewLastModifiedInspections);
-                editor.putLong(PREFERENCES_LAST_UPDATED, System.currentTimeMillis());
-                editor.apply();
+                mDataPackageManager.updateLastModified(
+                        MapsActivity.this,
+                        mNewLastModifiedRestaurants,
+                        mNewLastModifiedInspections);
 
             } catch (IOException e) {
                 e.printStackTrace();
