@@ -30,6 +30,8 @@ public class InspectionManager {
 
     private List<Inspection> mInspections;
 
+    private static InspectionManager sInstance;
+
     public static InspectionManager getInstance(Context context)  {
         if (sInstance == null) {
             sInstance = new InspectionManager(context);

@@ -27,6 +27,8 @@ public class RestaurantManager {
 
     private List<Restaurant> mRestaurants;
 
+    private static RestaurantManager sInstance;
+
     public static RestaurantManager getInstance(Context context) {
         if (sInstance == null) {
             sInstance = new RestaurantManager(context);

@@ -35,6 +35,7 @@ import android.widget.Toast;
 import com.example.restauranthealthinspectionbrowser.R;
 
 import com.example.restauranthealthinspectionbrowser.model.DataFetcher;
+import com.example.restauranthealthinspectionbrowser.model.DataPackageManager;
 import com.example.restauranthealthinspectionbrowser.model.Inspection;
 import com.example.restauranthealthinspectionbrowser.model.InspectionManager;
 import com.example.restauranthealthinspectionbrowser.model.PegItem;
