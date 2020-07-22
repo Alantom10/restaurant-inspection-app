@@ -10,8 +10,9 @@
         android:id="@+id/txtMapResName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
+        android:layout_marginStart="20dp"
         android:text="TextView"
+        android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/imageMapIcon"
         tools:layout_editor_absoluteY="45dp" />
 
@@ -19,7 +20,7 @@
         android:id="@+id/txtMapAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="8dp"
         android:text="TextView"
         app:layout_constraintStart_toEndOf="@+id/imageMapIcon"
@@ -39,8 +40,8 @@
         android:id="@+id/imageMapHazard"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginStart="124dp"
+        android:layout_marginStart="76dp"
         app:layout_constraintStart_toEndOf="@+id/txtMapAddress"
-        tools:layout_editor_absoluteY="74dp"
+        tools:layout_editor_absoluteY="64dp"
         tools:srcCompat="@tools:sample/avatars" />
 </androidx.constraintlayout.widget.ConstraintLayout>

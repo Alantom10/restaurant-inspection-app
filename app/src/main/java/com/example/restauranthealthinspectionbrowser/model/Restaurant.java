@@ -11,6 +11,7 @@ public class Restaurant implements Comparable<Restaurant> {
     private double mLatitude;
     private double mLongitude;
     private int mHazardIcon;
+    private int mIcon;
 
     public Restaurant() {
     }
@@ -60,6 +61,12 @@ public class Restaurant implements Comparable<Restaurant> {
     }
 
     public int getHazardIcon(){ return mHazardIcon;}
+
+    public void setmIcon(int icon){ mIcon = icon;}
+
+    public int getmIcon(){
+        return mIcon;
+    }
 
     @Override
     public int compareTo(Restaurant o) {
