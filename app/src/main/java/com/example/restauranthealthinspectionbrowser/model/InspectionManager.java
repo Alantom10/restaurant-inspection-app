@@ -30,16 +30,14 @@ public class InspectionManager {
 
     private List<Inspection> mInspections;
 
-    private static InspectionManager sInstance;
-
-    public static InspectionManager getInstance(Context context) throws FileNotFoundException {
+    public static InspectionManager getInstance(Context context)  {
         if (sInstance == null) {
             sInstance = new InspectionManager(context);
         }
         return sInstance;
     }
 
-    private InspectionManager(Context context) throws FileNotFoundException {
+    private InspectionManager(Context context) {
         mInspections = new ArrayList<>();
         readData(context);
     }
@@ -77,16 +75,23 @@ public class InspectionManager {
         readData(context);
     }
 
-    private void readData(Context context) throws FileNotFoundException {
+    private void readData(Context context)  {
         File file = new File(context.getFilesDir() + "/" + FILE_NAME_INSPECTION_REPORTS);
-        InputStream inputStream;
+        InputStream inputStream = null;
         if (file.exists()) {
-            inputStream = context.openFileInput(FILE_NAME_INSPECTION_REPORTS);
+            try {
+                inputStream = context.openFileInput(FILE_NAME_INSPECTION_REPORTS);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
         }
         else {
             inputStream = context.getResources().openRawResource(R.raw.inspectionreports_itr1);
         }
 
+        if(inputStream == null){
+            return;
+        }
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
         try {
             String line = reader.readLine();

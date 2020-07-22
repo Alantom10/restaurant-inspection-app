@@ -41,17 +41,16 @@ public class RestaurantFragment extends Fragment {
     private Restaurant mRestaurant;
     private String mRestaurantID;
 
+    public static final String RESTAURANT_LATITUDE_INTENT_TAG = "Restaurant latitude";
+    public static final String RESTAURANT_LONGITUDE_INTENT_TAG = "Restaurant longitude";
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_restaurant, container, false);
 
         mRestaurantID = getActivity().getIntent().getStringExtra(EXTRA_RESTAURANT_ID);
-        try {
-            mRestaurant = RestaurantManager.getInstance(getActivity()).getRestaurant(mRestaurantID);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        mRestaurant = RestaurantManager.getInstance(getActivity()).getRestaurant(mRestaurantID);
 
         mTitleTextView = (TextView) view.findViewById(R.id.title);
         mAddressTextView = (TextView) view.findViewById(R.id.address);
@@ -68,6 +67,7 @@ public class RestaurantFragment extends Fragment {
             e.printStackTrace();
         }
 
+
         return view;
     }
 
@@ -75,6 +75,16 @@ public class RestaurantFragment extends Fragment {
         mTitleTextView.setText(getString(R.string.restaurant_name, mRestaurant.getName()));
         mAddressTextView.setText(getString(R.string.address, mRestaurant.getAddress()));
         mCoordinatesTextView.setText(getString(R.string.coordinates, mRestaurant.getLatitude(), mRestaurant.getLongitude()));
+
+        mCoordinatesTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = MapsActivity.makeIntent(getActivity());
+                intent.putExtra(RESTAURANT_LATITUDE_INTENT_TAG, mRestaurant.getLatitude());
+                intent.putExtra(RESTAURANT_LONGITUDE_INTENT_TAG, mRestaurant.getLongitude());
+                startActivity(intent);
+            }
+        });
     }
 
     private void updateRecyclerView() throws FileNotFoundException {

@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentManager;
 import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -34,19 +35,27 @@ import android.widget.Toast;
 import com.example.restauranthealthinspectionbrowser.R;
 
 import com.example.restauranthealthinspectionbrowser.model.DataFetcher;
-import com.example.restauranthealthinspectionbrowser.model.DataPackageManager;
+import com.example.restauranthealthinspectionbrowser.model.Inspection;
 import com.example.restauranthealthinspectionbrowser.model.InspectionManager;
+import com.example.restauranthealthinspectionbrowser.model.PegItem;
+import com.example.restauranthealthinspectionbrowser.model.Restaurant;
 import com.example.restauranthealthinspectionbrowser.model.RestaurantManager;
+import com.example.restauranthealthinspectionbrowser.model.SimpleClusterRender;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.maps.android.MarkerManager;
+import com.google.maps.android.clustering.ClusterManager;
 
 import org.json.JSONException;
 
@@ -79,21 +88,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private EditText mSearchText;
+    private ClusterManager<PegItem> mClusterManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
+        mSearchText = (EditText) findViewById(R.id.editSearch);
         getLocationPermission();
         setItemOnClick();
+        initSearch();
 
-        try {
-            mRestaurantManager = RestaurantManager.getInstance(this);
-            mInspectionManager = InspectionManager.getInstance(this);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        mRestaurantManager = RestaurantManager.getInstance(this);
+        mInspectionManager = InspectionManager.getInstance(this);
+
 
         mDataPackageManager = DataPackageManager.getInstance(this);
 
@@ -113,17 +122,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
         mMap.getUiSettings().setZoomControlsEnabled(true);
 
-        //setUpClusterer();
+        setUpClusterer();
+
+        mMap.setInfoWindowAdapter(new MapInfoWindowAdapter(MapsActivity.this));
+        setOnMapsListener();
 
         if (mLocationPermissionsGranted) {
             getDeviceLocation();
 
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                    ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-            {
+                    ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
-
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
         }
@@ -185,6 +195,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void getDeviceLocation() {
         Log.d(TAG, "getDeviceLocation:getting the devices current location");
+
+        //
+        Intent intent = getIntent();
+        double lat = intent.getDoubleExtra(RestaurantFragment.RESTAURANT_LATITUDE_INTENT_TAG,0);
+        double lng = intent.getDoubleExtra(RestaurantFragment.RESTAURANT_LONGITUDE_INTENT_TAG, 0);
+
+        if(lat != 0 && lng != 0) {
+            LatLng latLng = new LatLng(lat,lng);
+            Restaurant restaurant = RestaurantManager.getInstance(getBaseContext()).getRestaurant(latLng);
+
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.position(latLng).title(restaurant.getName());//.icon(restaurant.getmIcon());
+            Marker marker = mMap.addMarker(markerOptions);
+            //marker.setIcon(restaurant.getHazardIcon());
+            marker.showInfoWindow();
+            moveCamera(latLng, DEFAULT_ZOOM);
+            return;
+        }
+
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
         try {
@@ -214,8 +243,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,zoom));
 
         //drop a pin
-        MarkerOptions options = new MarkerOptions().position(latLng);
-        mMap.addMarker(options);
+        //MarkerOptions options = new MarkerOptions().position(latLng);
+        //mMap.addMarker(options);
+
+//        hideKeyboard();
     }
 
     private void initSearch(){
@@ -259,6 +290,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         );
     }
 
+    //The above are all adapted from the youtube video:
+    //https://www.youtube.com/watch?v=Vt6H9TOmsuo&list=PLgCYzUzKIBE-vInwQhGSdnbyJ62nixHCt&index=4
+
     private void setItemOnClick(){
         ImageView list = findViewById(R.id.ic_listview);
         list.setOnClickListener(new View.OnClickListener(){
@@ -266,7 +300,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onClick(View v) {
                 Intent intent = new Intent (MapsActivity.this, RestaurantListActivity.class);
                 startActivity(intent);
-                finish();
             }
         });
 
@@ -279,53 +312,95 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
     }
 
-    //    private void setUpClusterer() {
-//        // Initialize new clusterManager
-//        mClusterManager = new ClusterManager<PegItem>(this, mMap);
-//
-//        mMap.setOnCameraIdleListener(mClusterManager);
-//        mMap.setOnMarkerClickListener(mClusterManager);
-//
-//        getPegs();
-//    }
+    //Adapted from: https://developers.google.com/maps/documentation/android-sdk/utility/marker-clustering
+    //Learned from: https://ahsensaeed.com/android-custom-info-window-view-on-marker-click-map-utils/#simpleTitleInfoOnMarkerClick
+        private void setUpClusterer() {
+        // Initialize new clusterManager
+            mClusterManager = new ClusterManager<PegItem>(this, mMap);
 
-//    private void getPegs() {
-//        RestaurantManager manager = RestaurantManager.getInstance(getActivity());
-//        List<Restaurant> restaurants = manager.getRestaurants();
-//        int i = 0;
-//        for (Restaurant restaurant : restaurants) {
-//
-//            String temp = restaurant.getName();
-//
-//            //change first two terms into name and address
-////            PegItem newItem = new PegItem(restaurant.getLatitude(),
-////                    restaurant.getLongitude(),
-////                    temp, getHazardIcon(restaurant));
-//
-//            PegItem peg = new PegItem(
-//                    restaurant.getLatitude(),
-//                    restaurant.getLongitude()
-//            );
-//
-//            mClusterManager.addItem(peg);
-//        }
-//    }
-//    private BitmapDescriptor getHazardIcon(Restaurant restaurant) {
-//        //Inspection inspection = restaurant.getInspection();
-//        BitmapDescriptor hazardRating;
-//        String hazardLevel = "";
-//        if(hazardLevel == "Low"){
-//            hazardRating = ;
-//        }
-//        return hazardRating;
-//    }
+            SimpleClusterRender markerClusterRenderer = new SimpleClusterRender(this, mMap, mClusterManager); // 2
+            mClusterManager.setRenderer(markerClusterRenderer);
+
+            mMap.setOnCameraIdleListener(mClusterManager);
+        //mMap.setOnMarkerClickListener(mClusterManager);
+
+                addItems();
+
+            mClusterManager.cluster();
+        }
+
+    private void addItems() {
+        RestaurantManager manager = RestaurantManager.getInstance(getBaseContext());
+        List<Restaurant> restaurants = manager.getRestaurants();
+
+        InspectionManager inspectionManager = InspectionManager.getInstance(this);
+
+        int i = 0;
+        for (Restaurant restaurant : restaurants) {
+            String name = restaurant.getName();
+            String mRestaurantID = restaurant.getID();
+            Inspection inspection = inspectionManager.getLatestInspection(mRestaurantID);
+            String hazardLevel = "";
+
+            if (inspection != null) {
+                hazardLevel = inspection.getHazardRating();
+            }
+
+            PegItem peg = new PegItem(restaurant.getLatitude(),
+                    restaurant.getLongitude(),
+                    name, hazardLevel);
+
+            mClusterManager.addItem(peg);
+        }
+    }
+
+    private void setOnMapsListener() {
+        /**
+         *
+         */
+        this.mMap.setOnMarkerClickListener((marker) -> {
+//            moveCamera(marker.getPosition(), DEFAULT_ZOOM);
+            marker.showInfoWindow();
+            return true;
+        });
+
+        mMap.setOnInfoWindowClickListener(marker -> {
+            LatLng position = marker.getPosition();
+
+            Restaurant restaurant = RestaurantManager.getInstance(MapsActivity.this).getRestaurant(position);
+
+            if (restaurant == null) {
+                return;
+            }
+
+            Intent intent = new Intent(MapsActivity.this, RestaurantActivity.class);
+            intent.putExtra(RestaurantActivity.EXTRA_RESTAURANT_ID,restaurant.getID());
+            startActivity(intent);
+        });
 
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.activity_maps, menu);
-//        return super.onCreateOptionsMenu(menu);
-//    }
+        mMap.setOnMapClickListener((latLng) -> {
+            mClusterManager.clearItems();
+            mMap.clear();
+
+            setUpClusterer();
+
+            moveCamera(latLng, 15f);
+        });
+
+
+        mClusterManager.setOnClusterClickListener((cluster) -> {
+            moveCamera(cluster.getPosition(), -10f);
+            return true;
+        });
+
+    }
+
+    public static Intent makeIntent(Context context) {
+        return new Intent(context, MapsActivity.class);
+    }
+
+    //----------------------------------------------------------------------------------------------
 
     private class FetchLastModifiedTask extends AsyncTask<Void,Void,String[]> {
 
