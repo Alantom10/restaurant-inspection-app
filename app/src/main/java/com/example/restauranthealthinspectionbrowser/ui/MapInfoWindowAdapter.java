@@ -6,7 +6,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
+
 import com.example.restauranthealthinspectionbrowser.R;
+import com.example.restauranthealthinspectionbrowser.model.Inspection;
+import com.example.restauranthealthinspectionbrowser.model.InspectionManager;
 import com.example.restauranthealthinspectionbrowser.model.Restaurant;
 import com.example.restauranthealthinspectionbrowser.model.RestaurantManager;
 import com.google.android.gms.maps.GoogleMap;
@@ -18,6 +22,7 @@ public class MapInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
     private final View mWindow;
     private final Context context;
     private Restaurant restaurant;
+    private Inspection inspection;
 
     public MapInfoWindowAdapter(Context context){
         this.context = context;
@@ -30,15 +35,14 @@ public class MapInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
         ImageView restaurantIcon = (ImageView) view.findViewById(R.id.imageMapIcon);
         ImageView restaurantHazard = (ImageView) view.findViewById(R.id.imageMapHazard);
 
-
-            this.restaurant = RestaurantManager.getInstance(context).getRestaurant(marker.getPosition());
+        this.restaurant = RestaurantManager.getInstance(context).getRestaurant(marker.getPosition());
 
         if(this.restaurant == null) {
             return;
         }
         restaurantName.setText(restaurant.getName());
         restaurantAddress.setText(restaurant.getAddress());
-        restaurantIcon.setImageResource(restaurant.getHazardIcon());
+        restaurantIcon.setImageResource(restaurant.getmIcon());
         restaurantHazard.setImageResource(restaurant.getHazardIcon()); //todo
     }
 

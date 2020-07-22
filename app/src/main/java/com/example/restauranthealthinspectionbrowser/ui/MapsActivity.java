@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentManager;
 import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -49,9 +50,11 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.maps.android.MarkerManager;
 import com.google.maps.android.clustering.ClusterManager;
 
 import org.json.JSONException;
@@ -97,8 +100,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setItemOnClick();
         initSearch();
 
-            mRestaurantManager = RestaurantManager.getInstance(this);
-            mInspectionManager = InspectionManager.getInstance(this);
+        mRestaurantManager = RestaurantManager.getInstance(this);
+        mInspectionManager = InspectionManager.getInstance(this);
 
 
         mDataPackageManager = DataPackageManager.getInstance(this);
@@ -192,6 +195,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void getDeviceLocation() {
         Log.d(TAG, "getDeviceLocation:getting the devices current location");
+
+        //
+        Intent intent = getIntent();
+        double lat = intent.getDoubleExtra(RestaurantFragment.RESTAURANT_LATITUDE_INTENT_TAG,0);
+        double lng = intent.getDoubleExtra(RestaurantFragment.RESTAURANT_LONGITUDE_INTENT_TAG, 0);
+
+        if(lat != 0 && lng != 0) {
+            LatLng latLng = new LatLng(lat,lng);
+            Restaurant restaurant = RestaurantManager.getInstance(getBaseContext()).getRestaurant(latLng);
+
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.position(latLng).title(restaurant.getName());//.icon(restaurant.getmIcon());
+            Marker marker = mMap.addMarker(markerOptions);
+            //marker.setIcon(restaurant.getHazardIcon());
+            marker.showInfoWindow();
+            moveCamera(latLng, DEFAULT_ZOOM);
+            return;
+        }
+
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
         try {
@@ -224,7 +246,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //MarkerOptions options = new MarkerOptions().position(latLng);
         //mMap.addMarker(options);
 
-        hideKeyboard();
+//        hideKeyboard();
     }
 
     private void initSearch(){
@@ -291,6 +313,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     //Adapted from: https://developers.google.com/maps/documentation/android-sdk/utility/marker-clustering
+    //Learned from: https://ahsensaeed.com/android-custom-info-window-view-on-marker-click-map-utils/#simpleTitleInfoOnMarkerClick
         private void setUpClusterer() {
         // Initialize new clusterManager
             mClusterManager = new ClusterManager<PegItem>(this, mMap);
@@ -299,7 +322,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mClusterManager.setRenderer(markerClusterRenderer);
 
             mMap.setOnCameraIdleListener(mClusterManager);
-//        mMap.setOnMarkerClickListener(mClusterManager);
+        //mMap.setOnMarkerClickListener(mClusterManager);
 
                 addItems();
 
@@ -336,7 +359,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
          *
          */
         this.mMap.setOnMarkerClickListener((marker) -> {
-            moveCamera(marker.getPosition(), DEFAULT_ZOOM);
+//            moveCamera(marker.getPosition(), DEFAULT_ZOOM);
             marker.showInfoWindow();
             return true;
         });
@@ -371,6 +394,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             return true;
         });
 
+    }
+
+    public static Intent makeIntent(Context context) {
+        return new Intent(context, MapsActivity.class);
     }
 
     //----------------------------------------------------------------------------------------------
