@@ -10,8 +10,6 @@ public class Restaurant implements Comparable<Restaurant> {
     private String mAddress;
     private double mLatitude;
     private double mLongitude;
-    private int mHazardIcon;
-    private int mIcon;
 
     public Restaurant() {
     }
@@ -54,18 +52,6 @@ public class Restaurant implements Comparable<Restaurant> {
 
     public void setLongitude(double longitude) {
         mLongitude = longitude;
-    }
-
-    public void setHazardIcon(int hazardIcon){
-        mHazardIcon = hazardIcon;
-    }
-
-    public int getHazardIcon(){ return mHazardIcon;}
-
-    public void setmIcon(int icon){ mIcon = icon;}
-
-    public int getmIcon(){
-        return mIcon;
     }
 
     @Override

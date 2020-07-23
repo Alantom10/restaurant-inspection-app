@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.restauranthealthinspectionbrowser.R;
 import com.example.restauranthealthinspectionbrowser.model.DateHelper;
+import com.example.restauranthealthinspectionbrowser.model.HazardRatingHelper;
 import com.example.restauranthealthinspectionbrowser.model.Inspection;
 import com.example.restauranthealthinspectionbrowser.model.InspectionManager;
 import com.example.restauranthealthinspectionbrowser.model.Restaurant;
@@ -130,16 +131,10 @@ public class RestaurantListFragment extends Fragment {
 
                 String hazardLevel = inspection.getHazardRating();
                 mHazardLevelTextView.setText(getString(R.string.hazard_level, hazardLevel));
-                if (hazardLevel.equals("High")) {
-                    mHazardLevelTextView.setTextColor(ContextCompat.getColor(getActivity(), R.color.highHazardLevel));
-                    mHazardLevelImageView.setImageResource(R.drawable.red_exclamation_circle);
-                } else if (hazardLevel.equals("Moderate")) {
-                    mHazardLevelTextView.setTextColor(ContextCompat.getColor(getActivity(), R.color.moderateHazardLevel));
-                    mHazardLevelImageView.setImageResource(R.drawable.yellow_exclamation_circle);
-                } else {
-                    mHazardLevelTextView.setTextColor(ContextCompat.getColor(getActivity(), R.color.lowHazardLevel));
-                    mHazardLevelImageView.setImageResource(R.drawable.green_exclamation_circle);
-                }
+
+                HazardRatingHelper helper = new HazardRatingHelper();
+                mHazardLevelTextView.setTextColor(ContextCompat.getColor(getActivity(), helper.getHazardColor(hazardLevel)));
+                mHazardLevelImageView.setImageResource(helper.getHazardIcon(hazardLevel));
             }
             else {
                 mDateTextView.setText("");
