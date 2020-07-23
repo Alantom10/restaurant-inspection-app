@@ -17,7 +17,8 @@ import java.util.List;
  * reading violation date from file.
  */
 public class ViolationManager {
-    private List<Violation> listBriefViolation = new ArrayList<>();
+    private List<Violation> mViolations = new ArrayList<>();
+
     private static ViolationManager sInstance;
 
     public static ViolationManager getInstance(Context context) {
@@ -28,25 +29,22 @@ public class ViolationManager {
         return sInstance;
     }
 
-    public List<Violation> getListBriefViolation() {
-        return listBriefViolation;
+    public List<Violation> getViolations() {
+        return mViolations;
     }
 
     private void readData(Context context){
-        try(InputStream is = context.getResources().openRawResource(R.raw.violation_description);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))
-        ){
+        InputStream is = context.getResources().openRawResource(R.raw.violation_descriptions);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
+        try {
             String line = "";
             while ((line = reader.readLine()) != null) {
                 String[] row = line.split(",");
-                Violation briefViolation = new Violation();
-                briefViolation.setIndex(Integer.valueOf(row[0].replace("\"", "")));
-                briefViolation.setViolationBriefDesc(row[1].replace("\"", ""));
-//                inspection.setTest(row[6]);
-                //
+                Violation violation = new Violation();
+                violation.setIndex(Integer.parseInt(row[0].replace("\"", "")));
+                violation.setViolationDescription(row[1].replace("\"", ""));
 
-                listBriefViolation.add(briefViolation);
-
+                mViolations.add(violation);
             }
         }
         catch  (IOException e) {
@@ -55,7 +53,7 @@ public class ViolationManager {
     }
 
     private ViolationManager(Context context) {
-        listBriefViolation = new ArrayList<>();
+        mViolations = new ArrayList<>();
         readData(context);
     }
 }

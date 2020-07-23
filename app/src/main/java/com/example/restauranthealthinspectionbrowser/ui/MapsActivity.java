@@ -119,7 +119,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     // Adapted from: https://www.youtube.com/watch?v=Vt6H9TOmsuo&list=PLgCYzUzKIBE-vInwQhGSdnbyJ62nixHCt&index=4
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        Toast.makeText(this, "Map is ready", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.maps_activity_title), Toast.LENGTH_LONG).show();
         mMap = googleMap;
         mMap.getUiSettings().setZoomControlsEnabled(true);
 
