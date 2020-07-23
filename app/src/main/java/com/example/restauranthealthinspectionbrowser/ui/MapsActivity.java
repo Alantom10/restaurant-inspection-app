@@ -1,12 +1,10 @@
 package com.example.restauranthealthinspectionbrowser.ui;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
 
 import android.Manifest;
 import android.app.Activity;
@@ -14,7 +12,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -23,7 +20,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.Menu;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
@@ -48,19 +44,15 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.maps.android.MarkerManager;
 import com.google.maps.android.clustering.ClusterManager;
 
 import org.json.JSONException;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -91,10 +83,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private EditText mSearchText;
     private ClusterManager<PegItem> mClusterManager;
 
+    public static Activity main;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        main = this;
 
         mSearchText = (EditText) findViewById(R.id.editSearch);
         getLocationPermission();
@@ -121,7 +116,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
         mMap.getUiSettings().setZoomControlsEnabled(true);
 
-        setUpClusterer();
+        setUpClusters();
 
         mMap.setInfoWindowAdapter(new MapInfoWindowAdapter(MapsActivity.this));
         setOnMapsListener();
@@ -313,7 +308,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     //Adapted from: https://developers.google.com/maps/documentation/android-sdk/utility/marker-clustering
     //Learned from: https://ahsensaeed.com/android-custom-info-window-view-on-marker-click-map-utils/#simpleTitleInfoOnMarkerClick
-        private void setUpClusterer() {
+        private void setUpClusters() {
         // Initialize new clusterManager
             mClusterManager = new ClusterManager<PegItem>(this, mMap);
 
@@ -323,7 +318,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mMap.setOnCameraIdleListener(mClusterManager);
         //mMap.setOnMarkerClickListener(mClusterManager);
 
-                addItems();
+            addItems();
 
             mClusterManager.cluster();
         }
@@ -382,7 +377,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mClusterManager.clearItems();
             mMap.clear();
 
-            setUpClusterer();
+            setUpClusters();
 
             moveCamera(latLng, 15f);
         });

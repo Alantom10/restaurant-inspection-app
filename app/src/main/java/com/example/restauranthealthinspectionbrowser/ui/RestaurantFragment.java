@@ -82,6 +82,7 @@ public class RestaurantFragment extends Fragment {
                 Intent intent = MapsActivity.makeIntent(getActivity());
                 intent.putExtra(RESTAURANT_LATITUDE_INTENT_TAG, mRestaurant.getLatitude());
                 intent.putExtra(RESTAURANT_LONGITUDE_INTENT_TAG, mRestaurant.getLongitude());
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
         });
