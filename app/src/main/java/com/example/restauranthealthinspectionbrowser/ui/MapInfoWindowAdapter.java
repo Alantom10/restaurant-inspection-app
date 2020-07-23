@@ -9,41 +9,58 @@ import android.widget.TextView;
 import androidx.core.content.ContextCompat;
 
 import com.example.restauranthealthinspectionbrowser.R;
+import com.example.restauranthealthinspectionbrowser.model.HazardRatingHelper;
 import com.example.restauranthealthinspectionbrowser.model.Inspection;
 import com.example.restauranthealthinspectionbrowser.model.InspectionManager;
 import com.example.restauranthealthinspectionbrowser.model.Restaurant;
+import com.example.restauranthealthinspectionbrowser.model.RestaurantIconHelper;
 import com.example.restauranthealthinspectionbrowser.model.RestaurantManager;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
 
-import java.io.FileNotFoundException;
-
 public class MapInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
     private final View mWindow;
-    private final Context context;
-    private Restaurant restaurant;
-    private Inspection inspection;
+    private final Context mContext;
 
     public MapInfoWindowAdapter(Context context){
-        this.context = context;
+        this.mContext = context;
         mWindow = LayoutInflater.from(context).inflate(R.layout.fragment_map_info_pop_window, null);
     }
 
     private void renderWindowText(Marker marker, View view){
-        TextView restaurantName = (TextView) view.findViewById(R.id.txtMapResName);
-        TextView restaurantAddress = (TextView) view.findViewById(R.id.txtMapAddress);
-        ImageView restaurantIcon = (ImageView) view.findViewById(R.id.imageMapIcon);
-        ImageView restaurantHazard = (ImageView) view.findViewById(R.id.imageMapHazard);
+        TextView titleTextView = (TextView) view.findViewById(R.id.title);
+        TextView addressTextView = (TextView) view.findViewById(R.id.address);
+        TextView hazardLevelTextView = (TextView) view.findViewById(R.id.hazard_level);
+        ImageView restaurantIcon = (ImageView) view.findViewById(R.id.restaurant_icon);
+        ImageView hazardLevelIcon = (ImageView) view.findViewById(R.id.hazard_level_icon);
 
-        this.restaurant = RestaurantManager.getInstance(context).getRestaurant(marker.getPosition());
+        Restaurant restaurant = RestaurantManager.getInstance(mContext).getRestaurant(marker.getPosition());
 
-        if(this.restaurant == null) {
+        if(restaurant == null) {
             return;
         }
-        restaurantName.setText(restaurant.getName());
-        restaurantAddress.setText(restaurant.getAddress());
-        restaurantIcon.setImageResource(restaurant.getmIcon());
-        restaurantHazard.setImageResource(restaurant.getHazardIcon()); //todo
+
+        titleTextView.setText(restaurant.getName());
+        addressTextView.setText(restaurant.getAddress());
+
+        int iconResId = new RestaurantIconHelper().getIconResId(restaurant.getName());
+        restaurantIcon.setImageResource(iconResId);
+
+        String restaurantID = restaurant.getID();
+        Inspection inspection = InspectionManager.getInstance(mContext).getLatestInspection(restaurantID);
+
+        if (inspection != null) {
+            String hazardLevel = inspection.getHazardRating();
+            hazardLevelTextView.setText(mContext.getString(R.string.hazard_level, hazardLevel));
+
+            HazardRatingHelper helper = new HazardRatingHelper();
+            hazardLevelTextView.setTextColor(ContextCompat.getColor(mContext, helper.getHazardColor(hazardLevel)));
+            hazardLevelIcon.setImageResource(helper.getHazardIcon(hazardLevel));
+        }
+        else {
+            hazardLevelTextView.setText(R.string.no_inspection_info);
+            hazardLevelIcon.setImageResource(R.drawable.blank_icon);
+        }
     }
 
     @Override

@@ -103,8 +103,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         mRestaurantManager = RestaurantManager.getInstance(this);
         mInspectionManager = InspectionManager.getInstance(this);
-
-
         mDataPackageManager = DataPackageManager.getInstance(this);
 
         if (!mDataPackageManager.isHasRequestedDownloadPermission()) {
