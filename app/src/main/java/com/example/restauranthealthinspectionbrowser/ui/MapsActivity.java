@@ -308,24 +308,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     //Adapted from: https://developers.google.com/maps/documentation/android-sdk/utility/marker-clustering
     //Learned from: https://ahsensaeed.com/android-custom-info-window-view-on-marker-click-map-utils/#simpleTitleInfoOnMarkerClick
-        private void setUpClusters() {
+    private void setUpClusters() {
         // Initialize new clusterManager
-            mClusterManager = new ClusterManager<PegItem>(this, mMap);
+        mClusterManager = new ClusterManager<PegItem>(this, mMap);
 
-            SimpleClusterRender markerClusterRenderer = new SimpleClusterRender(this, mMap, mClusterManager); // 2
-            mClusterManager.setRenderer(markerClusterRenderer);
+        SimpleClusterRender markerClusterRenderer = new SimpleClusterRender(this, mMap, mClusterManager); // 2
+        mClusterManager.setRenderer(markerClusterRenderer);
 
-            mMap.setOnCameraIdleListener(mClusterManager);
+        mMap.setOnCameraIdleListener(mClusterManager);
         //mMap.setOnMarkerClickListener(mClusterManager);
 
-            addItems();
+        addItems();
 
-            mClusterManager.cluster();
-        }
+        mClusterManager.cluster();
+    }
 
     private void addItems() {
-        RestaurantManager manager = RestaurantManager.getInstance(getBaseContext());
-        List<Restaurant> restaurants = manager.getRestaurants();
+        List<Restaurant> restaurants = mRestaurantManager.getRestaurants();
 
         InspectionManager inspectionManager = InspectionManager.getInstance(this);
 
@@ -523,7 +522,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 e.printStackTrace();
             }
 
-//            updateUI();
+            setUpClusters();
         }
 
         private void storeData(String fileName, byte[] data) throws IOException {
