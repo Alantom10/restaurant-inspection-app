@@ -5,22 +5,22 @@ package com.example.restauranthealthinspectionbrowser.model;
  * the index and a description.
  */
 public class Violation {
-    private int index;
-    private String violationBriefDesc;
+    private int mIndex;
+    private String mViolationDescription;
 
     public int getIndex() {
-        return index;
+        return mIndex;
     }
 
     public void setIndex(int index) {
-        this.index = index;
+        this.mIndex = index;
     }
 
-    public String getViolationBriefDesc() {
-        return violationBriefDesc;
+    public String getViolationDescription() {
+        return mViolationDescription;
     }
 
-    public void setViolationBriefDesc(String violationBriefDesc) {
-        this.violationBriefDesc = violationBriefDesc;
+    public void setViolationDescription(String violationDescription) {
+        this.mViolationDescription = violationDescription;
     }
 }

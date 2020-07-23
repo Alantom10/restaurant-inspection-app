@@ -35,7 +35,7 @@ public class InspectionActivity extends AppCompatActivity {
 
     private Inspection mInspection;
 
-    ArrayList<String> violations = new ArrayList<String>();
+    ArrayList<String> mViolations = new ArrayList<String>();
 
     public static Intent makeIntent(Context context, Inspection inspection) {
         Intent intent = new Intent(context, InspectionActivity.class);
@@ -110,11 +110,11 @@ public class InspectionActivity extends AppCompatActivity {
     }
 
     private void showViolation(){
-        for (String s : mInspection.getViolation()) {
-            violations.add(s);
+        for (String s : mInspection.getViolations()) {
+            mViolations.add(s);
         }
 
-        ArrayAdapter<String> adapter = new ViolationAdapter(InspectionActivity.this, 0, R.layout.list_item_violation, violations);
+        ArrayAdapter<String> adapter = new ViolationAdapter(InspectionActivity.this, 0, R.layout.list_item_violation, mViolations);
         ListView violation = findViewById(R.id.listViolation);
 
         violation.setAdapter(adapter);

@@ -12,12 +12,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import static com.example.restauranthealthinspectionbrowser.ui.MapsActivity.FILE_NAME_INSPECTION_REPORTS;
 
@@ -91,9 +88,10 @@ public class InspectionManager {
             inputStream = context.getResources().openRawResource(R.raw.inspectionreports_itr1);
         }
 
-        if(inputStream == null){
+        if (inputStream == null) {
             return;
         }
+
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
         try {
             String line = reader.readLine();
@@ -114,13 +112,12 @@ public class InspectionManager {
 
                 String violations = "";
                 for (int i = 5; i < row.length - 1; i++) {
-                    if (i > 6) {
+                    if (i >= 6) {
                         violations += ",";
                     }
                     violations += row[i].replace("\"", "");
                 }
-                String[] vio = violations.split("\\|");
-                inspection.setViolation(vio);
+                inspection.setViolations(violations.split("\\|"));
 
                 mInspections.add(inspection);
             }

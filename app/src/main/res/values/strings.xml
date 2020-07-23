@@ -2,6 +2,7 @@
     <string name="app_name">Surrey Restaurant Browser</string>
     <string name="restaurant_activity_title">Inspections</string>
     <string name="inspection_activity_title">Violations</string>
+    <string name="maps_activity_title">Surrey Restaurant Browser Map View</string>
     <string name="map_view">Map View</string>
     <string name="list_view">Restaurant List View</string>
     <string name="data_update_title">Update Data</string>
@@ -25,7 +26,7 @@
     <string name="txtNumNonCriticalIssues"># Non-Critical Issues: </string>
     <string name="txtHazardRating">Hazard Rating: </string>
     <string name="txtViolation">Violations: </string>
-    <string name="txtViolationDetail">No violations!</string>
+    <string name="txtViolationDetail">No violations found</string>
     <string name="title_activity_maps">Map</string>
     <string name="hintSearch">Enter Address, City or Zip code</string>
 </resources>
