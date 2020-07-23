@@ -12,7 +12,7 @@
     <string name="restaurant_name">%1$s</string>
     <string name="hazard_level">%1$s Hazard Level</string>
     <string name="num_issues">%1$d Issues Found</string>
-    <string name="no_inspection_info">No inspection information</string>
+    <string name="no_inspection_info">No Inspection Information</string>
     <string name="txtAddress">Address:</string>
     <string name="txtCoordinates">GPS:</string>
     <string name="address">%1$s</string>
@@ -26,7 +26,8 @@
     <string name="txtNumNonCriticalIssues"># Non-Critical Issues: </string>
     <string name="txtHazardRating">Hazard Rating: </string>
     <string name="txtViolation">Violations: </string>
-    <string name="txtViolationDetail">No violations found</string>
+    <string name="txtViolationDetail">No Violations Found</string>
     <string name="title_activity_maps">Map</string>
     <string name="hintSearch">Enter Address, City or Zip code</string>
+    <string name="location_error">Unable to get current location</string>
 </resources>

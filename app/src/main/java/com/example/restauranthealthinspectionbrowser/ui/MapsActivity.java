@@ -227,7 +227,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                     currentLocation.getLongitude()), DEFAULT_ZOOM);
                         }else{
                             Log.d(TAG, "onComplete: current location is null");
-                            Toast.makeText(MapsActivity.this, "unable to get current location", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MapsActivity.this, getString(R.string.location_error), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
