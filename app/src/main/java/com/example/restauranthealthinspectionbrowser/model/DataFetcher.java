@@ -12,6 +12,10 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+/**
+ * A helper class that converts Date objects to formatted strings for display
+ * on UI.
+ */
 public class DataFetcher {
     private static final String TAG = "DataFetcher";
 

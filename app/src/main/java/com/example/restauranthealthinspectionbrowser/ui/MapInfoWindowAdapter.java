@@ -51,9 +51,11 @@ public class MapInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
 
         if (inspection != null) {
             String hazardLevel = inspection.getHazardRating();
+            hazardLevelTextView.setText(mContext.getString(R.string.hazard_level, hazardLevel));
+
             HazardRatingHelper helper = new HazardRatingHelper();
             hazardLevelTextView.setTextColor(ContextCompat.getColor(mContext, helper.getHazardColor(hazardLevel)));
-            hazardLevelIcon.setImageResource(helper.getHazardColor(hazardLevel));
+            hazardLevelIcon.setImageResource(helper.getHazardIcon(hazardLevel));
         }
         else {
             hazardLevelTextView.setText(R.string.no_inspection_info);

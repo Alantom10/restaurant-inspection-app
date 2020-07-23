@@ -34,8 +34,8 @@
 
     <ImageView
         android:id="@+id/restaurant_icon"
-        android:layout_width="88dp"
-        android:layout_height="88dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="12dp"
         android:layout_marginBottom="12dp"
@@ -48,17 +48,23 @@
         android:id="@+id/hazard_level_icon"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toStartOf="@+id/hazard_level"
-        app:layout_constraintTop_toBottomOf="@+id/hazard_level"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/hazard_level"
+        app:layout_constraintTop_toBottomOf="@+id/address"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
         android:id="@+id/hazard_level"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:text="Hazard Level"
+        app:layout_constraintBottom_toBottomOf="@+id/hazard_level_icon"
         app:layout_constraintStart_toStartOf="@+id/address"
-        app:layout_constraintTop_toBottomOf="@+id/address" />
+        app:layout_constraintTop_toTopOf="@+id/hazard_level_icon" />
 </androidx.constraintlayout.widget.ConstraintLayout>
