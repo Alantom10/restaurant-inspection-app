@@ -66,8 +66,8 @@ public class RestaurantListFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.map_view:
                 Intent intent = new Intent (getActivity(), MapsActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
-                getActivity().finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
