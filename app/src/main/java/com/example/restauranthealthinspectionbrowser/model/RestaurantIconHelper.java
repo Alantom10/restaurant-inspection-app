@@ -2,6 +2,9 @@ package com.example.restauranthealthinspectionbrowser.model;
 
 import com.example.restauranthealthinspectionbrowser.R;
 
+/**
+ * A helper class for setting custom restaurant icons.
+ */
 public class RestaurantIconHelper {
 
     public int getIconResId(String title) {

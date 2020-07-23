@@ -13,8 +13,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 /**
- * A helper class that converts Date objects to formatted strings for display
- * on UI.
+ * A networking class for accessing Fraser Health restaurant inspection reports.
+ * It supports parsing meta data json and downloading data packages.
  */
 public class DataFetcher {
     private static final String TAG = "DataFetcher";

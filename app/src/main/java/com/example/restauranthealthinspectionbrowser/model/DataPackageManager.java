@@ -3,6 +3,10 @@ package com.example.restauranthealthinspectionbrowser.model;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+/**
+ * DataPackageManager class stores the timestamps of data packages updates.
+ * It uses SharedPreferences to manage data.
+ */
 public class DataPackageManager {
     private static final String TAG = "DataPackageManager";
 

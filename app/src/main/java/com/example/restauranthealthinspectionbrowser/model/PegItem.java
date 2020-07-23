@@ -4,7 +4,10 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.clustering.ClusterItem;
 
-public class PegItem implements ClusterItem{
+/**
+ * PegItem class stores data of a peg item displayed on the map screen.
+ */
+public class PegItem implements ClusterItem {
     private LatLng mPosition;
     private String mTitle;
     private String mHazardLevel;
@@ -34,7 +37,7 @@ public class PegItem implements ClusterItem{
         return "";
     }
 
-    public String getmHazardLevel() {
+    public String getHazardLevel() {
         return mHazardLevel;
     }
 

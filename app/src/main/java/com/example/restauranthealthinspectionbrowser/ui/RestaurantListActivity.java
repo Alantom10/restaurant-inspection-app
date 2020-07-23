@@ -5,8 +5,8 @@ import androidx.fragment.app.Fragment;
 import static com.example.restauranthealthinspectionbrowser.ui.MapsActivity.main;
 
 /**
- * MainActivity initializes the main screen of the app through RestaurantListFragment.
- * The main screen shows a list of restaurants.
+ * RestaurantListActivity initializes the restaurant list view screen through
+ * RestaurantListFragment.
  */
 public class RestaurantListActivity extends SingleFragmentActivity {
 

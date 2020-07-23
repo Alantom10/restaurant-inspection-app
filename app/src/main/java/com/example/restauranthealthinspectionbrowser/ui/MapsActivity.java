@@ -37,7 +37,7 @@ import com.example.restauranthealthinspectionbrowser.model.InspectionManager;
 import com.example.restauranthealthinspectionbrowser.model.PegItem;
 import com.example.restauranthealthinspectionbrowser.model.Restaurant;
 import com.example.restauranthealthinspectionbrowser.model.RestaurantManager;
-import com.example.restauranthealthinspectionbrowser.model.SimpleClusterRender;
+import com.example.restauranthealthinspectionbrowser.model.SimpleClusterRenderer;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -59,6 +59,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * MapsActivity sets up the restaurant map view screen. It starts data fetching
+ * tasks on the background.
+ */
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
     private static final String TAG = "MapActivity";
 
@@ -312,7 +316,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // Initialize new clusterManager
         mClusterManager = new ClusterManager<PegItem>(this, mMap);
 
-        SimpleClusterRender markerClusterRenderer = new SimpleClusterRender(this, mMap, mClusterManager); // 2
+        SimpleClusterRenderer markerClusterRenderer = new SimpleClusterRenderer(this, mMap, mClusterManager); // 2
         mClusterManager.setRenderer(markerClusterRenderer);
 
         mMap.setOnCameraIdleListener(mClusterManager);

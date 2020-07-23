@@ -31,8 +31,8 @@ import java.io.FileNotFoundException;
 import java.util.List;
 
 /**
- * RestaurantListFragment sets up the main screen with a list of restaurants.
- * through RestaurantManager class. It starts RestaurantActivity upon selection of a
+ * RestaurantListFragment sets up the restaurant list view screen through
+ * RestaurantManager class. It starts RestaurantActivity upon selection of a
  * restaurant in the list.
  */
 public class RestaurantListFragment extends Fragment {

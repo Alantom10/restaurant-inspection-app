@@ -4,6 +4,9 @@ import androidx.core.content.ContextCompat;
 
 import com.example.restauranthealthinspectionbrowser.R;
 
+/**
+ * A helper class for getting UI resources related to restaurant hazard ratings.
+ */
 public class HazardRatingHelper {
 
     public int getHazardColor(String hazardRating) {

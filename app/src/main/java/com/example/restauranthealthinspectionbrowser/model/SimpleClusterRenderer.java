@@ -10,21 +10,24 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 
-public class SimpleClusterRender extends DefaultClusterRenderer<PegItem> {
-    public SimpleClusterRender(Context context, GoogleMap map, ClusterManager<PegItem> clusterManager) {
+/**
+ * A helper class for formatting images displayed on map screen.
+ */
+public class SimpleClusterRenderer extends DefaultClusterRenderer<PegItem> {
+    public SimpleClusterRenderer(Context context, GoogleMap map, ClusterManager<PegItem> clusterManager) {
         super(context, map, clusterManager);
     }
 
     @Override
     protected void onBeforeClusterItemRendered(PegItem item, MarkerOptions markerOptions) {
         BitmapDescriptor bitmapDescriptor = null;
-        if("Low".equalsIgnoreCase(item.getmHazardLevel())){
+        if("Low".equalsIgnoreCase(item.getHazardLevel())){
             bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.green_peg);
         }
-        else if("Moderate".equalsIgnoreCase(item.getmHazardLevel())){
+        else if("Moderate".equalsIgnoreCase(item.getHazardLevel())){
             bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.yellow_peg);
         }
-        else if("High".equalsIgnoreCase(item.getmHazardLevel())){
+        else if("High".equalsIgnoreCase(item.getHazardLevel())){
             bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.orange_peg);
         }
         else{

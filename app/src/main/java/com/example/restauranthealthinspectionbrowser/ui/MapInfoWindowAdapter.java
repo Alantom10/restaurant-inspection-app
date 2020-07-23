@@ -18,13 +18,16 @@ import com.example.restauranthealthinspectionbrowser.model.RestaurantManager;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
 
+/**
+ * An adapter class used by MapsActivity to set up restaurant info window.
+ */
 public class MapInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
     private final View mWindow;
     private final Context mContext;
 
     public MapInfoWindowAdapter(Context context){
         this.mContext = context;
-        mWindow = LayoutInflater.from(context).inflate(R.layout.fragment_map_info_pop_window, null);
+        mWindow = LayoutInflater.from(context).inflate(R.layout.fragment_map_info_window, null);
     }
 
     private void renderWindowText(Marker marker, View view){
