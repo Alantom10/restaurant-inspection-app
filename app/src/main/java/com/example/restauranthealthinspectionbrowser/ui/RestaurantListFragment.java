@@ -27,7 +27,6 @@ import com.example.restauranthealthinspectionbrowser.model.Restaurant;
 import com.example.restauranthealthinspectionbrowser.model.RestaurantIconHelper;
 import com.example.restauranthealthinspectionbrowser.model.RestaurantManager;
 
-import java.io.FileNotFoundException;
 import java.util.List;
 
 /**
@@ -41,18 +40,11 @@ public class RestaurantListFragment extends Fragment {
     private RecyclerView mRestaurantRecyclerView;
     private RestaurantAdapter mAdapter;
 
-    private RestaurantManager mRestaurantManager;
-    private InspectionManager mInspectionManager;
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         setRetainInstance(true);
-
-            mRestaurantManager = RestaurantManager.getInstance(getActivity());
-            mInspectionManager = InspectionManager.getInstance(getActivity());
-
     }
 
     @Override
@@ -88,7 +80,7 @@ public class RestaurantListFragment extends Fragment {
     }
 
     private void updateUI() {
-        List<Restaurant> restaurants = mRestaurantManager.getRestaurants();
+        List<Restaurant> restaurants = new RestaurantManager(getActivity()).getRestaurants();
 
         if (isAdded()) {
             mAdapter = new RestaurantAdapter(restaurants);
@@ -119,14 +111,15 @@ public class RestaurantListFragment extends Fragment {
         }
 
         public void bind(Restaurant restaurant) {
-            mRestaurantID = restaurant.getID();
-            mTitleTextView.setText(getString(R.string.restaurant_name, restaurant.getName()));
+            mRestaurantID = restaurant.getId();
+            mTitleTextView.setText(getString(R.string.restaurant_name, restaurant.getTitle()));
 
-            Inspection inspection = mInspectionManager.getLatestInspection(mRestaurantID);
+            Inspection inspection = InspectionManager.getInstance(getActivity())
+                    .getLatestInspection(mRestaurantID);
             if (inspection != null) {
                 mDateTextView.setText(DateHelper.getDisplayDate(inspection.getInspectionDate()));
 
-                int numIssues = inspection.getNumOfCritical() + inspection.getNumOfNonCritical();
+                int numIssues = inspection.getNumCritical() + inspection.getNumNonCritical();
                 mNumIssuesTextView.setText(getString(R.string.num_issues, numIssues));
 
                 String hazardLevel = inspection.getHazardRating();
@@ -143,7 +136,7 @@ public class RestaurantListFragment extends Fragment {
                 mHazardLevelImageView.setImageResource(R.drawable.blank_icon);
             }
 
-            int iconResId = new RestaurantIconHelper().getIconResId(restaurant.getName());
+            int iconResId = new RestaurantIconHelper().getIconResId(restaurant.getTitle());
             mRestaurantIcon.setImageResource(iconResId);
         }
 

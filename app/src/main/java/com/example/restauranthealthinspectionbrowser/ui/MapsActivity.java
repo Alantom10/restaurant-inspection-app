@@ -100,7 +100,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setItemOnClick();
         initSearch();
 
-        mRestaurantManager = RestaurantManager.getInstance(this);
+        mRestaurantManager = new RestaurantManager(this);
         mInspectionManager = InspectionManager.getInstance(this);
         mDataPackageManager = DataPackageManager.getInstance(this);
 
@@ -194,17 +194,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void getDeviceLocation() {
         Log.d(TAG, "getDeviceLocation:getting the devices current location");
 
-        //
         Intent intent = getIntent();
         double lat = intent.getDoubleExtra(RestaurantFragment.RESTAURANT_LATITUDE_INTENT_TAG,0);
         double lng = intent.getDoubleExtra(RestaurantFragment.RESTAURANT_LONGITUDE_INTENT_TAG, 0);
 
         if(lat != 0 && lng != 0) {
             LatLng latLng = new LatLng(lat,lng);
-            Restaurant restaurant = RestaurantManager.getInstance(getBaseContext()).getRestaurant(latLng);
+            Restaurant restaurant = mRestaurantManager.getRestaurant(latLng);
 
             MarkerOptions markerOptions = new MarkerOptions();
-            markerOptions.position(latLng).title(restaurant.getName());//.icon(restaurant.getmIcon());
+            markerOptions.position(latLng).title(restaurant.getTitle());//.icon(restaurant.getmIcon());
             Marker marker = mMap.addMarker(markerOptions);
             //marker.setIcon(restaurant.getHazardIcon());
             marker.showInfoWindow();
@@ -330,31 +329,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void addItems() {
         List<Restaurant> restaurants = mRestaurantManager.getRestaurants();
 
-        InspectionManager inspectionManager = InspectionManager.getInstance(this);
-
-        int i = 0;
         for (Restaurant restaurant : restaurants) {
-            String name = restaurant.getName();
-            String mRestaurantID = restaurant.getID();
-            Inspection inspection = inspectionManager.getLatestInspection(mRestaurantID);
-            String hazardLevel = "";
+            String title = restaurant.getTitle();
+            String id = restaurant.getId();
+            Inspection inspection = mInspectionManager.getLatestInspection(id);
+            String rating = "";
 
             if (inspection != null) {
-                hazardLevel = inspection.getHazardRating();
+                rating = inspection.getHazardRating();
             }
 
             PegItem peg = new PegItem(restaurant.getLatitude(),
                     restaurant.getLongitude(),
-                    name, hazardLevel);
+                    title,
+                    rating
+            );
 
             mClusterManager.addItem(peg);
         }
     }
 
     private void setOnMapsListener() {
-        /**
-         *
-         */
         this.mMap.setOnMarkerClickListener((marker) -> {
 //            moveCamera(marker.getPosition(), DEFAULT_ZOOM);
             marker.showInfoWindow();
@@ -364,14 +359,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setOnInfoWindowClickListener(marker -> {
             LatLng position = marker.getPosition();
 
-            Restaurant restaurant = RestaurantManager.getInstance(MapsActivity.this).getRestaurant(position);
+            Restaurant restaurant = mRestaurantManager.getRestaurant(position);
 
             if (restaurant == null) {
                 return;
             }
 
             Intent intent = new Intent(MapsActivity.this, RestaurantActivity.class);
-            intent.putExtra(RestaurantActivity.EXTRA_RESTAURANT_ID,restaurant.getID());
+            intent.putExtra(RestaurantActivity.EXTRA_RESTAURANT_ID,restaurant.getId());
             startActivity(intent);
         });
 
@@ -514,13 +509,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 storeData(FILE_NAME_RESTAURANTS, arrays[0]);
                 storeData(FILE_NAME_INSPECTION_REPORTS, arrays[1]);
 
-                mRestaurantManager.updateRestaurants(MapsActivity.this);
-                mInspectionManager.updateInspections(MapsActivity.this);
-
                 mDataPackageManager.updateLastModified(
                         MapsActivity.this,
                         mNewLastModifiedRestaurants,
-                        mNewLastModifiedInspections);
+                        mNewLastModifiedInspections
+                );
+
+                mInspectionManager.updateInspections(MapsActivity.this);
+                mRestaurantManager.updateRestaurantDatabase(MapsActivity.this);
 
             } catch (IOException e) {
                 e.printStackTrace();

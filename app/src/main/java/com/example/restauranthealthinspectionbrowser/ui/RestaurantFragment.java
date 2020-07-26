@@ -50,7 +50,7 @@ public class RestaurantFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_restaurant, container, false);
 
         mRestaurantID = getActivity().getIntent().getStringExtra(EXTRA_RESTAURANT_ID);
-        mRestaurant = RestaurantManager.getInstance(getActivity()).getRestaurant(mRestaurantID);
+        mRestaurant = new RestaurantManager(getActivity()).getRestaurant(mRestaurantID);
 
         mTitleTextView = (TextView) view.findViewById(R.id.title);
         mAddressTextView = (TextView) view.findViewById(R.id.address);
@@ -72,7 +72,7 @@ public class RestaurantFragment extends Fragment {
     }
 
     private void updateTextViews() {
-        mTitleTextView.setText(getString(R.string.restaurant_name, mRestaurant.getName()));
+        mTitleTextView.setText(getString(R.string.restaurant_name, mRestaurant.getTitle()));
         mAddressTextView.setText(getString(R.string.address, mRestaurant.getAddress()));
         mCoordinatesTextView.setText(getString(R.string.coordinates, mRestaurant.getLatitude(), mRestaurant.getLongitude()));
 
@@ -118,8 +118,8 @@ public class RestaurantFragment extends Fragment {
         public void bind(Inspection inspection) {
             mInspection = inspection;
 
-            mNumCriticalIssuesTextView.setText(getString(R.string.num_critical_issues, mInspection.getNumOfCritical()));
-            mNumNonCriticalIssuesTextView.setText(getString(R.string.num_non_critical_issues, mInspection.getNumOfNonCritical()));
+            mNumCriticalIssuesTextView.setText(getString(R.string.num_critical_issues, mInspection.getNumCritical()));
+            mNumNonCriticalIssuesTextView.setText(getString(R.string.num_non_critical_issues, mInspection.getNumNonCritical()));
             mDateTextView.setText(DateHelper.getDisplayDate(mInspection.getInspectionDate()));
 
             String hazardLevel = inspection.getHazardRating();

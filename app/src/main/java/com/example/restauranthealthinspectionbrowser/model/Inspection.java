@@ -12,8 +12,8 @@ public class Inspection implements Comparable<Inspection> {
     private Date inspectionDate;
     private String inspectionType;
     private String hazardRating;
-    private int numOfCritical;
-    private int numOfNonCritical;
+    private int numCritical;
+    private int numNonCritical;
     private String[] violations;
 
     public String getTrackingNum() {
@@ -48,20 +48,20 @@ public class Inspection implements Comparable<Inspection> {
         this.hazardRating = hazardRating;
     }
 
-    public int getNumOfCritical() {
-        return numOfCritical;
+    public int getNumCritical() {
+        return numCritical;
     }
 
-    public void setNumOfCritical(int numOfCritical) {
-        this.numOfCritical = numOfCritical;
+    public void setNumCritical(int numCritical) {
+        this.numCritical = numCritical;
     }
 
-    public int getNumOfNonCritical() {
-        return numOfNonCritical;
+    public int getNumNonCritical() {
+        return numNonCritical;
     }
 
-    public void setNumOfNonCritical(int numOfNonCritical) {
-        this.numOfNonCritical = numOfNonCritical;
+    public void setNumNonCritical(int numNonCritical) {
+        this.numNonCritical = numNonCritical;
     }
 
     public String[] getViolations() {
@@ -77,13 +77,13 @@ public class Inspection implements Comparable<Inspection> {
     }
 
     public Inspection(String trackingNum, Date inspectionDate, String inspectionType,
-                      int numOfCritical, int numOfNonCritical,
+                      int numCritical, int numNonCritical,
                       String hazardRating, String[] violations) {
         this.trackingNum = trackingNum;
         this.inspectionDate = inspectionDate;
         this.inspectionType = inspectionType;
-        this.numOfCritical = numOfCritical;
-        this.numOfNonCritical = numOfNonCritical;
+        this.numCritical = numCritical;
+        this.numNonCritical = numNonCritical;
         this.hazardRating = hazardRating;
     }
 

@@ -92,8 +92,8 @@ public class InspectionActivity extends AppCompatActivity {
         txtTrackNum.setText(mInspection.getTrackingNum());
         txtInspectionDate.setText(DateHelper.getFullDate(mInspection.getInspectionDate()));
         txtInspectionType.setText(mInspection.getInspectionType());
-        txtNumOfCritical.setText(Integer.toString(mInspection.getNumOfCritical()));
-        txtNumOfNonCritical.setText(Integer.toString(mInspection.getNumOfNonCritical()));
+        txtNumOfCritical.setText(Integer.toString(mInspection.getNumCritical()));
+        txtNumOfNonCritical.setText(Integer.toString(mInspection.getNumNonCritical()));
         txtHazardRating.setText(mInspection.getHazardRating());
 
         ImageView hazardImage = findViewById(R.id.hazardLogo);

@@ -38,7 +38,7 @@ public class InspectionManager {
 
     private InspectionManager(Context context) {
         mInspections = new ArrayList<>();
-        readData(context);
+        readDataFile(context);
     }
 
     public Inspection getLatestInspection(String restaurantID) {
@@ -71,10 +71,10 @@ public class InspectionManager {
 
     public void updateInspections(Context context) throws FileNotFoundException {
         mInspections.clear();
-        readData(context);
+        readDataFile(context);
     }
 
-    private void readData(Context context)  {
+    private void readDataFile(Context context)  {
         File file = new File(context.getFilesDir() + "/" + FILE_NAME_INSPECTION_REPORTS);
         InputStream inputStream = null;
         if (file.exists()) {
@@ -105,8 +105,8 @@ public class InspectionManager {
                 inspection.setTrackingNum(row[0].replace("\"", ""));
                 inspection.setInspectionType(row[2].replace("\"", ""));
                 inspection.setHazardRating(row[row.length - 1].replace("\"",""));
-                inspection.setNumOfCritical(Integer.parseInt(row[3].replace("\"", "")));
-                inspection.setNumOfNonCritical(Integer.parseInt(row[4].replace("\"", "")));
+                inspection.setNumCritical(Integer.parseInt(row[3].replace("\"", "")));
+                inspection.setNumNonCritical(Integer.parseInt(row[4].replace("\"", "")));
                 inspection.setInspectionDate(DateHelper
                         .parseInspectionDate(row[1].replace("\"", "")));
 

@@ -1,8 +1,15 @@
 package com.example.restauranthealthinspectionbrowser.model;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.example.restauranthealthinspectionbrowser.R;
+import com.example.restauranthealthinspectionbrowser.databse.RestaurantBaseHelper;
+import com.example.restauranthealthinspectionbrowser.databse.RestaurantCursorWrapper;
+import com.example.restauranthealthinspectionbrowser.databse.RestaurantDbSchema.RestaurantTable;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.BufferedReader;
@@ -14,6 +21,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import static com.example.restauranthealthinspectionbrowser.ui.MapsActivity.FILE_NAME_RESTAURANTS;
@@ -25,43 +33,98 @@ import static com.example.restauranthealthinspectionbrowser.ui.MapsActivity.FILE
 public class RestaurantManager {
     private static final String TAG = "RestaurantManager";
 
-    private List<Restaurant> mRestaurants;
+    private Context mContext;
+    private SQLiteDatabase mDatabase;
 
-    private static RestaurantManager sInstance;
+    public RestaurantManager(Context context) {
+        mContext = context.getApplicationContext();
+        mDatabase = new RestaurantBaseHelper(mContext).getWritableDatabase();
 
-    public static RestaurantManager getInstance(Context context) {
-        if (sInstance == null) {
-            sInstance = new RestaurantManager(context);
+        long lastUpdated = DataPackageManager.getInstance(context)
+                .getLastUpdated();
+        if (lastUpdated == 0) {
+            writeDataFileToDatabase(context);
         }
-        return sInstance;
-    }
-
-    private RestaurantManager(Context context)  {
-        mRestaurants = new ArrayList<>();
-        readData(context);
-        Collections.sort(mRestaurants);
     }
 
     public Restaurant getRestaurant(String id) {
-        for (Restaurant restaurant : mRestaurants) {
-            if (restaurant.getID().equals(id)) {
-                return restaurant;
+        RestaurantCursorWrapper cursor = queryRestaurants(
+                RestaurantTable.Cols.ID + " = ?",
+                new String[] { id }
+        );
+
+        try {
+            if (cursor.getCount() == 0) {
+                return null;
             }
+
+            cursor.moveToFirst();
+            return cursor.getRestaurant();
+        } finally {
+            cursor.close();
         }
-        return null;
+    }
+
+    public Restaurant getRestaurant(LatLng latLng) {
+        RestaurantCursorWrapper cursor = queryRestaurants(
+                RestaurantTable.Cols.LATITUDE + " = ? AND " +
+                        RestaurantTable.Cols.LONGITUDE + " = ?",
+                new String[] { Double.toString(latLng.latitude),
+                        Double.toString(latLng.longitude) }
+        );
+        Log.i(TAG, "Lat = " + latLng.latitude + "; Lon = " + latLng.longitude);
+
+        try {
+            if (cursor.getCount() == 0) {
+                return null;
+            }
+
+            cursor.moveToFirst();
+            return cursor.getRestaurant();
+        } finally {
+            cursor.close();
+        }
     }
 
     public List<Restaurant> getRestaurants() {
-        return mRestaurants;
+        List<Restaurant> restaurants = new ArrayList<>();
+
+        RestaurantCursorWrapper cursor = queryRestaurants(null, null);
+
+        try {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                restaurants.add(cursor.getRestaurant());
+                cursor.moveToNext();
+            }
+        } finally {
+            cursor.close();
+        }
+
+        Collections.sort(restaurants);
+
+        return restaurants;
     }
 
-    public void updateRestaurants(Context context) throws FileNotFoundException {
-        mRestaurants.clear();
-        readData(context);
-        Collections.sort(mRestaurants);
+    private RestaurantCursorWrapper queryRestaurants(String whereClause, String[] whereArgs) {
+        Cursor cursor = mDatabase.query(
+                RestaurantTable.NAME,
+                null,
+                whereClause,
+                whereArgs,
+                null,
+                null,
+                null
+        );
+
+        return new RestaurantCursorWrapper(cursor);
     }
 
-    private void readData(Context context)  {
+    public void updateRestaurantDatabase(Context context) throws FileNotFoundException {
+        writeDataFileToDatabase(context);
+    }
+
+    private void writeDataFileToDatabase(Context context)  {
         // Adapted from https://www.youtube.com/watch?v=i-TqNzUryn8
         File file = new File(context.getFilesDir() + "/" + FILE_NAME_RESTAURANTS);
         InputStream inputStream = null;
@@ -96,25 +159,45 @@ public class RestaurantManager {
                     }
                 }
 
-                Restaurant restaurant = new Restaurant();
-                restaurant.setID(row[0].replace("\"", ""));
-                restaurant.setName(row[1].replace("\"", ""));
-                restaurant.setAddress((row[2] + ", " + row[3]).replace("\"", ""));
-                restaurant.setLatitude(Double.parseDouble(row[5]));
-                restaurant.setLongitude(Double.parseDouble(row[6]));
-                mRestaurants.add(restaurant);
+                String id = row[0].replace("\"", "");
+                String title = row[1].replace("\"", "");
+                String address = (row[2] + ", " + row[3]).replace("\"", "");
+                String latitude = row[5];
+                String longitude = row[6];
+                int issues = 0;
+                String rating = "";
+                long date = 0;
+
+                Inspection inspection = InspectionManager.getInstance(context)
+                        .getLatestInspection(id);
+                if (inspection != null) {
+                    issues = inspection.getNumCritical() + inspection.getNumNonCritical();
+                    rating = inspection.getHazardRating();
+                    date = inspection.getInspectionDate().getTime();
+                }
+
+                ContentValues values = new ContentValues();
+                values.put(RestaurantTable.Cols.ID, id);
+                values.put(RestaurantTable.Cols.TITLE, title);
+                values.put(RestaurantTable.Cols.ADDRESS, address);
+                values.put(RestaurantTable.Cols.LATITUDE, latitude);
+                values.put(RestaurantTable.Cols.LONGITUDE, longitude);
+                values.put(RestaurantTable.Cols.ISSUES, issues);
+                values.put(RestaurantTable.Cols.RATING, rating);
+                values.put(RestaurantTable.Cols.DATE, date);
+
+                Restaurant restaurant = getRestaurant(id);
+                if (restaurant == null) {
+                    mDatabase.insert(RestaurantTable.NAME, null, values);
+                }
+                else {
+                    mDatabase.update(RestaurantTable.NAME, values,
+                            RestaurantTable.Cols.ID + " = ?",
+                            new String[] { id });
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public Restaurant getRestaurant(LatLng latLng) {
-        for (Restaurant mRestaurant : mRestaurants) {
-            if (mRestaurant.getLatitude() == latLng.latitude && mRestaurant.getLongitude() == latLng.longitude){
-                return mRestaurant;
-            }
-        }
-        return null;
     }
 }
