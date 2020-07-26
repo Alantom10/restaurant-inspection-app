@@ -17,8 +17,8 @@ public class RestaurantCursorWrapper extends CursorWrapper {
         String id = getString(getColumnIndex(RestaurantTable.Cols.ID));
         String title = getString(getColumnIndex(RestaurantTable.Cols.TITLE));
         String address = getString(getColumnIndex(RestaurantTable.Cols.ADDRESS));
-        Double latitude = getDouble(getColumnIndex(RestaurantTable.Cols.LATITUDE));
-        Double longitude = getDouble(getColumnIndex(RestaurantTable.Cols.LONGITUDE));
+        Double latitude = Double.parseDouble(getString(getColumnIndex(RestaurantTable.Cols.LATITUDE)));
+        Double longitude = Double.parseDouble(getString(getColumnIndex(RestaurantTable.Cols.LONGITUDE)));
         int issues = getInt(getColumnIndex(RestaurantTable.Cols.ISSUES));
         String rating = getString(getColumnIndex(RestaurantTable.Cols.RATING));
         Date date = new Date(getLong(getColumnIndex(RestaurantTable.Cols.DATE)));

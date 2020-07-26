@@ -162,8 +162,8 @@ public class RestaurantManager {
                 String id = row[0].replace("\"", "");
                 String title = row[1].replace("\"", "");
                 String address = (row[2] + ", " + row[3]).replace("\"", "");
-                Double latitude = Double.parseDouble(row[5]);
-                Double longitude = Double.parseDouble(row[6]);
+                String latitude = row[5];
+                String longitude = row[6];
                 int issues = 0;
                 String rating = "";
                 long date = 0;
