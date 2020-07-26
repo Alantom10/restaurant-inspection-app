@@ -87,7 +87,7 @@ public class RestaurantListFragment extends Fragment {
     }
 
     private void updateUI() {
-        List<Restaurant> restaurants = mRestaurantManager.getRestaurants();
+        List<Restaurant> restaurants = mRestaurantManager.getRestaurantList();
 
         if (isAdded()) {
             mAdapter = new RestaurantAdapter(restaurants);

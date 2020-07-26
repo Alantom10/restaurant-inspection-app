@@ -328,7 +328,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void addItems() {
-        List<Restaurant> restaurants = mRestaurantManager.getRestaurants();
+        List<Restaurant> restaurants = mRestaurantManager.getRestaurantList();
 
         InspectionManager inspectionManager = InspectionManager.getInstance(this);
 
@@ -514,8 +514,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 storeData(FILE_NAME_RESTAURANTS, arrays[0]);
                 storeData(FILE_NAME_INSPECTION_REPORTS, arrays[1]);
 
-                mRestaurantManager.updateRestaurants(MapsActivity.this);
-                mInspectionManager.updateInspections(MapsActivity.this);
+                mRestaurantManager.updateRestaurantList(MapsActivity.this);
+                mInspectionManager.updateInspectionList(MapsActivity.this);
 
                 mDataPackageManager.updateLastModified(
                         MapsActivity.this,

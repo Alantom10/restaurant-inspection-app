@@ -1,10 +1,14 @@
 package com.example.restauranthealthinspectionbrowser.model;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.restauranthealthinspectionbrowser.R;
 import com.example.restauranthealthinspectionbrowser.databse.RestaurantBaseHelper;
+import com.example.restauranthealthinspectionbrowser.databse.RestaurantCursorWrapper;
+import com.example.restauranthealthinspectionbrowser.databse.RestaurantDbSchema.RestaurantTable;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.BufferedReader;
@@ -57,11 +61,45 @@ public class RestaurantManager {
         return null;
     }
 
-    public List<Restaurant> getRestaurants() {
+    public void updateRestaurant(Restaurant restaurant) {
+        String id = restaurant.getId();
+        ContentValues values = getContentValues(restaurant);
+        mDatabase.update(RestaurantTable.NAME, values,
+                RestaurantTable.Cols.ID + " = ?",
+                new String[] { id });
+    }
+
+    private RestaurantCursorWrapper queryCrimes(String whereClause, String[] whereArgs) {
+        Cursor cursor = mDatabase.query(
+                RestaurantTable.NAME,
+                null,
+                whereClause,
+                whereArgs,
+                null,
+                null,
+                null
+        );
+
+        return new RestaurantCursorWrapper(cursor);
+    }
+
+    private static ContentValues getContentValues(Restaurant restaurant) {
+        ContentValues values = new ContentValues();
+        values.put(RestaurantTable.Cols.ID, restaurant.getId());
+        values.put(RestaurantTable.Cols.TITLE, restaurant.getTitle());
+        return values;
+    }
+
+    public void addRestaurant(Restaurant restaurant) {
+        ContentValues values = getContentValues(restaurant);
+        mDatabase.insert(RestaurantTable.NAME, null, values);
+    }
+
+    public List<Restaurant> getRestaurantList() {
         return mRestaurants;
     }
 
-    public void updateRestaurants(Context context) throws FileNotFoundException {
+    public void updateRestaurantList(Context context) throws FileNotFoundException {
         mRestaurants.clear();
         readData(context);
         Collections.sort(mRestaurants);
@@ -104,7 +142,7 @@ public class RestaurantManager {
 
                 Restaurant restaurant = new Restaurant();
                 restaurant.setId(row[0].replace("\"", ""));
-                restaurant.setName(row[1].replace("\"", ""));
+                restaurant.setTitle(row[1].replace("\"", ""));
                 restaurant.setAddress((row[2] + ", " + row[3]).replace("\"", ""));
                 restaurant.setLatitude(Double.parseDouble(row[5]));
                 restaurant.setLongitude(Double.parseDouble(row[6]));

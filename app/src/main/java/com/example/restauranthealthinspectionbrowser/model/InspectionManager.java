@@ -65,11 +65,11 @@ public class InspectionManager {
         return inspectionList;
     }
 
-    public List<Inspection> getInspections(){
+    public List<Inspection> getInspectionList(){
         return mInspections;
     }
 
-    public void updateInspections(Context context) throws FileNotFoundException {
+    public void updateInspectionList(Context context) throws FileNotFoundException {
         mInspections.clear();
         readData(context);
     }

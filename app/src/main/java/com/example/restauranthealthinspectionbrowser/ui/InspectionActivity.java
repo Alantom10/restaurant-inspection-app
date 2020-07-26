@@ -73,7 +73,7 @@ public class InspectionActivity extends AppCompatActivity {
         Date inspectionDate = new Date();
         inspectionDate.setTime(inspectionTime);
 
-        for (Inspection inspection : InspectionManager.getInstance(this.getBaseContext()).getInspections()) {
+        for (Inspection inspection : InspectionManager.getInstance(this.getBaseContext()).getInspectionList()) {
             if (inspection.getTrackingNum().equalsIgnoreCase(trackingNum) && inspection.getInspectionDate().equals(inspectionDate)) {
                 mInspection = inspection;
             }

@@ -1,16 +1,12 @@
 package com.example.restauranthealthinspectionbrowser.model;
 
-import android.content.ContentValues;
-
-import com.example.restauranthealthinspectionbrowser.databse.RestaurantDbSchema.RestaurantTable;
-
 /**
  * Restaurant class stores information about a single restaurant. Data include
  * ID, name, address and GPS coordinates.
  */
 public class Restaurant implements Comparable<Restaurant> {
     private String mId;
-    private String mName;
+    private String mTitle;
     private String mAddress;
     private double mLatitude;
     private double mLongitude;
@@ -18,12 +14,16 @@ public class Restaurant implements Comparable<Restaurant> {
     public Restaurant() {
     }
 
+    public Restaurant(String id) {
+        mId = id;
+    }
+
     public String getId() {
         return mId;
     }
 
     public String getTitle() {
-        return mName;
+        return mTitle;
     }
 
     public String getAddress() {
@@ -42,8 +42,8 @@ public class Restaurant implements Comparable<Restaurant> {
         mId = id;
     }
 
-    public void setName(String name) {
-        mName = name;
+    public void setTitle(String title) {
+        mTitle = title;
     }
 
     public void setAddress(String address) {
