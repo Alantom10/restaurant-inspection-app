@@ -1,8 +1,10 @@
 package com.example.restauranthealthinspectionbrowser.model;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 
 import com.example.restauranthealthinspectionbrowser.R;
+import com.example.restauranthealthinspectionbrowser.databse.RestaurantBaseHelper;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.BufferedReader;
@@ -26,6 +28,8 @@ public class RestaurantManager {
     private static final String TAG = "RestaurantManager";
 
     private List<Restaurant> mRestaurants;
+    private Context mContext;
+    private SQLiteDatabase mDatabase;
 
     private static RestaurantManager sInstance;
 
@@ -36,7 +40,9 @@ public class RestaurantManager {
         return sInstance;
     }
 
-    private RestaurantManager(Context context)  {
+    private RestaurantManager(Context context) {
+        mContext = context.getApplicationContext();
+        mDatabase = new RestaurantBaseHelper(mContext).getWritableDatabase();
         mRestaurants = new ArrayList<>();
         readData(context);
         Collections.sort(mRestaurants);
@@ -44,7 +50,7 @@ public class RestaurantManager {
 
     public Restaurant getRestaurant(String id) {
         for (Restaurant restaurant : mRestaurants) {
-            if (restaurant.getID().equals(id)) {
+            if (restaurant.getId().equals(id)) {
                 return restaurant;
             }
         }
@@ -97,7 +103,7 @@ public class RestaurantManager {
                 }
 
                 Restaurant restaurant = new Restaurant();
-                restaurant.setID(row[0].replace("\"", ""));
+                restaurant.setId(row[0].replace("\"", ""));
                 restaurant.setName(row[1].replace("\"", ""));
                 restaurant.setAddress((row[2] + ", " + row[3]).replace("\"", ""));
                 restaurant.setLatitude(Double.parseDouble(row[5]));

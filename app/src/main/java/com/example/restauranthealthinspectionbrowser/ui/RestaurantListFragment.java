@@ -27,7 +27,6 @@ import com.example.restauranthealthinspectionbrowser.model.Restaurant;
 import com.example.restauranthealthinspectionbrowser.model.RestaurantIconHelper;
 import com.example.restauranthealthinspectionbrowser.model.RestaurantManager;
 
-import java.io.FileNotFoundException;
 import java.util.List;
 
 /**
@@ -119,8 +118,8 @@ public class RestaurantListFragment extends Fragment {
         }
 
         public void bind(Restaurant restaurant) {
-            mRestaurantID = restaurant.getID();
-            mTitleTextView.setText(getString(R.string.restaurant_name, restaurant.getName()));
+            mRestaurantID = restaurant.getId();
+            mTitleTextView.setText(getString(R.string.restaurant_name, restaurant.getTitle()));
 
             Inspection inspection = mInspectionManager.getLatestInspection(mRestaurantID);
             if (inspection != null) {
@@ -143,7 +142,7 @@ public class RestaurantListFragment extends Fragment {
                 mHazardLevelImageView.setImageResource(R.drawable.blank_icon);
             }
 
-            int iconResId = new RestaurantIconHelper().getIconResId(restaurant.getName());
+            int iconResId = new RestaurantIconHelper().getIconResId(restaurant.getTitle());
             mRestaurantIcon.setImageResource(iconResId);
         }
 

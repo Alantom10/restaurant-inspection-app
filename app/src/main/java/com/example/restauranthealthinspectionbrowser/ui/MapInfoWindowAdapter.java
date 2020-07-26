@@ -43,13 +43,13 @@ public class MapInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
             return;
         }
 
-        titleTextView.setText(restaurant.getName());
+        titleTextView.setText(restaurant.getTitle());
         addressTextView.setText(restaurant.getAddress());
 
-        int iconResId = new RestaurantIconHelper().getIconResId(restaurant.getName());
+        int iconResId = new RestaurantIconHelper().getIconResId(restaurant.getTitle());
         restaurantIcon.setImageResource(iconResId);
 
-        String restaurantID = restaurant.getID();
+        String restaurantID = restaurant.getId();
         Inspection inspection = InspectionManager.getInstance(mContext).getLatestInspection(restaurantID);
 
         if (inspection != null) {

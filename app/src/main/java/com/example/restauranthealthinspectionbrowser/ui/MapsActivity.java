@@ -204,7 +204,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Restaurant restaurant = RestaurantManager.getInstance(getBaseContext()).getRestaurant(latLng);
 
             MarkerOptions markerOptions = new MarkerOptions();
-            markerOptions.position(latLng).title(restaurant.getName());//.icon(restaurant.getmIcon());
+            markerOptions.position(latLng).title(restaurant.getTitle());//.icon(restaurant.getmIcon());
             Marker marker = mMap.addMarker(markerOptions);
             //marker.setIcon(restaurant.getHazardIcon());
             marker.showInfoWindow();
@@ -334,8 +334,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         int i = 0;
         for (Restaurant restaurant : restaurants) {
-            String name = restaurant.getName();
-            String mRestaurantID = restaurant.getID();
+            String name = restaurant.getTitle();
+            String mRestaurantID = restaurant.getId();
             Inspection inspection = inspectionManager.getLatestInspection(mRestaurantID);
             String hazardLevel = "";
 
@@ -371,7 +371,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
 
             Intent intent = new Intent(MapsActivity.this, RestaurantActivity.class);
-            intent.putExtra(RestaurantActivity.EXTRA_RESTAURANT_ID,restaurant.getID());
+            intent.putExtra(RestaurantActivity.EXTRA_RESTAURANT_ID,restaurant.getId());
             startActivity(intent);
         });
 
