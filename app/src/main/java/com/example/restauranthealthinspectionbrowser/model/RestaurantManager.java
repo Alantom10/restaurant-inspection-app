@@ -20,6 +20,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import static com.example.restauranthealthinspectionbrowser.ui.MapsActivity.FILE_NAME_RESTAURANTS;
@@ -35,41 +36,52 @@ public class RestaurantManager {
     private Context mContext;
     private SQLiteDatabase mDatabase;
 
-    private static RestaurantManager sInstance;
-
-    public static RestaurantManager getInstance(Context context) {
-        if (sInstance == null) {
-            sInstance = new RestaurantManager(context);
-        }
-        return sInstance;
-    }
-
     private RestaurantManager(Context context) {
         mContext = context.getApplicationContext();
         mDatabase = new RestaurantBaseHelper(mContext).getWritableDatabase();
+
         mRestaurants = new ArrayList<>();
-        readData(context);
+        writeDataFileToDatabase(context);
         Collections.sort(mRestaurants);
     }
 
     public Restaurant getRestaurant(String id) {
-        for (Restaurant restaurant : mRestaurants) {
-            if (restaurant.getId().equals(id)) {
-                return restaurant;
-            }
-        }
-        return null;
-    }
-
-    public void updateRestaurant(Restaurant restaurant) {
-        String id = restaurant.getId();
-        ContentValues values = getContentValues(restaurant);
-        mDatabase.update(RestaurantTable.NAME, values,
+        RestaurantCursorWrapper cursor = queryRestaurants(
                 RestaurantTable.Cols.ID + " = ?",
-                new String[] { id });
+                new String[] { id }
+        );
+
+        try {
+            if (cursor.getCount() == 0) {
+                return null;
+            }
+
+            cursor.moveToFirst();
+            return cursor.getRestaurant();
+        } finally {
+            cursor.close();
+        }
     }
 
-    private RestaurantCursorWrapper queryCrimes(String whereClause, String[] whereArgs) {
+    public List<Restaurant> getRestaurants() {
+        List<Restaurant> restaurants = new ArrayList<>();
+
+        RestaurantCursorWrapper cursor = queryRestaurants(null, null);
+
+        try {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                restaurants.add(cursor.getRestaurant());
+                cursor.moveToNext();
+            }
+        } finally {
+            cursor.close();
+        }
+
+        return restaurants;
+    }
+
+    private RestaurantCursorWrapper queryRestaurants(String whereClause, String[] whereArgs) {
         Cursor cursor = mDatabase.query(
                 RestaurantTable.NAME,
                 null,
@@ -95,17 +107,21 @@ public class RestaurantManager {
         mDatabase.insert(RestaurantTable.NAME, null, values);
     }
 
-    public List<Restaurant> getRestaurantList() {
-        return mRestaurants;
+    public void updateRestaurant(Restaurant restaurant) {
+        String id = restaurant.getId();
+        ContentValues values = getContentValues(restaurant);
+        mDatabase.update(RestaurantTable.NAME, values,
+                RestaurantTable.Cols.ID + " = ?",
+                new String[] { id });
     }
 
-    public void updateRestaurantList(Context context) throws FileNotFoundException {
+    public void updateRestaurantDatabase(Context context) throws FileNotFoundException {
         mRestaurants.clear();
-        readData(context);
+        writeDataFileToDatabase(context);
         Collections.sort(mRestaurants);
     }
 
-    private void readData(Context context)  {
+    private void writeDataFileToDatabase(Context context)  {
         // Adapted from https://www.youtube.com/watch?v=i-TqNzUryn8
         File file = new File(context.getFilesDir() + "/" + FILE_NAME_RESTAURANTS);
         InputStream inputStream = null;

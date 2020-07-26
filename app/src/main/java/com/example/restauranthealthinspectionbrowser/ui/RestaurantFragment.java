@@ -118,8 +118,8 @@ public class RestaurantFragment extends Fragment {
         public void bind(Inspection inspection) {
             mInspection = inspection;
 
-            mNumCriticalIssuesTextView.setText(getString(R.string.num_critical_issues, mInspection.getNumOfCritical()));
-            mNumNonCriticalIssuesTextView.setText(getString(R.string.num_non_critical_issues, mInspection.getNumOfNonCritical()));
+            mNumCriticalIssuesTextView.setText(getString(R.string.num_critical_issues, mInspection.getNumCritical()));
+            mNumNonCriticalIssuesTextView.setText(getString(R.string.num_non_critical_issues, mInspection.getNumNonCritical()));
             mDateTextView.setText(DateHelper.getDisplayDate(mInspection.getInspectionDate()));
 
             String hazardLevel = inspection.getHazardRating();

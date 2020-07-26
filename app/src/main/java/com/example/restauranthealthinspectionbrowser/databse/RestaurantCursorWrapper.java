@@ -20,6 +20,6 @@ public class RestaurantCursorWrapper extends CursorWrapper {
         Restaurant restaurant = new Restaurant(id);
         restaurant.setTitle(title);
 
-        return null;
+        return restaurant;
     }
 }

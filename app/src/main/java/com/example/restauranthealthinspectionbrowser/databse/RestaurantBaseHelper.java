@@ -20,8 +20,11 @@ public class RestaurantBaseHelper extends SQLiteOpenHelper {
                 " _id integer primary key autoincrement, " +
                 RestaurantTable.Cols.ID + ", " +
                 RestaurantTable.Cols.TITLE + ", " +
+                RestaurantTable.Cols.ADDRESS + ", " +
+                RestaurantTable.Cols.LATITUDE + ", " +
+                RestaurantTable.Cols.LONGITUDE + ", " +
                 RestaurantTable.Cols.ISSUES + ", " +
-                RestaurantTable.Cols.HAZARD_LEVEL + ", " +
+                RestaurantTable.Cols.RATING + ", " +
                 RestaurantTable.Cols.DATE + ", " +
                 RestaurantTable.Cols.FAVOURITE +
                 ")"

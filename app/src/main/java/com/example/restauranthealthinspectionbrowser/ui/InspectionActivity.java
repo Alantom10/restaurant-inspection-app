@@ -73,7 +73,7 @@ public class InspectionActivity extends AppCompatActivity {
         Date inspectionDate = new Date();
         inspectionDate.setTime(inspectionTime);
 
-        for (Inspection inspection : InspectionManager.getInstance(this.getBaseContext()).getInspectionList()) {
+        for (Inspection inspection : InspectionManager.getInstance(this.getBaseContext()).getInspections()) {
             if (inspection.getTrackingNum().equalsIgnoreCase(trackingNum) && inspection.getInspectionDate().equals(inspectionDate)) {
                 mInspection = inspection;
             }
@@ -92,8 +92,8 @@ public class InspectionActivity extends AppCompatActivity {
         txtTrackNum.setText(mInspection.getTrackingNum());
         txtInspectionDate.setText(DateHelper.getFullDate(mInspection.getInspectionDate()));
         txtInspectionType.setText(mInspection.getInspectionType());
-        txtNumOfCritical.setText(Integer.toString(mInspection.getNumOfCritical()));
-        txtNumOfNonCritical.setText(Integer.toString(mInspection.getNumOfNonCritical()));
+        txtNumOfCritical.setText(Integer.toString(mInspection.getNumCritical()));
+        txtNumOfNonCritical.setText(Integer.toString(mInspection.getNumNonCritical()));
         txtHazardRating.setText(mInspection.getHazardRating());
 
         ImageView hazardImage = findViewById(R.id.hazardLogo);

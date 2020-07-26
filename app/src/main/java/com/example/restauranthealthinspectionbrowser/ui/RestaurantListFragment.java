@@ -87,7 +87,7 @@ public class RestaurantListFragment extends Fragment {
     }
 
     private void updateUI() {
-        List<Restaurant> restaurants = mRestaurantManager.getRestaurantList();
+        List<Restaurant> restaurants = mRestaurantManager.getRestaurants();
 
         if (isAdded()) {
             mAdapter = new RestaurantAdapter(restaurants);
@@ -125,7 +125,7 @@ public class RestaurantListFragment extends Fragment {
             if (inspection != null) {
                 mDateTextView.setText(DateHelper.getDisplayDate(inspection.getInspectionDate()));
 
-                int numIssues = inspection.getNumOfCritical() + inspection.getNumOfNonCritical();
+                int numIssues = inspection.getNumCritical() + inspection.getNumNonCritical();
                 mNumIssuesTextView.setText(getString(R.string.num_issues, numIssues));
 
                 String hazardLevel = inspection.getHazardRating();
