@@ -40,18 +40,11 @@ public class RestaurantListFragment extends Fragment {
     private RecyclerView mRestaurantRecyclerView;
     private RestaurantAdapter mAdapter;
 
-    private RestaurantManager mRestaurantManager;
-    private InspectionManager mInspectionManager;
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         setRetainInstance(true);
-
-            mRestaurantManager = RestaurantManager.getInstance(getActivity());
-            mInspectionManager = InspectionManager.getInstance(getActivity());
-
     }
 
     @Override
@@ -87,7 +80,7 @@ public class RestaurantListFragment extends Fragment {
     }
 
     private void updateUI() {
-        List<Restaurant> restaurants = mRestaurantManager.getRestaurants();
+        List<Restaurant> restaurants = new RestaurantManager(getActivity()).getRestaurants();
 
         if (isAdded()) {
             mAdapter = new RestaurantAdapter(restaurants);
@@ -121,7 +114,8 @@ public class RestaurantListFragment extends Fragment {
             mRestaurantID = restaurant.getId();
             mTitleTextView.setText(getString(R.string.restaurant_name, restaurant.getTitle()));
 
-            Inspection inspection = mInspectionManager.getLatestInspection(mRestaurantID);
+            Inspection inspection = InspectionManager.getInstance(getActivity())
+                    .getLatestInspection(mRestaurantID);
             if (inspection != null) {
                 mDateTextView.setText(DateHelper.getDisplayDate(inspection.getInspectionDate()));
 

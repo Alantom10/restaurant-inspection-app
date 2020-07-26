@@ -10,8 +10,8 @@ public class RestaurantDbSchema {
             public static final String ADDRESS = "address";
             public static final String LATITUDE = "latitude";
             public static final String LONGITUDE = "longitude";
-            public static final String ISSUES = "number of issues";
-            public static final String RATING = "hazard rating";
+            public static final String ISSUES = "issues";
+            public static final String RATING = "rating";
             public static final String DATE = "date";
             public static final String FAVOURITE = "favourite";
         }

@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.example.restauranthealthinspectionbrowser.R;
 import com.example.restauranthealthinspectionbrowser.databse.RestaurantBaseHelper;
@@ -32,17 +33,18 @@ import static com.example.restauranthealthinspectionbrowser.ui.MapsActivity.FILE
 public class RestaurantManager {
     private static final String TAG = "RestaurantManager";
 
-    private List<Restaurant> mRestaurants;
     private Context mContext;
     private SQLiteDatabase mDatabase;
 
-    private RestaurantManager(Context context) {
+    public RestaurantManager(Context context) {
         mContext = context.getApplicationContext();
         mDatabase = new RestaurantBaseHelper(mContext).getWritableDatabase();
 
-        mRestaurants = new ArrayList<>();
-        writeDataFileToDatabase(context);
-        Collections.sort(mRestaurants);
+        long lastUpdated = DataPackageManager.getInstance(context)
+                .getLastUpdated();
+        if (lastUpdated == 0) {
+            writeDataFileToDatabase(context);
+        }
     }
 
     public Restaurant getRestaurant(String id) {
@@ -50,6 +52,27 @@ public class RestaurantManager {
                 RestaurantTable.Cols.ID + " = ?",
                 new String[] { id }
         );
+
+        try {
+            if (cursor.getCount() == 0) {
+                return null;
+            }
+
+            cursor.moveToFirst();
+            return cursor.getRestaurant();
+        } finally {
+            cursor.close();
+        }
+    }
+
+    public Restaurant getRestaurant(LatLng latLng) {
+        RestaurantCursorWrapper cursor = queryRestaurants(
+                RestaurantTable.Cols.LATITUDE + " = ? AND " +
+                        RestaurantTable.Cols.LONGITUDE + " = ?",
+                new String[] { Double.toString(latLng.latitude),
+                        Double.toString(latLng.longitude) }
+        );
+        Log.i(TAG, "Lat = " + latLng.latitude + "; Lon = " + latLng.longitude);
 
         try {
             if (cursor.getCount() == 0) {
@@ -78,6 +101,8 @@ public class RestaurantManager {
             cursor.close();
         }
 
+        Collections.sort(restaurants);
+
         return restaurants;
     }
 
@@ -95,30 +120,8 @@ public class RestaurantManager {
         return new RestaurantCursorWrapper(cursor);
     }
 
-    private static ContentValues getContentValues(Restaurant restaurant) {
-        ContentValues values = new ContentValues();
-        values.put(RestaurantTable.Cols.ID, restaurant.getId());
-        values.put(RestaurantTable.Cols.TITLE, restaurant.getTitle());
-        return values;
-    }
-
-    public void addRestaurant(Restaurant restaurant) {
-        ContentValues values = getContentValues(restaurant);
-        mDatabase.insert(RestaurantTable.NAME, null, values);
-    }
-
-    public void updateRestaurant(Restaurant restaurant) {
-        String id = restaurant.getId();
-        ContentValues values = getContentValues(restaurant);
-        mDatabase.update(RestaurantTable.NAME, values,
-                RestaurantTable.Cols.ID + " = ?",
-                new String[] { id });
-    }
-
     public void updateRestaurantDatabase(Context context) throws FileNotFoundException {
-        mRestaurants.clear();
         writeDataFileToDatabase(context);
-        Collections.sort(mRestaurants);
     }
 
     private void writeDataFileToDatabase(Context context)  {
@@ -156,25 +159,45 @@ public class RestaurantManager {
                     }
                 }
 
-                Restaurant restaurant = new Restaurant();
-                restaurant.setId(row[0].replace("\"", ""));
-                restaurant.setTitle(row[1].replace("\"", ""));
-                restaurant.setAddress((row[2] + ", " + row[3]).replace("\"", ""));
-                restaurant.setLatitude(Double.parseDouble(row[5]));
-                restaurant.setLongitude(Double.parseDouble(row[6]));
-                mRestaurants.add(restaurant);
+                String id = row[0].replace("\"", "");
+                String title = row[1].replace("\"", "");
+                String address = (row[2] + ", " + row[3]).replace("\"", "");
+                Double latitude = Double.parseDouble(row[5]);
+                Double longitude = Double.parseDouble(row[6]);
+                int issues = 0;
+                String rating = "";
+                long date = 0;
+
+                Inspection inspection = InspectionManager.getInstance(context)
+                        .getLatestInspection(id);
+                if (inspection != null) {
+                    issues = inspection.getNumCritical() + inspection.getNumNonCritical();
+                    rating = inspection.getHazardRating();
+                    date = inspection.getInspectionDate().getTime();
+                }
+
+                ContentValues values = new ContentValues();
+                values.put(RestaurantTable.Cols.ID, id);
+                values.put(RestaurantTable.Cols.TITLE, title);
+                values.put(RestaurantTable.Cols.ADDRESS, address);
+                values.put(RestaurantTable.Cols.LATITUDE, latitude);
+                values.put(RestaurantTable.Cols.LONGITUDE, longitude);
+                values.put(RestaurantTable.Cols.ISSUES, issues);
+                values.put(RestaurantTable.Cols.RATING, rating);
+                values.put(RestaurantTable.Cols.DATE, date);
+
+                Restaurant restaurant = getRestaurant(id);
+                if (restaurant == null) {
+                    mDatabase.insert(RestaurantTable.NAME, null, values);
+                }
+                else {
+                    mDatabase.update(RestaurantTable.NAME, values,
+                            RestaurantTable.Cols.ID + " = ?",
+                            new String[] { id });
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public Restaurant getRestaurant(LatLng latLng) {
-        for (Restaurant mRestaurant : mRestaurants) {
-            if (mRestaurant.getLatitude() == latLng.latitude && mRestaurant.getLongitude() == latLng.longitude){
-                return mRestaurant;
-            }
-        }
-        return null;
     }
 }

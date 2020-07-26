@@ -37,9 +37,9 @@ public class MapInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
         ImageView restaurantIcon = (ImageView) view.findViewById(R.id.restaurant_icon);
         ImageView hazardLevelIcon = (ImageView) view.findViewById(R.id.hazard_level_icon);
 
-        Restaurant restaurant = RestaurantManager.getInstance(mContext).getRestaurant(marker.getPosition());
+        Restaurant restaurant = new RestaurantManager(mContext).getRestaurant(marker.getPosition());
 
-        if(restaurant == null) {
+        if (restaurant == null) {
             return;
         }
 
