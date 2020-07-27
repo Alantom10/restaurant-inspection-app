@@ -25,6 +25,7 @@ import com.example.restauranthealthinspectionbrowser.model.DateHelper;
 import com.example.restauranthealthinspectionbrowser.model.HazardRatingHelper;
 import com.example.restauranthealthinspectionbrowser.model.Inspection;
 import com.example.restauranthealthinspectionbrowser.model.InspectionManager;
+import com.example.restauranthealthinspectionbrowser.model.QueryPreferences;
 import com.example.restauranthealthinspectionbrowser.model.Restaurant;
 import com.example.restauranthealthinspectionbrowser.model.RestaurantIconHelper;
 import com.example.restauranthealthinspectionbrowser.model.RestaurantManager;
@@ -60,9 +61,8 @@ public class RestaurantListFragment extends Fragment {
             @Override
             public boolean onQueryTextSubmit(String s) {
                 Log.d(TAG, "QueryTextSubmit: " + s);
-                List<Restaurant> restaurants = new RestaurantManager(getActivity())
-                        .getRestaurants(s);
-                updateUI(restaurants);
+                QueryPreferences.setStoredQuery(getActivity(), s);
+                updateUI();
                 return true;
             }
             @Override
@@ -82,9 +82,8 @@ public class RestaurantListFragment extends Fragment {
                 startActivity(intent);
                 return true;
             case R.id.menu_item_clear:
-                List<Restaurant> restaurants = new RestaurantManager(getActivity())
-                        .getRestaurants();
-                updateUI(restaurants);
+                QueryPreferences.setStoredQuery(getActivity(), null);
+                updateUI();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -101,12 +100,16 @@ public class RestaurantListFragment extends Fragment {
 
         List<Restaurant> restaurants = new RestaurantManager(getActivity())
                 .getRestaurants();
-        updateUI(restaurants);
+        updateUI();
 
         return view;
     }
 
-    private void updateUI(List<Restaurant> restaurants) {
+    private void updateUI() {
+        String query = QueryPreferences.getStoredQuery(getActivity());
+        List<Restaurant> restaurants = new RestaurantManager(getActivity())
+                .getRestaurants(query);
+
         if (mAdapter == null) {
             mAdapter = new RestaurantAdapter(restaurants);
             mRestaurantRecyclerView.setAdapter(mAdapter);

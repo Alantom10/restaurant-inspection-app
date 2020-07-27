@@ -35,6 +35,7 @@ import com.example.restauranthealthinspectionbrowser.model.DataPackageManager;
 import com.example.restauranthealthinspectionbrowser.model.Inspection;
 import com.example.restauranthealthinspectionbrowser.model.InspectionManager;
 import com.example.restauranthealthinspectionbrowser.model.PegItem;
+import com.example.restauranthealthinspectionbrowser.model.QueryPreferences;
 import com.example.restauranthealthinspectionbrowser.model.Restaurant;
 import com.example.restauranthealthinspectionbrowser.model.RestaurantManager;
 import com.example.restauranthealthinspectionbrowser.model.SimpleClusterRenderer;
@@ -327,7 +328,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void addItems() {
-        List<Restaurant> restaurants = mRestaurantManager.getRestaurants();
+        String query = QueryPreferences.getStoredQuery(this);
+        List<Restaurant> restaurants = mRestaurantManager.getRestaurants(query);
 
         for (Restaurant restaurant : restaurants) {
             String title = restaurant.getTitle();

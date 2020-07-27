@@ -92,11 +92,17 @@ public class RestaurantManager {
     }
 
     public List<Restaurant> getRestaurants(String query) {
-        RestaurantCursorWrapper cursor = queryRestaurants(
-                RestaurantTable.Cols.TITLE + " LIKE ?",
-                new String[] { "%" + query + "%" }
-        );
-        return iterateRestaurantCursor(cursor);
+        if (query == null) {
+            return getRestaurants();
+        }
+        else {
+            RestaurantCursorWrapper cursor = queryRestaurants(
+                    RestaurantTable.Cols.TITLE + " LIKE ?",
+                    new String[] { "%" + query + "%" }
+            );
+
+            return iterateRestaurantCursor(cursor);
+        }
     }
 
     public List<Restaurant> iterateRestaurantCursor(RestaurantCursorWrapper cursor) {
