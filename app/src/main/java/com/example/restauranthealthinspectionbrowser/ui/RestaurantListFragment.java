@@ -60,7 +60,9 @@ public class RestaurantListFragment extends Fragment {
             @Override
             public boolean onQueryTextSubmit(String s) {
                 Log.d(TAG, "QueryTextSubmit: " + s);
-                updateUI();
+                List<Restaurant> restaurants = new RestaurantManager(getActivity())
+                        .getRestaurants(s);
+                updateUI(restaurants);
                 return true;
             }
             @Override
@@ -79,6 +81,11 @@ public class RestaurantListFragment extends Fragment {
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 return true;
+            case R.id.menu_item_clear:
+                List<Restaurant> restaurants = new RestaurantManager(getActivity())
+                        .getRestaurants();
+                updateUI(restaurants);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -92,17 +99,20 @@ public class RestaurantListFragment extends Fragment {
         mRestaurantRecyclerView = (RecyclerView) view.findViewById(R.id.restaurant_recycler_view);
         mRestaurantRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        updateUI();
+        List<Restaurant> restaurants = new RestaurantManager(getActivity())
+                .getRestaurants();
+        updateUI(restaurants);
 
         return view;
     }
 
-    private void updateUI() {
-        List<Restaurant> restaurants = new RestaurantManager(getActivity()).getRestaurants();
-
-        if (isAdded()) {
+    private void updateUI(List<Restaurant> restaurants) {
+        if (mAdapter == null) {
             mAdapter = new RestaurantAdapter(restaurants);
             mRestaurantRecyclerView.setAdapter(mAdapter);
+        } else {
+            mAdapter.setRestaurants(restaurants);
+            mAdapter.notifyDataSetChanged();
         }
     }
 
@@ -144,7 +154,10 @@ public class RestaurantListFragment extends Fragment {
                 mHazardLevelTextView.setText(getString(R.string.hazard_level, hazardLevel));
 
                 HazardRatingHelper helper = new HazardRatingHelper();
-                mHazardLevelTextView.setTextColor(ContextCompat.getColor(getActivity(), helper.getHazardColor(hazardLevel)));
+                mHazardLevelTextView.setTextColor(
+                        ContextCompat.getColor(getActivity(),
+                        helper.getHazardColor(hazardLevel))
+                );
                 mHazardLevelImageView.setImageResource(helper.getHazardIcon(hazardLevel));
             }
             else {
@@ -190,6 +203,9 @@ public class RestaurantListFragment extends Fragment {
         public int getItemCount() {
             return mRestaurants.size();
         }
-    }
 
+        public void setRestaurants(List<Restaurant> restaurants) {
+            mRestaurants = restaurants;
+        }
+    }
 }
