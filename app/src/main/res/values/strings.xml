@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Surrey Restaurant Browser</string>
+    <string name="app_name">RestaurantBrowser</string>
     <string name="restaurant_activity_title">Inspections</string>
     <string name="inspection_activity_title">Violations</string>
     <string name="maps_activity_title">Surrey Restaurant Browser Map View</string>
@@ -30,4 +30,6 @@
     <string name="title_activity_maps">Map</string>
     <string name="hintSearch">Enter Address, City or Zip code</string>
     <string name="location_error">Unable to get current location</string>
+    <string name="search">Search</string>
+    <string name="clear_search">Clear Search</string>
 </resources>
