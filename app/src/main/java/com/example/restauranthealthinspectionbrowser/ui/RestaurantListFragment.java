@@ -2,6 +2,7 @@ package com.example.restauranthealthinspectionbrowser.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -23,6 +25,7 @@ import com.example.restauranthealthinspectionbrowser.model.DateHelper;
 import com.example.restauranthealthinspectionbrowser.model.HazardRatingHelper;
 import com.example.restauranthealthinspectionbrowser.model.Inspection;
 import com.example.restauranthealthinspectionbrowser.model.InspectionManager;
+import com.example.restauranthealthinspectionbrowser.model.QueryPreferences;
 import com.example.restauranthealthinspectionbrowser.model.Restaurant;
 import com.example.restauranthealthinspectionbrowser.model.RestaurantIconHelper;
 import com.example.restauranthealthinspectionbrowser.model.RestaurantManager;
@@ -51,15 +54,36 @@ public class RestaurantListFragment extends Fragment {
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.fragment_restaurant_list, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.menu_item_search);
+        final SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                Log.d(TAG, "QueryTextSubmit: " + s);
+                QueryPreferences.setStoredQuery(getActivity(), s);
+                updateUI();
+                return true;
+            }
+            @Override
+            public boolean onQueryTextChange(String s) {
+                Log.d(TAG, "QueryTextChange: " + s);
+                return false;
+            }
+        });
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.map_view:
+            case R.id.menu_item_map_view:
                 Intent intent = new Intent (getActivity(), MapsActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
+                return true;
+            case R.id.menu_item_clear:
+                QueryPreferences.setStoredQuery(getActivity(), null);
+                updateUI();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -74,17 +98,24 @@ public class RestaurantListFragment extends Fragment {
         mRestaurantRecyclerView = (RecyclerView) view.findViewById(R.id.restaurant_recycler_view);
         mRestaurantRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+        List<Restaurant> restaurants = new RestaurantManager(getActivity())
+                .getRestaurants();
         updateUI();
 
         return view;
     }
 
     private void updateUI() {
-        List<Restaurant> restaurants = new RestaurantManager(getActivity()).getRestaurants();
+        String query = QueryPreferences.getStoredQuery(getActivity());
+        List<Restaurant> restaurants = new RestaurantManager(getActivity())
+                .getRestaurants(query);
 
-        if (isAdded()) {
+        if (mAdapter == null) {
             mAdapter = new RestaurantAdapter(restaurants);
             mRestaurantRecyclerView.setAdapter(mAdapter);
+        } else {
+            mAdapter.setRestaurants(restaurants);
+            mAdapter.notifyDataSetChanged();
         }
     }
 
@@ -126,7 +157,10 @@ public class RestaurantListFragment extends Fragment {
                 mHazardLevelTextView.setText(getString(R.string.hazard_level, hazardLevel));
 
                 HazardRatingHelper helper = new HazardRatingHelper();
-                mHazardLevelTextView.setTextColor(ContextCompat.getColor(getActivity(), helper.getHazardColor(hazardLevel)));
+                mHazardLevelTextView.setTextColor(
+                        ContextCompat.getColor(getActivity(),
+                        helper.getHazardColor(hazardLevel))
+                );
                 mHazardLevelImageView.setImageResource(helper.getHazardIcon(hazardLevel));
             }
             else {
@@ -172,6 +206,9 @@ public class RestaurantListFragment extends Fragment {
         public int getItemCount() {
             return mRestaurants.size();
         }
-    }
 
+        public void setRestaurants(List<Restaurant> restaurants) {
+            mRestaurants = restaurants;
+        }
+    }
 }

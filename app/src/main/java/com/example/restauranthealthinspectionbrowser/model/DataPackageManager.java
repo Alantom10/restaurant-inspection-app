@@ -10,10 +10,10 @@ import android.content.SharedPreferences;
 public class DataPackageManager {
     private static final String TAG = "DataPackageManager";
 
-    private static final String PREFERENCES = "restaurant list";
-    private static final String PREFERENCES_LAST_UPDATED = "last updated";
-    private static final String PREFERENCES_LAST_MODIFIED_RESTAURANTS = "last modified restaurants";
-    private static final String PREFERENCES_LAST_MODIFIED_INSPECTIONS = "last modified inspections";
+    private static final String PREF = "dataPackages";
+    private static final String PREF_LAST_UPDATED = "lastUpdated";
+    private static final String PREF_LAST_MODIFIED_RESTAURANTS = "lastModifiedRestaurants";
+    private static final String PREF_LAST_MODIFIED_INSPECTIONS = "lastModifiedInspections";
 
     private long mLastUpdated;
     private String mLastModifiedRestaurants;
@@ -30,10 +30,10 @@ public class DataPackageManager {
     }
 
     private DataPackageManager(Context context) {
-        SharedPreferences sp = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
-        mLastUpdated = sp.getLong(PREFERENCES_LAST_UPDATED, 0);
-        mLastModifiedRestaurants = sp.getString(PREFERENCES_LAST_MODIFIED_RESTAURANTS, "");
-        mLastModifiedInspections = sp.getString(PREFERENCES_LAST_MODIFIED_INSPECTIONS, "");
+        SharedPreferences sp = context.getSharedPreferences(PREF, Context.MODE_PRIVATE);
+        mLastUpdated = sp.getLong(PREF_LAST_UPDATED, 0);
+        mLastModifiedRestaurants = sp.getString(PREF_LAST_MODIFIED_RESTAURANTS, "");
+        mLastModifiedInspections = sp.getString(PREF_LAST_MODIFIED_INSPECTIONS, "");
 
         mHasRequestedDownloadPermission = false;
     }
@@ -63,11 +63,11 @@ public class DataPackageManager {
         mLastModifiedInspections = lastModifiedInspections;
         mLastUpdated = System.currentTimeMillis();
 
-        SharedPreferences sp = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences sp = context.getSharedPreferences(PREF, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
-        editor.putString(PREFERENCES_LAST_MODIFIED_RESTAURANTS, mLastModifiedRestaurants);
-        editor.putString(PREFERENCES_LAST_MODIFIED_INSPECTIONS, mLastModifiedInspections);
-        editor.putLong(PREFERENCES_LAST_UPDATED, mLastUpdated);
+        editor.putString(PREF_LAST_MODIFIED_RESTAURANTS, mLastModifiedRestaurants);
+        editor.putString(PREF_LAST_MODIFIED_INSPECTIONS, mLastModifiedInspections);
+        editor.putLong(PREF_LAST_UPDATED, mLastUpdated);
         editor.apply();
     }
 }

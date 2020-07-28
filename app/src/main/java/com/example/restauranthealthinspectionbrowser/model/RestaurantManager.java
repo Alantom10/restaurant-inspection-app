@@ -21,7 +21,6 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 import static com.example.restauranthealthinspectionbrowser.ui.MapsActivity.FILE_NAME_RESTAURANTS;
@@ -43,7 +42,7 @@ public class RestaurantManager {
         long lastUpdated = DataPackageManager.getInstance(context)
                 .getLastUpdated();
         if (lastUpdated == 0) {
-            writeDataFileToDatabase(context);
+            readDataFileIntoDatabase(context);
         }
     }
 
@@ -87,9 +86,26 @@ public class RestaurantManager {
     }
 
     public List<Restaurant> getRestaurants() {
-        List<Restaurant> restaurants = new ArrayList<>();
-
         RestaurantCursorWrapper cursor = queryRestaurants(null, null);
+        return iterateRestaurantCursor(cursor);
+    }
+
+    public List<Restaurant> getRestaurants(String query) {
+        if (query == null) {
+            return getRestaurants();
+        }
+        else {
+            RestaurantCursorWrapper cursor = queryRestaurants(
+                    RestaurantTable.Cols.TITLE + " LIKE ?",
+                    new String[] { "%" + query + "%" }
+            );
+
+            return iterateRestaurantCursor(cursor);
+        }
+    }
+
+    public List<Restaurant> iterateRestaurantCursor(RestaurantCursorWrapper cursor) {
+        List<Restaurant> restaurants = new ArrayList<>();
 
         try {
             cursor.moveToFirst();
@@ -121,10 +137,10 @@ public class RestaurantManager {
     }
 
     public void updateRestaurantDatabase(Context context) throws FileNotFoundException {
-        writeDataFileToDatabase(context);
+        readDataFileIntoDatabase(context);
     }
 
-    private void writeDataFileToDatabase(Context context)  {
+    private void readDataFileIntoDatabase(Context context)  {
         // Adapted from https://www.youtube.com/watch?v=i-TqNzUryn8
         File file = new File(context.getFilesDir() + "/" + FILE_NAME_RESTAURANTS);
         InputStream inputStream = null;

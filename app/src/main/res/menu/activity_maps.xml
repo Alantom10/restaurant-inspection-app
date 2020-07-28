@@ -2,8 +2,20 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/list_view"
-        android:icon="@drawable/ic_view_list"
+        android:id="@+id/menu_item_list_view"
+        android:icon="@drawable/ic_menu_list_view"
         android:title="@string/list_view"
         app:showAsAction="ifRoom|withText"/>
+
+    <item
+        android:id="@+id/menu_item_search"
+        android:icon="@drawable/ic_search_black_24dp"
+        android:title="@string/search"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/menu_item_clear"
+        android:title="@string/clear_search"
+        app:showAsAction="never" />
 </menu>
