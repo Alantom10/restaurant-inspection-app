@@ -2,6 +2,8 @@ package com.example.restauranthealthinspectionbrowser.ui;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
@@ -20,6 +22,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
@@ -64,7 +69,7 @@ import java.util.concurrent.TimeUnit;
  * MapsActivity sets up the restaurant map view screen. It starts data fetching
  * tasks on the background.
  */
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
     private static final String TAG = "MapActivity";
 
     public static final String FILE_NAME_RESTAURANTS = "restaurants.csv";
@@ -96,10 +101,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_maps);
         main = this;
 
-        mSearchText = (EditText) findViewById(R.id.editSearch);
+//        mSearchText = (EditText) findViewById(R.id.editSearch);
         getLocationPermission();
         setItemOnClick();
-        initSearch();
+//        initSearch();
 
         mRestaurantManager = new RestaurantManager(this);
         mInspectionManager = InspectionManager.getInstance(this);
@@ -111,6 +116,47 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             if (currentTime - lastUpdated > TimeUnit.HOURS.toMillis(20)) {
                 new FetchLastModifiedTask().execute();
             }
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.activity_maps, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.menu_item_search);
+        final SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                Log.d(TAG, "QueryTextSubmit: " + s);
+                QueryPreferences.setStoredQuery(MapsActivity.this, s);
+                setUpClusters();
+                return true;
+            }
+            @Override
+            public boolean onQueryTextChange(String s) {
+                Log.d(TAG, "QueryTextChange: " + s);
+                return false;
+            }
+        });
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_item_list_view:
+                Intent intent = new Intent (MapsActivity.this, RestaurantListActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.menu_item_clear:
+                QueryPreferences.setStoredQuery(MapsActivity.this, null);
+                setUpClusters();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
@@ -292,14 +338,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     //https://www.youtube.com/watch?v=Vt6H9TOmsuo&list=PLgCYzUzKIBE-vInwQhGSdnbyJ62nixHCt&index=4
 
     private void setItemOnClick(){
-        ImageView list = findViewById(R.id.ic_listview);
-        list.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent (MapsActivity.this, RestaurantListActivity.class);
-                startActivity(intent);
-            }
-        });
+//        ImageView list = findViewById(R.id.ic_listview);
+//        list.setOnClickListener(new View.OnClickListener(){
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent (MapsActivity.this, RestaurantListActivity.class);
+//                startActivity(intent);
+//            }
+//        });
 
         ImageView location = findViewById(R.id.ic_my_location);
         location.setOnClickListener(new View.OnClickListener(){
