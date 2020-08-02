@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * RestaurantManager class stores a collection of violations. It supports
@@ -33,8 +34,12 @@ public class ViolationManager {
         return mViolations;
     }
 
-    private void readData(Context context){
+    private void readData(Context context) {
         InputStream is = context.getResources().openRawResource(R.raw.violation_descriptions);
+        if (Locale.getDefault().getLanguage() == "fr") {
+            is = context.getResources().openRawResource(R.raw.violation_descriptions_french);
+        }
+
         BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
         try {
             String line = "";
