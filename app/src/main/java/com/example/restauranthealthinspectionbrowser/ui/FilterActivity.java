@@ -42,17 +42,27 @@ public class FilterActivity extends AppCompatActivity {
 
                 RadioGroup hazardLev = (RadioGroup) findViewById(R.id.radioGroup2);
                 int rad = hazardLev.getCheckedRadioButtonId();
-
                 RadioButton x = (RadioButton) findViewById(rad);
                 try{
                     hazStr = (String) x.getText();
                 } catch(NullPointerException ex) {
                     hazStr = "Low Medium High";
                 }
-                Log.d("myTag", hazStr);
 
+                EditText minInput = (EditText) findViewById(R.id.min_input);
+                try{
+                    minViolation = Integer.parseInt(minInput.getText().toString());
+                } catch(NumberFormatException ex) {
+                    minViolation = 0;
+                }
+                Log.d("violationText1", "valueMin " + minViolation);
 
-
+                EditText maxInput = (EditText) findViewById(R.id.max_input);
+                try{
+                    maxViolation = Integer.parseInt(maxInput.getText().toString());
+                } catch(NumberFormatException ex) {
+                    maxViolation = 1000;
+                }
                 Log.d("violationText2", "valueMax " + maxViolation);
 
                 FilterSettings filterSet = FilterSettings.getFilterSettings();
