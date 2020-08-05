@@ -3,6 +3,7 @@ package com.example.restauranthealthinspectionbrowser.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -43,13 +44,16 @@ public class FilterActivity extends AppCompatActivity {
                 int rad = hazardLev.getCheckedRadioButtonId();
 
                 RadioButton x = (RadioButton) findViewById(rad);
-                hazStr = (String) x.getText();
+                try{
+                    hazStr = (String) x.getText();
+                } catch(NullPointerException ex) {
+                    hazStr = "Low Medium High";
+                }
+                Log.d("myTag", hazStr);
 
-                EditText minInput = (EditText) findViewById(R.id.min_input);
-                minViolation = Integer.parseInt(minInput.getText().toString());
 
-                EditText maxInput = (EditText) findViewById(R.id.max_input);
-                maxViolation = Integer.parseInt(maxInput.getText().toString());
+
+                Log.d("violationText2", "valueMax " + maxViolation);
 
                 FilterSettings filterSet = FilterSettings.getFilterSettings();
                 filterSet.setFavSetting(favourites);
