@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -51,6 +52,12 @@ public class RestaurantFragment extends Fragment {
     public static final String RESTAURANT_LONGITUDE_INTENT_TAG = "Restaurant longitude";
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_restaurant, container, false);
@@ -82,8 +89,9 @@ public class RestaurantFragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
 
         inflater.inflate(R.menu.fragment_restaurant, menu);
-
         MenuItem favorite = menu.findItem(R.id.action_favorite);
+
+        favorite.setIcon(R.drawable.ic_baseline_star_24);
 
         if (mRestaurant.isFavorite()) {
             favorite.setIcon(R.drawable.ic_baseline_star_24);
@@ -97,19 +105,6 @@ public class RestaurantFragment extends Fragment {
 
         if (item.getItemId() == R.id.action_favorite) {
 
-            ContentValues values = new ContentValues();
-            values.put(RestaurantDbSchema.RestaurantTable.Cols.ID, id);
-            values.put(RestaurantDbSchema.RestaurantTable.Cols.TITLE, title);
-            values.put(RestaurantDbSchema.RestaurantTable.Cols.ADDRESS, address);
-            values.put(RestaurantDbSchema.RestaurantTable.Cols.LATITUDE, latitude);
-            values.put(RestaurantDbSchema.RestaurantTable.Cols.LONGITUDE, longitude);
-            values.put(RestaurantDbSchema.RestaurantTable.Cols.ISSUES, issues);
-            values.put(RestaurantDbSchema.RestaurantTable.Cols.RATING, rating);
-            values.put(RestaurantDbSchema.RestaurantTable.Cols.DATE, date);
-
-            mDatabase.update(RestaurantDbSchema.RestaurantTable.NAME, values,
-                    RestaurantDbSchema.RestaurantTable.Cols.ID + " = ?",
-                    new String[] { id });
         }
 
         return super.onOptionsItemSelected(item);
