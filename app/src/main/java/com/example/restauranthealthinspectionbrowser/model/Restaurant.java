@@ -15,9 +15,11 @@ public class Restaurant implements Comparable<Restaurant> {
     private int mIssues;
     private String mRating;
     private Date mDate;
+    private boolean mIsFavorite;
 
     public Restaurant() {
     }
+
 
     public Restaurant(String id) {
         mId = id;
@@ -87,6 +89,13 @@ public class Restaurant implements Comparable<Restaurant> {
         mDate = date;
     }
 
+    public boolean isFavorite() {
+        return mIsFavorite;
+    }
+
+    public void setIsFavorite(boolean mIsFavorite) {
+        this.mIsFavorite = mIsFavorite;
+    }
     @Override
     public int compareTo(Restaurant o) {
         return getTitle().compareTo(o.getTitle());

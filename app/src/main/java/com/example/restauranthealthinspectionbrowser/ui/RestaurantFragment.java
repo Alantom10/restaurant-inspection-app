@@ -1,19 +1,25 @@
 package com.example.restauranthealthinspectionbrowser.ui;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.restauranthealthinspectionbrowser.R;
+import com.example.restauranthealthinspectionbrowser.databse.RestaurantDbSchema;
 import com.example.restauranthealthinspectionbrowser.model.DateHelper;
 import com.example.restauranthealthinspectionbrowser.model.Inspection;
 import com.example.restauranthealthinspectionbrowser.model.InspectionManager;
@@ -69,6 +75,44 @@ public class RestaurantFragment extends Fragment {
 
 
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+
+        inflater.inflate(R.menu.fragment_restaurant, menu);
+
+        MenuItem favorite = menu.findItem(R.id.action_favorite);
+
+        if (mRestaurant.isFavorite()) {
+            favorite.setIcon(R.drawable.ic_baseline_star_24);
+        } else {
+            favorite.setIcon(R.drawable.ic_baseline_star_border_24);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        if (item.getItemId() == R.id.action_favorite) {
+
+            ContentValues values = new ContentValues();
+            values.put(RestaurantDbSchema.RestaurantTable.Cols.ID, id);
+            values.put(RestaurantDbSchema.RestaurantTable.Cols.TITLE, title);
+            values.put(RestaurantDbSchema.RestaurantTable.Cols.ADDRESS, address);
+            values.put(RestaurantDbSchema.RestaurantTable.Cols.LATITUDE, latitude);
+            values.put(RestaurantDbSchema.RestaurantTable.Cols.LONGITUDE, longitude);
+            values.put(RestaurantDbSchema.RestaurantTable.Cols.ISSUES, issues);
+            values.put(RestaurantDbSchema.RestaurantTable.Cols.RATING, rating);
+            values.put(RestaurantDbSchema.RestaurantTable.Cols.DATE, date);
+
+            mDatabase.update(RestaurantDbSchema.RestaurantTable.NAME, values,
+                    RestaurantDbSchema.RestaurantTable.Cols.ID + " = ?",
+                    new String[] { id });
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void updateTextViews() {
