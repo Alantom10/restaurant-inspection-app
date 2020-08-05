@@ -93,7 +93,7 @@ public class RestaurantFragment extends Fragment {
 
         favorite.setIcon(R.drawable.ic_baseline_star_24);
 
-        if (mRestaurant.isFavorite()) {
+        if (mRestaurant.isFavourite()) {
             favorite.setIcon(R.drawable.ic_baseline_star_24);
         } else {
             favorite.setIcon(R.drawable.ic_baseline_star_border_24);
@@ -104,7 +104,15 @@ public class RestaurantFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         if (item.getItemId() == R.id.action_favorite) {
-
+            if (mRestaurant.isFavourite()) {
+                mRestaurant.setFavourite(false);
+                item.setIcon(R.drawable.ic_baseline_star_border_24);
+            }
+            else {
+                mRestaurant.setFavourite(true);
+                item.setIcon(R.drawable.ic_baseline_star_24);
+            }
+            new RestaurantManager(getActivity()).updateRestaurant(mRestaurant);
         }
 
         return super.onOptionsItemSelected(item);
