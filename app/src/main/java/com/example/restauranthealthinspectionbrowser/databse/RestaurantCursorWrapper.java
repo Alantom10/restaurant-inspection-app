@@ -22,6 +22,7 @@ public class RestaurantCursorWrapper extends CursorWrapper {
         int issues = getInt(getColumnIndex(RestaurantTable.Cols.ISSUES));
         String rating = getString(getColumnIndex(RestaurantTable.Cols.RATING));
         Date date = new Date(getLong(getColumnIndex(RestaurantTable.Cols.DATE)));
+        int isFavourite = getInt(getColumnIndex(RestaurantTable.Cols.FAVOURITE));
 
         Restaurant restaurant = new Restaurant(id);
         restaurant.setTitle(title);
@@ -31,6 +32,7 @@ public class RestaurantCursorWrapper extends CursorWrapper {
         restaurant.setIssues(issues);
         restaurant.setRating(rating);
         restaurant.setDate(date);
+        restaurant.setFavourite(isFavourite != 0);
 
         return restaurant;
     }
