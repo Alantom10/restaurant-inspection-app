@@ -13,12 +13,14 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.restauranthealthinspectionbrowser.R;
+import com.example.restauranthealthinspectionbrowser.model.FilterSettings;
 import com.example.restauranthealthinspectionbrowser.model.Inspection;
 
 public class FilterActivity extends AppCompatActivity {
     private boolean favourites;
     private String hazStr;
     private int minViolation;
+    private int maxViolation;
 
     public static Intent makeIntent(Context context) {
         Intent intent = new Intent(context, InspectionActivity.class);
@@ -47,7 +49,13 @@ public class FilterActivity extends AppCompatActivity {
                 minViolation = Integer.parseInt(minInput.getText().toString());
 
                 EditText maxInput = (EditText) findViewById(R.id.max_input);
-                minViolation = Integer.parseInt(maxInput.getText().toString());
+                maxViolation = Integer.parseInt(maxInput.getText().toString());
+
+                FilterSettings filterSet = FilterSettings.getFilterSettings();
+                filterSet.setFavSetting(favourites);
+                filterSet.setHazardSetting(hazStr);
+                filterSet.setMinSetting(minViolation);
+                filterSet.setMaxSetting(maxViolation);
             }
         });
     }
