@@ -85,6 +85,10 @@ public class RestaurantListFragment extends Fragment {
                 QueryPreferences.setStoredQuery(getActivity(), null);
                 updateUI();
                 return true;
+            case R.id.menu_item_filter:
+                Intent intent2 = new Intent(getActivity(), FilterActivity.class);
+                startActivity(intent2);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
