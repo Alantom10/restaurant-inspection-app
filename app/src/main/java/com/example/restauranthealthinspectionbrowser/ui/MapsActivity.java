@@ -118,6 +118,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 new FetchLastModifiedTask().execute();
             }
         }
+
+        Intent intent = new Intent (MapsActivity.this, RestaurantUpdateActivity.class);
+        startActivity(intent);
     }
 
     @Override

@@ -46,6 +46,6 @@
     <string name="cancel_btn">CANCEL</string>
     <string name="clear_filter_btn">CLEAR FILTER</string>
     <string name="filter_pg_title">FILTER:</string>
-    <string name="restaurant_update_title">Favourite Restaurants with New Inspections</string>
+    <string name="restaurant_update_title">New Inspections</string>
 
 </resources>
