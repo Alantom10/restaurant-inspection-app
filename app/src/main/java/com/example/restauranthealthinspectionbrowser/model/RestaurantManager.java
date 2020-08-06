@@ -22,6 +22,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import static com.example.restauranthealthinspectionbrowser.ui.MapsActivity.FILE_NAME_RESTAURANTS;
 
@@ -210,8 +211,7 @@ public class RestaurantManager {
                 String id = row[0].replace("\"", "");
                 String title = row[1].replace("\"", "");
                 String address = (row[2] + ", " + row[3]).replace("\"", "");
-                String latitude = row[5];
-                String longitude = row[6];
+
                 int issues = 0;
                 String rating = "";
                 long date = 0;
@@ -224,12 +224,20 @@ public class RestaurantManager {
                     date = inspection.getInspectionDate().getTime();
                 }
 
+                Random rand = new Random();
+                Double latitude = Double.parseDouble(row[5]);
+                Double longitude = Double.parseDouble(row[6]);
+                latitude += rand.nextInt(10) * Math.pow(10, -4);
+                longitude += rand.nextInt(10) * Math.pow(10, -4);
+                String latitudeString = Double.toString(latitude);
+                String longitudeString = Double.toString(longitude);
+
                 ContentValues values = new ContentValues();
                 values.put(RestaurantTable.Cols.ID, id);
                 values.put(RestaurantTable.Cols.TITLE, title);
                 values.put(RestaurantTable.Cols.ADDRESS, address);
-                values.put(RestaurantTable.Cols.LATITUDE, latitude);
-                values.put(RestaurantTable.Cols.LONGITUDE, longitude);
+                values.put(RestaurantTable.Cols.LATITUDE, latitudeString);
+                values.put(RestaurantTable.Cols.LONGITUDE, longitudeString);
                 values.put(RestaurantTable.Cols.ISSUES, issues);
                 values.put(RestaurantTable.Cols.RATING, rating);
                 values.put(RestaurantTable.Cols.DATE, date);
