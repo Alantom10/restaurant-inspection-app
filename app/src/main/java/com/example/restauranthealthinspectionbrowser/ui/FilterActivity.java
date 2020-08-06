@@ -46,7 +46,7 @@ public class FilterActivity extends AppCompatActivity {
                 try{
                     hazStr = (String) x.getText();
                 } catch(NullPointerException ex) {
-                    hazStr = "Low Medium High";
+                    hazStr = "Low Medium High"; //int rad -1 when nothing is selected
                 }
 
                 EditText minInput = (EditText) findViewById(R.id.min_input);
@@ -70,6 +70,8 @@ public class FilterActivity extends AppCompatActivity {
                 filterSet.setHazardSetting(hazStr);
                 filterSet.setMinSetting(minViolation);
                 filterSet.setMaxSetting(maxViolation);
+
+                finish();
             }
         });
     }
