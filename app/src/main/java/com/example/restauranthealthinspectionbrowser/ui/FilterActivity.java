@@ -20,8 +20,8 @@ import com.example.restauranthealthinspectionbrowser.model.Inspection;
 public class FilterActivity extends AppCompatActivity {
     private boolean favourites;
     private String hazStr;
-    private int minViolation;
-    private int maxViolation;
+    private String minViolation;
+    private String maxViolation;
 
     public static Intent makeIntent(Context context) {
         Intent intent = new Intent(context, InspectionActivity.class);
@@ -46,22 +46,22 @@ public class FilterActivity extends AppCompatActivity {
                 try{
                     hazStr = (String) x.getText();
                 } catch(NullPointerException ex) {
-                    hazStr = ""; //int rad -1 when nothing is selected
+                    hazStr = null; //int rad -1 when nothing is selected
                 }
 
                 EditText minInput = (EditText) findViewById(R.id.min_input);
                 try{
-                    minViolation = Integer.parseInt(minInput.getText().toString());
+                    minViolation = minInput.getText().toString();
                 } catch(NumberFormatException ex) {
-                    minViolation = 0;
+                    minViolation = null;
                 }
                 Log.d("violationText1", "valueMin " + minViolation);
 
                 EditText maxInput = (EditText) findViewById(R.id.max_input);
                 try{
-                    maxViolation = Integer.parseInt(maxInput.getText().toString());
+                    maxViolation = maxInput.getText().toString();
                 } catch(NumberFormatException ex) {
-                    maxViolation = 1000;
+                    maxViolation = null;
                 }
                 Log.d("violationText2", "valueMax " + maxViolation);
 
@@ -88,16 +88,18 @@ public class FilterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 FilterSettings filterSet = FilterSettings.getFilterSettings();
-                favourites = false;
+                if(favourites == true) {
+                    favourites = false;
+                }
                 filterSet.setFavSetting(favourites);
 
-                hazStr = "";
+                hazStr = null;
                 filterSet.setHazardSetting(hazStr);
 
-                minViolation = 0;
+                minViolation = null;
                 filterSet.setMinSetting(minViolation);
 
-                maxViolation = 1000;
+                maxViolation = null;
                 filterSet.setMaxSetting(maxViolation);
 
                 finish();

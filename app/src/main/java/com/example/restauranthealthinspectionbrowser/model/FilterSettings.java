@@ -4,8 +4,8 @@ public class FilterSettings {
     private static FilterSettings filterSettings = null;
     private boolean favSetting;
     private String hazardSetting;
-    private int minSetting;
-    private int maxSetting;
+    private String minSetting;
+    private String maxSetting;
 
     private FilterSettings() {
 
@@ -37,19 +37,19 @@ public class FilterSettings {
         this.hazardSetting = hazardSetting;
     }
 
-    public int getMinSetting() {
+    public String getMinSetting() {
         return minSetting;
     }
 
-    public void setMinSetting(int minSetting) {
+    public void setMinSetting(String minSetting) {
         this.minSetting = minSetting;
     }
 
-    public int getMaxSetting() {
+    public String getMaxSetting() {
         return maxSetting;
     }
 
-    public void setMaxSetting(int maxSetting) {
+    public void setMaxSetting(String maxSetting) {
         this.maxSetting = maxSetting;
     }
 }
