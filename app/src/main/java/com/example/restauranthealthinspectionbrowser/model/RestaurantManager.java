@@ -21,6 +21,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -99,7 +100,7 @@ public class RestaurantManager {
         values.put(RestaurantTable.Cols.TITLE, restaurant.getTitle());
         values.put(RestaurantTable.Cols.ADDRESS, restaurant.getAddress());
         values.put(RestaurantTable.Cols.LATITUDE, Double.toString(restaurant.getLatitude()));
-        values.put(RestaurantTable.Cols.LONGITUDE, Double.toString(restaurant.getLatitude()));
+        values.put(RestaurantTable.Cols.LONGITUDE, Double.toString(restaurant.getLongitude()));
         values.put(RestaurantTable.Cols.ISSUES, restaurant.getIssues());
         values.put(RestaurantTable.Cols.RATING, restaurant.getRating());
         values.put(RestaurantTable.Cols.DATE, restaurant.getDate().getTime());
@@ -214,14 +215,14 @@ public class RestaurantManager {
 
                 int issues = 0;
                 String rating = "";
-                long date = 0;
+                Date date = new Date();
 
                 Inspection inspection = InspectionManager.getInstance(context)
                         .getLatestInspection(id);
                 if (inspection != null) {
                     issues = inspection.getNumCritical() + inspection.getNumNonCritical();
                     rating = inspection.getHazardRating();
-                    date = inspection.getInspectionDate().getTime();
+                    date = inspection.getInspectionDate();
                 }
 
                 Random rand = new Random();
@@ -232,21 +233,27 @@ public class RestaurantManager {
                 String latitudeString = Double.toString(latitude);
                 String longitudeString = Double.toString(longitude);
 
-                ContentValues values = new ContentValues();
-                values.put(RestaurantTable.Cols.ID, id);
-                values.put(RestaurantTable.Cols.TITLE, title);
-                values.put(RestaurantTable.Cols.ADDRESS, address);
-                values.put(RestaurantTable.Cols.LATITUDE, latitudeString);
-                values.put(RestaurantTable.Cols.LONGITUDE, longitudeString);
-                values.put(RestaurantTable.Cols.ISSUES, issues);
-                values.put(RestaurantTable.Cols.RATING, rating);
-                values.put(RestaurantTable.Cols.DATE, date);
-
                 Restaurant restaurant = getRestaurant(id);
                 if (restaurant == null) {
+                    restaurant = new Restaurant(id);
+                    restaurant.setTitle(title);
+                    restaurant.setAddress(address);
+                    restaurant.setLatitude(latitude);
+                    restaurant.setLongitude(longitude);
+                    restaurant.setIssues(issues);
+                    restaurant.setRating(rating);
+                    restaurant.setDate(date);
+                    restaurant.setFavourite(false);
+
+                    ContentValues values = getContentValues(restaurant);
                     mDatabase.insert(RestaurantTable.NAME, null, values);
                 }
                 else {
+                    restaurant.setIssues(issues);
+                    restaurant.setRating(rating);
+                    restaurant.setDate(date);
+
+                    ContentValues values = getContentValues(restaurant);
                     mDatabase.update(RestaurantTable.NAME, values,
                             RestaurantTable.Cols.ID + " = ?",
                             new String[] { id });

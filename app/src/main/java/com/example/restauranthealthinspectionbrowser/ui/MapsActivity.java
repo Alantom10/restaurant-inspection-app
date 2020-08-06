@@ -69,11 +69,12 @@ import java.util.concurrent.TimeUnit;
  * tasks on the background.
  */
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
-    private static final String TAG = "MapActivity";
+    private static final String TAG = "MapsActivity";
 
     public static final String FILE_NAME_RESTAURANTS = "restaurants.csv";
     public static final String FILE_NAME_INSPECTION_REPORTS = "inspection_reports.csv";
     private static final int REQUEST_CODE_FILTER = 51;
+    private static final int REQUEST_CODE_RESTAURANT = 52;
 
     private String mNewLastModifiedRestaurants;
     private String mNewLastModifiedInspections;
@@ -426,7 +427,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             Intent intent = new Intent(MapsActivity.this, RestaurantActivity.class);
             intent.putExtra(RestaurantActivity.EXTRA_RESTAURANT_ID,restaurant.getId());
-            startActivity(intent);
+            startActivityForResult(intent, REQUEST_CODE_RESTAURANT);
         });
 
 

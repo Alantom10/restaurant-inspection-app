@@ -79,7 +79,7 @@ public class FilterActivity extends AppCompatActivity {
                 QueryPreferences.setStoredMinimumIssuesQuery(FilterActivity.this, minViolation);
 
                 Intent intent = new Intent();
-                setResult(51, intent);
+                setResult(RESULT_OK, intent);
                 finish();
             }
         });
@@ -88,8 +88,6 @@ public class FilterActivity extends AppCompatActivity {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = getIntent();
-                setResult(2, intent);
                 finish();
             }
         });
@@ -109,7 +107,7 @@ public class FilterActivity extends AppCompatActivity {
                 QueryPreferences.setStoredMinimumIssuesQuery(FilterActivity.this, minViolation);
 
                 Intent intent = new Intent();
-                setResult(2, intent);
+                setResult(RESULT_OK, intent);
                 finish();
             }
         });
