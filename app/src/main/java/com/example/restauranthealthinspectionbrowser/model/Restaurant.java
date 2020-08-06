@@ -16,6 +16,7 @@ public class Restaurant implements Comparable<Restaurant> {
     private String mRating;
     private Date mDate;
     private boolean mIsFavourite;
+    private boolean mIsUpdated;
 
     public Restaurant() {
     }
@@ -94,6 +95,14 @@ public class Restaurant implements Comparable<Restaurant> {
 
     public void setFavourite(boolean favourite) {
         mIsFavourite = favourite;
+    }
+
+    public boolean isUpdated() {
+        return mIsUpdated;
+    }
+
+    public void setUpdated(boolean updated) {
+        mIsUpdated = updated;
     }
 
     @Override

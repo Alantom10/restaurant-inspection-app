@@ -73,7 +73,7 @@ public class RestaurantManager {
                 new String[] { Double.toString(latLng.latitude),
                         Double.toString(latLng.longitude) }
         );
-        Log.i(TAG, "Lat = " + latLng.latitude + "; Lon = " + latLng.longitude);
+//        Log.i(TAG, "Lat = " + latLng.latitude + "; Lon = " + latLng.longitude);
 
         try {
             if (cursor.getCount() == 0) {
@@ -105,6 +105,7 @@ public class RestaurantManager {
         values.put(RestaurantTable.Cols.RATING, restaurant.getRating());
         values.put(RestaurantTable.Cols.DATE, restaurant.getDate().getTime());
         values.put(RestaurantTable.Cols.FAVOURITE, restaurant.isFavourite() ? "1" : "0");
+        values.put(RestaurantTable.Cols.UPDATED, restaurant.isUpdated() ? "1" : "0");
 
         return values;
     }
@@ -215,7 +216,8 @@ public class RestaurantManager {
 
                 int issues = 0;
                 String rating = "";
-                Date date = new Date();
+                Date date = new Date(0);
+//                Log.i(TAG, "Date/time: " + date.getTime());
 
                 Inspection inspection = InspectionManager.getInstance(context)
                         .getLatestInspection(id);
@@ -230,8 +232,6 @@ public class RestaurantManager {
                 Double longitude = Double.parseDouble(row[6]);
                 latitude += rand.nextInt(10) * Math.pow(10, -4);
                 longitude += rand.nextInt(10) * Math.pow(10, -4);
-                String latitudeString = Double.toString(latitude);
-                String longitudeString = Double.toString(longitude);
 
                 Restaurant restaurant = getRestaurant(id);
                 if (restaurant == null) {
@@ -244,6 +244,7 @@ public class RestaurantManager {
                     restaurant.setRating(rating);
                     restaurant.setDate(date);
                     restaurant.setFavourite(false);
+                    restaurant.setUpdated(false);
 
                     ContentValues values = getContentValues(restaurant);
                     mDatabase.insert(RestaurantTable.NAME, null, values);
@@ -252,6 +253,14 @@ public class RestaurantManager {
                     restaurant.setIssues(issues);
                     restaurant.setRating(rating);
                     restaurant.setDate(date);
+
+                    long time = restaurant.getDate().getTime();
+                    if (time == 0 || time < date.getTime()) {
+                        restaurant.setUpdated(true);
+                    }
+                    else {
+                        restaurant.setUpdated(false);
+                    }
 
                     ContentValues values = getContentValues(restaurant);
                     mDatabase.update(RestaurantTable.NAME, values,
