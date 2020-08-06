@@ -1,7 +1,8 @@
 <resources>
-    <string name="app_name">Navigateur de restaurant</string>
+    <string name="app_name">NavigateurDeRestaurant</string>
     <string name="restaurant_activity_title">Inspections</string>
     <string name="inspection_activity_title">Infraction</string>
+    <string name="filter_activity_title">Filtre</string>
     <string name="maps_activity_title">Vue de la carte du navigateur de restaurant</string>
     <string name="map_view">Vue de la carte</string>
     <string name="list_view">Vue de liste</string>

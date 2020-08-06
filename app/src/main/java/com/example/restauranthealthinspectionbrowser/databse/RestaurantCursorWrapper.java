@@ -2,6 +2,7 @@ package com.example.restauranthealthinspectionbrowser.databse;
 
 import android.database.Cursor;
 import android.database.CursorWrapper;
+import android.util.Log;
 
 import com.example.restauranthealthinspectionbrowser.databse.RestaurantDbSchema.RestaurantTable;
 import com.example.restauranthealthinspectionbrowser.model.Restaurant;
@@ -9,6 +10,7 @@ import com.example.restauranthealthinspectionbrowser.model.Restaurant;
 import java.util.Date;
 
 public class RestaurantCursorWrapper extends CursorWrapper {
+    private static final String TAG = "RestaurantCursorWrapper";
     public RestaurantCursorWrapper(Cursor cursor) {
         super(cursor);
     }
@@ -19,20 +21,21 @@ public class RestaurantCursorWrapper extends CursorWrapper {
         String address = getString(getColumnIndex(RestaurantTable.Cols.ADDRESS));
         Double latitude = Double.parseDouble(getString(getColumnIndex(RestaurantTable.Cols.LATITUDE)));
         Double longitude = Double.parseDouble(getString(getColumnIndex(RestaurantTable.Cols.LONGITUDE)));
-        int issues = getInt(getColumnIndex(RestaurantTable.Cols.ISSUES));
+        String issues = getString(getColumnIndex(RestaurantTable.Cols.ISSUES));
         String rating = getString(getColumnIndex(RestaurantTable.Cols.RATING));
         Date date = new Date(getLong(getColumnIndex(RestaurantTable.Cols.DATE)));
-        int isFavourite = getInt(getColumnIndex(RestaurantTable.Cols.FAVOURITE));
+        String isFavourite = getString(getColumnIndex(RestaurantTable.Cols.FAVOURITE));
+        Log.i(TAG, "Favourite: " + isFavourite);
 
         Restaurant restaurant = new Restaurant(id);
         restaurant.setTitle(title);
         restaurant.setAddress(address);
         restaurant.setLatitude(latitude);
         restaurant.setLongitude(longitude);
-        restaurant.setIssues(issues);
+        restaurant.setIssues(Integer.parseInt(issues));
         restaurant.setRating(rating);
         restaurant.setDate(date);
-        restaurant.setFavourite(isFavourite != 0);
+        restaurant.setFavourite(isFavourite.equals("1"));
 
         return restaurant;
     }

@@ -2,6 +2,7 @@
     <string name="app_name">RestaurantBrowser</string>
     <string name="restaurant_activity_title">Inspections</string>
     <string name="inspection_activity_title">Violations</string>
+    <string name="filter_activity_title">Filter</string>
     <string name="maps_activity_title">RestaurantBrowser Map View</string>
     <string name="map_view">Map View</string>
     <string name="list_view">List View</string>

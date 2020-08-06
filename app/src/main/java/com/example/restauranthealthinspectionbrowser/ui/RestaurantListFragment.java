@@ -39,6 +39,8 @@ import java.util.List;
  */
 public class RestaurantListFragment extends Fragment {
     private static final String TAG = "RestaurantListFragment";
+    private static final int REQUEST_CODE_FILTER = 31;
+    private static final int REQUEST_CODE_RESTAURANT = 32;
 
     private RecyclerView mRestaurantRecyclerView;
     private RestaurantAdapter mAdapter;
@@ -86,12 +88,18 @@ public class RestaurantListFragment extends Fragment {
                 updateUI();
                 return true;
             case R.id.menu_item_filter:
-                Intent intent2 = new Intent(getActivity(), FilterActivity.class);
-                startActivity(intent2);
+                Intent filter = FilterActivity.makeIntent(getActivity());
+                startActivityForResult(filter, REQUEST_CODE_FILTER);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        updateUI();
     }
 
     @Override
@@ -191,7 +199,7 @@ public class RestaurantListFragment extends Fragment {
         @Override
         public void onClick(View v) {
             Intent intent = RestaurantActivity.makeIntent(getActivity(), mRestaurantID);
-            startActivity(intent);
+            startActivityForResult(intent, REQUEST_CODE_RESTAURANT);
         }
     }
 

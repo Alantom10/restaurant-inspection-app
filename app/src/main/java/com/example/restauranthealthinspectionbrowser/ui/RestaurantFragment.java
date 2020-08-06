@@ -1,5 +1,6 @@
 package com.example.restauranthealthinspectionbrowser.ui;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
@@ -113,6 +114,9 @@ public class RestaurantFragment extends Fragment {
                 item.setIcon(R.drawable.ic_baseline_star_24);
             }
             new RestaurantManager(getActivity()).updateRestaurant(mRestaurant);
+
+            Intent intent = new Intent();
+            getActivity().setResult(Activity.RESULT_OK, intent);
         }
 
         return super.onOptionsItemSelected(item);
