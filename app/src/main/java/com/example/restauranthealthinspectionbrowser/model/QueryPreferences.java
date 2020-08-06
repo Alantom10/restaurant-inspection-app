@@ -12,21 +12,24 @@ import java.util.List;
 
 public class QueryPreferences {
     private static final String TAG = "QueryPreferences";
-    private static final String PREF_TITLE_QUERY = "titleQuery";
-    private static final String PREF_RATING_QUERY = "ratingQuery";
+    private static final String PREF_QUERY_TITLE = "titleQuery";
+    private static final String PREF_QUERY_FAVOURITE = "favouriteQuery";
+    private static final String PREF_QUERY_RATING = "ratingQuery";
+    private static final String PREF_QUERY_MAX_ISSUES = "maxIssuesQuery";
+    private static final String PREF_QUERY_MIN_ISSUES = "minIssuesQuery";
 
     public static String[] getStoredQuery(Context context) {
         List<String> query = new ArrayList<>();
         String clause = "";
 
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-        String titleQuery = sp.getString(PREF_TITLE_QUERY, null);
+        String titleQuery = sp.getString(PREF_QUERY_TITLE, null);
         if (titleQuery != null) {
             clause += RestaurantTable.Cols.TITLE + " LIKE ?";
             query.add(titleQuery);
         }
 
-        String favouriteQuery = sp.getString(PREF_RATING_QUERY, null);
+        String favouriteQuery = sp.getString(PREF_QUERY_FAVOURITE, null);
         if (favouriteQuery != null) {
             if (query.size() > 0) {
                 clause += " AND ";
@@ -35,7 +38,7 @@ public class QueryPreferences {
             query.add(favouriteQuery);
         }
 
-        String ratingQuery = sp.getString(PREF_RATING_QUERY, null);
+        String ratingQuery = sp.getString(PREF_QUERY_RATING, null);
         if (ratingQuery != null) {
             if (query.size() > 0) {
                 clause += " AND ";
@@ -44,7 +47,7 @@ public class QueryPreferences {
             query.add(ratingQuery);
         }
 
-        String maxIssuesQuery = sp.getString(PREF_RATING_QUERY, null);
+        String maxIssuesQuery = sp.getString(PREF_QUERY_MAX_ISSUES, null);
         if (maxIssuesQuery != null) {
             if (query.size() > 0) {
                 clause += " AND ";
@@ -53,7 +56,7 @@ public class QueryPreferences {
             query.add(maxIssuesQuery);
         }
 
-        String minIssuesQuery = sp.getString(PREF_RATING_QUERY, null);
+        String minIssuesQuery = sp.getString(PREF_QUERY_MIN_ISSUES, null);
         if (minIssuesQuery != null) {
             if (query.size() > 0) {
                 clause += " AND ";
@@ -78,24 +81,30 @@ public class QueryPreferences {
         SharedPreferences.Editor editor = PreferenceManager
                 .getDefaultSharedPreferences(context).edit();
         if (query == null) {
-            editor.putString(PREF_TITLE_QUERY, null)
+            editor.putString(PREF_QUERY_TITLE, null)
                     .apply();
         }
         else {
-            editor.putString(PREF_TITLE_QUERY, "%" + query + "%")
+            editor.putString(PREF_QUERY_TITLE, "%" + query + "%")
                     .apply();
         }
     }
 
-    public static void setStoredFavouriteQuery(Context context, String query) {
+    public static void setStoredFavouriteQuery(Context context, Boolean isFavourite) {
+        String query = null;
+
+        if (isFavourite) {
+            query = "1";
+        }
+
         SharedPreferences.Editor editor = PreferenceManager
                 .getDefaultSharedPreferences(context).edit();
         if (query == null) {
-            editor.putString(PREF_TITLE_QUERY, null)
+            editor.putString(PREF_QUERY_FAVOURITE, null)
                     .apply();
         }
         else {
-            editor.putString(PREF_TITLE_QUERY, query)
+            editor.putString(PREF_QUERY_FAVOURITE, query)
                     .apply();
         }
     }
@@ -104,11 +113,11 @@ public class QueryPreferences {
         SharedPreferences.Editor editor = PreferenceManager
                 .getDefaultSharedPreferences(context).edit();
         if (query == null) {
-            editor.putString(PREF_TITLE_QUERY, null)
+            editor.putString(PREF_QUERY_RATING, null)
                     .apply();
         }
         else {
-            editor.putString(PREF_TITLE_QUERY, query)
+            editor.putString(PREF_QUERY_RATING, query)
                     .apply();
         }
     }
@@ -117,11 +126,11 @@ public class QueryPreferences {
         SharedPreferences.Editor editor = PreferenceManager
                 .getDefaultSharedPreferences(context).edit();
         if (query == null) {
-            editor.putString(PREF_TITLE_QUERY, null)
+            editor.putString(PREF_QUERY_MAX_ISSUES, null)
                     .apply();
         }
         else {
-            editor.putString(PREF_TITLE_QUERY, query)
+            editor.putString(PREF_QUERY_MAX_ISSUES, query)
                     .apply();
         }
     }
@@ -130,11 +139,11 @@ public class QueryPreferences {
         SharedPreferences.Editor editor = PreferenceManager
                 .getDefaultSharedPreferences(context).edit();
         if (query == null) {
-            editor.putString(PREF_TITLE_QUERY, null)
+            editor.putString(PREF_QUERY_MIN_ISSUES, null)
                     .apply();
         }
         else {
-            editor.putString(PREF_TITLE_QUERY, query)
+            editor.putString(PREF_QUERY_MIN_ISSUES, query)
                     .apply();
         }
     }

@@ -154,6 +154,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 QueryPreferences.setStoredTitleQuery(MapsActivity.this, null);
                 setUpClusters();
                 return true;
+            case R.id.menu_item_filter:
+                Intent intent2 = new Intent(MapsActivity.this, FilterActivity.class);
+                startActivity(intent2);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
