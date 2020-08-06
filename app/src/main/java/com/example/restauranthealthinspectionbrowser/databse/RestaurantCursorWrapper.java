@@ -25,11 +25,11 @@ public class RestaurantCursorWrapper extends CursorWrapper {
         String address = getString(getColumnIndex(RestaurantTable.Cols.ADDRESS));
         Double latitude = Double.parseDouble(getString(getColumnIndex(RestaurantTable.Cols.LATITUDE)));
         Double longitude = Double.parseDouble(getString(getColumnIndex(RestaurantTable.Cols.LONGITUDE)));
-        String issues = getString(getColumnIndex(RestaurantTable.Cols.ISSUES));
+        int issues = getInt(getColumnIndex(RestaurantTable.Cols.ISSUES));
         String rating = getString(getColumnIndex(RestaurantTable.Cols.RATING));
         Date date = new Date(getLong(getColumnIndex(RestaurantTable.Cols.DATE)));
-        String isFavourite = getString(getColumnIndex(RestaurantTable.Cols.FAVOURITE));
-        String isUpdated = getString(getColumnIndex(RestaurantTable.Cols.UPDATED));
+        int isFavourite = getInt(getColumnIndex(RestaurantTable.Cols.FAVOURITE));
+        int isUpdated = getInt(getColumnIndex(RestaurantTable.Cols.UPDATED));
 //        Log.i(TAG, "Favourite: " + isFavourite);
 
         Restaurant restaurant = new Restaurant(id);
@@ -37,11 +37,11 @@ public class RestaurantCursorWrapper extends CursorWrapper {
         restaurant.setAddress(address);
         restaurant.setLatitude(latitude);
         restaurant.setLongitude(longitude);
-        restaurant.setIssues(Integer.parseInt(issues));
+        restaurant.setIssues(issues);
         restaurant.setRating(rating);
         restaurant.setDate(date);
-        restaurant.setFavourite(isFavourite.equals("1"));
-        restaurant.setUpdated(isUpdated.equals("1"));
+        restaurant.setFavourite(isFavourite == 1);
+        restaurant.setUpdated(isUpdated == 1);
 
         return restaurant;
     }
