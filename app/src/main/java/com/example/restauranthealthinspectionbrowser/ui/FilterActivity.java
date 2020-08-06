@@ -16,12 +16,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.restauranthealthinspectionbrowser.R;
 import com.example.restauranthealthinspectionbrowser.model.FilterSettings;
 import com.example.restauranthealthinspectionbrowser.model.Inspection;
+import com.example.restauranthealthinspectionbrowser.model.QueryPreferences;
 
 public class FilterActivity extends AppCompatActivity {
-    private boolean favourites;
-    private String hazStr;
-    private String minViolation;
-    private String maxViolation;
+    private boolean favourites = false;
+    private String hazStr = null;
+    private String minViolation = null;
+    private String maxViolation = null;
 
     public static Intent makeIntent(Context context) {
         Intent intent = new Intent(context, InspectionActivity.class);
@@ -52,6 +53,9 @@ public class FilterActivity extends AppCompatActivity {
                 EditText minInput = (EditText) findViewById(R.id.min_input);
                 try{
                     minViolation = minInput.getText().toString();
+                    if (minViolation.equals("")) {
+                        minViolation = null;
+                    }
                 } catch(NumberFormatException ex) {
                     minViolation = null;
                 }
@@ -60,6 +64,9 @@ public class FilterActivity extends AppCompatActivity {
                 EditText maxInput = (EditText) findViewById(R.id.max_input);
                 try{
                     maxViolation = maxInput.getText().toString();
+                    if (maxViolation.equals("")) {
+                        maxViolation = null;
+                    }
                 } catch(NumberFormatException ex) {
                     maxViolation = null;
                 }
@@ -70,6 +77,11 @@ public class FilterActivity extends AppCompatActivity {
                 filterSet.setHazardSetting(hazStr);
                 filterSet.setMinSetting(minViolation);
                 filterSet.setMaxSetting(maxViolation);
+
+                QueryPreferences.setStoredFavouriteQuery(FilterActivity.this, favourites);
+                QueryPreferences.setStoredRatingQuery(FilterActivity.this, hazStr);
+                QueryPreferences.setStoredMaximumIssuesQuery(FilterActivity.this, maxViolation);
+                QueryPreferences.setStoredMinimumIssuesQuery(FilterActivity.this, minViolation);
 
                 finish();
             }
@@ -101,6 +113,11 @@ public class FilterActivity extends AppCompatActivity {
 
                 maxViolation = null;
                 filterSet.setMaxSetting(maxViolation);
+
+                QueryPreferences.setStoredFavouriteQuery(FilterActivity.this, favourites);
+                QueryPreferences.setStoredRatingQuery(FilterActivity.this, hazStr);
+                QueryPreferences.setStoredMaximumIssuesQuery(FilterActivity.this, maxViolation);
+                QueryPreferences.setStoredMinimumIssuesQuery(FilterActivity.this, minViolation);
 
                 finish();
             }
