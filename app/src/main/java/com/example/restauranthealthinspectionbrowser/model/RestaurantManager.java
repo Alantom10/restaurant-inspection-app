@@ -101,10 +101,10 @@ public class RestaurantManager {
         values.put(RestaurantTable.Cols.ADDRESS, restaurant.getAddress());
         values.put(RestaurantTable.Cols.LATITUDE, Double.toString(restaurant.getLatitude()));
         values.put(RestaurantTable.Cols.LONGITUDE, Double.toString(restaurant.getLongitude()));
-        values.put(RestaurantTable.Cols.ISSUES, restaurant.getIssues());
+        values.put(RestaurantTable.Cols.ISSUES, Integer.toString(restaurant.getIssues()));
         values.put(RestaurantTable.Cols.RATING, restaurant.getRating());
         values.put(RestaurantTable.Cols.DATE, restaurant.getDate().getTime());
-        values.put(RestaurantTable.Cols.FAVOURITE, restaurant.isFavourite() ? 1 : 0);
+        values.put(RestaurantTable.Cols.FAVOURITE, restaurant.isFavourite() ? "1" : "0");
 
         return values;
     }
