@@ -106,6 +106,7 @@ public class RestaurantListFragment extends Fragment {
                 .getRestaurants();
         updateUI();
 
+        startActivity(new Intent(getActivity(), PopUpActivity.class));
         return view;
     }
 
@@ -215,4 +216,6 @@ public class RestaurantListFragment extends Fragment {
             mRestaurants = restaurants;
         }
     }
+
+
 }

@@ -46,6 +46,11 @@
         <activity android:name=".ui.RestaurantActivity" />
         <activity android:name=".ui.RestaurantListActivity" />
         <activity android:name=".ui.FilterActivity" />
+
+        <activity android:name=".ui.PopUpActivity"
+        android:theme="@style/AppTheme.PopUpTheme">
+        </activity>
+
     </application>
 
 </manifest>

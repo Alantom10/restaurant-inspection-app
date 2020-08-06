@@ -1,19 +1,26 @@
 package com.example.restauranthealthinspectionbrowser.ui;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.restauranthealthinspectionbrowser.R;
+import com.example.restauranthealthinspectionbrowser.databse.RestaurantDbSchema;
 import com.example.restauranthealthinspectionbrowser.model.DateHelper;
 import com.example.restauranthealthinspectionbrowser.model.Inspection;
 import com.example.restauranthealthinspectionbrowser.model.InspectionManager;
@@ -45,6 +52,12 @@ public class RestaurantFragment extends Fragment {
     public static final String RESTAURANT_LONGITUDE_INTENT_TAG = "Restaurant longitude";
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_restaurant, container, false);
@@ -69,6 +82,40 @@ public class RestaurantFragment extends Fragment {
 
 
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+
+        inflater.inflate(R.menu.fragment_restaurant, menu);
+        MenuItem favorite = menu.findItem(R.id.action_favorite);
+
+        favorite.setIcon(R.drawable.ic_baseline_star_24);
+
+        if (mRestaurant.isFavourite()) {
+            favorite.setIcon(R.drawable.ic_baseline_star_24);
+        } else {
+            favorite.setIcon(R.drawable.ic_baseline_star_border_24);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        if (item.getItemId() == R.id.action_favorite) {
+            if (mRestaurant.isFavourite()) {
+                mRestaurant.setFavourite(false);
+                item.setIcon(R.drawable.ic_baseline_star_border_24);
+            }
+            else {
+                mRestaurant.setFavourite(true);
+                item.setIcon(R.drawable.ic_baseline_star_24);
+            }
+            new RestaurantManager(getActivity()).updateRestaurant(mRestaurant);
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void updateTextViews() {

@@ -85,6 +85,28 @@ public class RestaurantManager {
         }
     }
 
+    public void updateRestaurant(Restaurant restaurant) {
+        ContentValues values = getContentValues(restaurant);
+        mDatabase.update(RestaurantTable.NAME, values,
+                RestaurantTable.Cols.ID + " = ?",
+                new String[] { restaurant.getId() });
+    }
+
+    private static ContentValues getContentValues(Restaurant restaurant) {
+        ContentValues values = new ContentValues();
+        values.put(RestaurantTable.Cols.ID, restaurant.getId());
+        values.put(RestaurantTable.Cols.TITLE, restaurant.getTitle());
+        values.put(RestaurantTable.Cols.ADDRESS, restaurant.getAddress());
+        values.put(RestaurantTable.Cols.LATITUDE, Double.toString(restaurant.getLatitude()));
+        values.put(RestaurantTable.Cols.LONGITUDE, Double.toString(restaurant.getLatitude()));
+        values.put(RestaurantTable.Cols.ISSUES, restaurant.getIssues());
+        values.put(RestaurantTable.Cols.RATING, restaurant.getRating());
+        values.put(RestaurantTable.Cols.DATE, restaurant.getDate().getTime());
+        values.put(RestaurantTable.Cols.FAVOURITE, restaurant.isFavourite() ? 1 : 0);
+
+        return values;
+    }
+
     public List<Restaurant> getRestaurants() {
         RestaurantCursorWrapper cursor = queryRestaurants(null, null);
         return iterateRestaurantCursor(cursor);
