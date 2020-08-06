@@ -64,7 +64,7 @@ public class QueryPreferences {
             if (query.size() > 0) {
                 clause += " AND ";
             }
-            clause += RestaurantTable.Cols.ISSUES + " => ?";
+            clause += RestaurantTable.Cols.ISSUES + " >= ?";
             query.add(minIssuesQuery);
         }
 
