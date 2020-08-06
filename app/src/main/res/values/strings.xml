@@ -44,5 +44,6 @@
     <string name="upadte_btn">UPDATE</string>
     <string name="cancel_btn">CANCEL</string>
     <string name="clear_filter_btn">CLEAR FILTER</string>
+    <string name="filter_pg_title">FILTER:</string>
 
 </resources>

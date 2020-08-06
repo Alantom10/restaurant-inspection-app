@@ -44,4 +44,6 @@
     <string name="upadte_btn">METTRE À JOUR</string>
     <string name="cancel_btn">ANNULER</string>
     <string name="clear_filter_btn">RÉINITIALISER LES FILTRES</string>
+    <string name="filter_pg_title">FILTRE:</string>
+
 </resources>
