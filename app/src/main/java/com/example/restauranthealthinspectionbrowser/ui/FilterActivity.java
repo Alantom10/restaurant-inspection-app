@@ -22,11 +22,8 @@ public class FilterActivity extends AppCompatActivity {
     private String minViolation = null;
     private String maxViolation = null;
 
-//    public static final String EXTRA_ACTIVITY_TITLE = "activity title";
-
     public static Intent makeIntent(Context context) {
         Intent intent = new Intent(context, FilterActivity.class);
-//        intent.putExtra(EXTRA_ACTIVITY_TITLE, title);
         return intent;
     }
 
@@ -34,6 +31,9 @@ public class FilterActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
+
+        getSupportActionBar().setTitle(getString(R.string.filter_activity_title));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Button update = (Button) findViewById(R.id.update_btn);
         update.setOnClickListener(new View.OnClickListener() {
