@@ -1,6 +1,7 @@
 package com.example.restauranthealthinspectionbrowser.model;
 
 import android.content.Context;
+import android.text.format.DateUtils;
 
 import com.example.restauranthealthinspectionbrowser.R;
 
@@ -42,7 +43,7 @@ public class InspectionManager {
     }
 
     public Inspection getLatestInspection(String restaurantID) {
-        List<Inspection> inspectionList = getInspectionsForRestaurant(restaurantID);
+        List<Inspection> inspectionList = getInspections(restaurantID);
 
         if (inspectionList.size() == 0) {
             return null;
@@ -51,7 +52,22 @@ public class InspectionManager {
         return inspectionList.get(0);
     }
 
-    public List<Inspection> getInspectionsForRestaurant(String restaurantID) {
+    public int getCriticalIssues(String restaurantID) {
+        int criticalIssues = 0;
+        long time = System.currentTimeMillis();
+
+        List<Inspection> inspectionList = getInspections(restaurantID);
+        for (Inspection inspection : inspectionList) {
+            boolean isRecent = time - inspection.getInspectionDate().getTime() < DateUtils.YEAR_IN_MILLIS;
+            if (isRecent) {
+                criticalIssues += inspection.getNumCritical();
+            }
+        }
+
+        return criticalIssues;
+    }
+
+    public List<Inspection> getInspections(String restaurantID) {
         List<Inspection> inspectionList = new ArrayList<>();
         for (Inspection inspection : mInspections) {
             if (restaurantID.equals(inspection.getTrackingNum())) {

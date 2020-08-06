@@ -106,6 +106,7 @@ public class RestaurantManager {
         values.put(RestaurantTable.Cols.DATE, restaurant.getDate().getTime());
         values.put(RestaurantTable.Cols.FAVOURITE, restaurant.isFavourite() ? 1 : 0);
         values.put(RestaurantTable.Cols.UPDATED, restaurant.isUpdated() ? 1 : 0);
+        values.put(RestaurantTable.Cols.CRITICAL, restaurant.getCriticalIssues());
 
         return values;
     }
@@ -214,24 +215,27 @@ public class RestaurantManager {
                 String title = row[1].replace("\"", "");
                 String address = (row[2] + ", " + row[3]).replace("\"", "");
 
-                int issues = 0;
-                String rating = "";
-                Date date = new Date(0);
-//                Log.i(TAG, "Date/time: " + date.getTime());
-
-                Inspection inspection = InspectionManager.getInstance(context)
-                        .getLatestInspection(id);
-                if (inspection != null) {
-                    issues = inspection.getNumCritical() + inspection.getNumNonCritical();
-                    rating = inspection.getHazardRating();
-                    date = inspection.getInspectionDate();
-                }
-
                 Random rand = new Random();
                 Double latitude = Double.parseDouble(row[5]);
                 Double longitude = Double.parseDouble(row[6]);
                 latitude += rand.nextInt(10) * Math.pow(10, -4);
                 longitude += rand.nextInt(10) * Math.pow(10, -4);
+
+                int issues = 0;
+                String rating = "";
+                Date date = new Date(0);
+//                Log.i(TAG, "Date/time: " + date.getTime());
+
+                InspectionManager im = InspectionManager.getInstance(context);
+
+                int criticalIssues = im.getCriticalIssues(id);
+
+                Inspection inspection = im.getLatestInspection(id);
+                if (inspection != null) {
+                    issues = inspection.getNumCritical() + inspection.getNumNonCritical();
+                    rating = inspection.getHazardRating();
+                    date = inspection.getInspectionDate();
+                }
 
                 Restaurant restaurant = getRestaurant(id);
                 if (restaurant == null) {
@@ -245,6 +249,7 @@ public class RestaurantManager {
                     restaurant.setDate(date);
                     restaurant.setFavourite(false);
                     restaurant.setUpdated(false);
+                    restaurant.setCriticalIssues(criticalIssues);
 
                     ContentValues values = getContentValues(restaurant);
                     mDatabase.insert(RestaurantTable.NAME, null, values);
@@ -262,6 +267,7 @@ public class RestaurantManager {
                     restaurant.setIssues(issues);
                     restaurant.setRating(rating);
                     restaurant.setDate(date);
+                    restaurant.setCriticalIssues(criticalIssues);
 
                     ContentValues values = getContentValues(restaurant);
                     mDatabase.update(RestaurantTable.NAME, values,
