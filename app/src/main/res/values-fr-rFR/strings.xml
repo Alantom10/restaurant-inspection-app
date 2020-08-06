@@ -33,4 +33,15 @@
     <string name="search">Chercher</string>
     <string name="clear_search">Effacer vos recherches</string>
     <string name="favorite">Favori</string>
+    <string name="search_favorite">Chercher parmi les favoris</string>
+    <string name="hazard_filter_title">Niveau de danger des inspections les plus récentes</string>
+    <string name="low_hazard_filter">Bas</string>
+    <string name="moderate_hazard_filter">Moyen</string>
+    <string name="high_hazard_filter">Élevé</string>
+    <string name="num_violation_filter">Nombre d\'Infractions</string>
+    <string name="min_num_violation">Min:</string>
+    <string name="max_num_violation">Max:</string>
+    <string name="upadte_btn">METTRE À JOUR</string>
+    <string name="cancel_btn">ANNULER</string>
+    <string name="clear_filter_btn">RÉINITIALISER LES FILTRES</string>
 </resources>
