@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.app.Activity;
@@ -130,7 +129,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public boolean onQueryTextSubmit(String s) {
                 Log.d(TAG, "QueryTextSubmit: " + s);
-                QueryPreferences.setStoredQuery(MapsActivity.this, s);
+                QueryPreferences.setStoredTitleQuery(MapsActivity.this, s);
                 setUpClusters();
                 return true;
             }
@@ -152,7 +151,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 startActivity(intent);
                 return true;
             case R.id.menu_item_clear:
-                QueryPreferences.setStoredQuery(MapsActivity.this, null);
+                QueryPreferences.setStoredTitleQuery(MapsActivity.this, null);
                 setUpClusters();
                 return true;
             case R.id.menu_item_filter:
@@ -378,7 +377,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     private void addItems() {
-        String query = QueryPreferences.getStoredQuery(this);
+        String[] query = QueryPreferences.getStoredQuery(this);
         List<Restaurant> restaurants = mRestaurantManager.getRestaurants(query);
 
         for (Restaurant restaurant : restaurants) {

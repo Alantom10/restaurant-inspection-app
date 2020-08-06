@@ -61,7 +61,7 @@ public class RestaurantListFragment extends Fragment {
             @Override
             public boolean onQueryTextSubmit(String s) {
                 Log.d(TAG, "QueryTextSubmit: " + s);
-                QueryPreferences.setStoredQuery(getActivity(), s);
+                QueryPreferences.setStoredTitleQuery(getActivity(), s);
                 updateUI();
                 return true;
             }
@@ -82,7 +82,7 @@ public class RestaurantListFragment extends Fragment {
                 startActivity(intent);
                 return true;
             case R.id.menu_item_clear:
-                QueryPreferences.setStoredQuery(getActivity(), null);
+                QueryPreferences.setStoredTitleQuery(getActivity(), null);
                 updateUI();
                 return true;
             case R.id.menu_item_filter:
@@ -111,7 +111,7 @@ public class RestaurantListFragment extends Fragment {
     }
 
     private void updateUI() {
-        String query = QueryPreferences.getStoredQuery(getActivity());
+        String[] query = QueryPreferences.getStoredQuery(getActivity());
         List<Restaurant> restaurants = new RestaurantManager(getActivity())
                 .getRestaurants(query);
 
