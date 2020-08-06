@@ -106,7 +106,7 @@ public class RestaurantListFragment extends Fragment {
                 .getRestaurants();
         updateUI();
 
-        startActivity(new Intent(getActivity(), PopUpActivity.class));
+//        startActivity(new Intent(getActivity(), PopUpActivity.class));
         return view;
     }
 
