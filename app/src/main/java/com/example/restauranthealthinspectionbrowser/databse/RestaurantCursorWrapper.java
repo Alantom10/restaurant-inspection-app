@@ -9,6 +9,10 @@ import com.example.restauranthealthinspectionbrowser.model.Restaurant;
 
 import java.util.Date;
 
+/**
+ * Wrapper class for Cursor that delegates calls to the cursor object. It
+ * returns a restaurant object.
+ */
 public class RestaurantCursorWrapper extends CursorWrapper {
     private static final String TAG = "RestaurantCursorWrapper";
     public RestaurantCursorWrapper(Cursor cursor) {

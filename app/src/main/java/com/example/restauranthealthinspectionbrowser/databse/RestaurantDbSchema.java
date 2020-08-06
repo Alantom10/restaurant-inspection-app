@@ -1,5 +1,8 @@
 package com.example.restauranthealthinspectionbrowser.databse;
 
+/**
+ * RestaurantDbSchema provides a schema for restaurant database.
+ */
 public class RestaurantDbSchema {
     public static final class RestaurantTable {
         public static final String NAME = "restaurants";

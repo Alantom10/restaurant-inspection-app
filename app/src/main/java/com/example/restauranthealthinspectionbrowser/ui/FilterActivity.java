@@ -18,6 +18,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.restauranthealthinspectionbrowser.R;
 import com.example.restauranthealthinspectionbrowser.model.QueryPreferences;
 
+/**
+ * FilterActivity sets up the Filter page. The Filter page shows
+ * the filter settings that can be set to filter out the
+ * results shown in the Restaurant list view and Map view.
+ */
 public class FilterActivity extends AppCompatActivity {
     private boolean favourites = false;
     private String hazStr = null;

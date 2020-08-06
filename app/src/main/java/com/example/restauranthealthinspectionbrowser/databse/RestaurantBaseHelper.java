@@ -6,6 +6,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.restauranthealthinspectionbrowser.databse.RestaurantDbSchema.RestaurantTable;
 
+/**
+ * A helper class to manage creation of restaurant database.
+ */
 public class RestaurantBaseHelper extends SQLiteOpenHelper {
     private static final int VERSION = 1;
     private static final String DATABASE_NAME = "restaurantBase.db";

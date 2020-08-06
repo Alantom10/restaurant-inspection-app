@@ -10,6 +10,9 @@ import com.example.restauranthealthinspectionbrowser.databse.RestaurantDbSchema.
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * QueryPreferences sets and stores queries from search and filter.
+ */
 public class QueryPreferences {
     private static final String TAG = "QueryPreferences";
     private static final String PREF_QUERY_TITLE = "titleQuery";
@@ -52,7 +55,7 @@ public class QueryPreferences {
             if (query.size() > 0) {
                 clause += " AND ";
             }
-            clause += RestaurantTable.Cols.ISSUES + " < ?";
+            clause += RestaurantTable.Cols.ISSUES + " <= ?";
             query.add(maxIssuesQuery);
         }
 
@@ -61,7 +64,7 @@ public class QueryPreferences {
             if (query.size() > 0) {
                 clause += " AND ";
             }
-            clause += RestaurantTable.Cols.ISSUES + " > ?";
+            clause += RestaurantTable.Cols.ISSUES + " => ?";
             query.add(minIssuesQuery);
         }
 
