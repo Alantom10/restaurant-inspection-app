@@ -9,6 +9,10 @@ import android.view.MenuItem;
 
 import com.example.restauranthealthinspectionbrowser.R;
 
+/**
+ * RestaurantUpdateActivity initializes the new inspections screen through
+ * RestaurantUpdateFragment.
+ */
 public class RestaurantUpdateActivity extends SingleFragmentActivity {
 
     @Override

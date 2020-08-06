@@ -26,6 +26,11 @@ import com.example.restauranthealthinspectionbrowser.model.RestaurantManager;
 
 import java.util.List;
 
+/**
+ * RestaurantListFragment sets up the new inspections screen through
+ * RestaurantManager class. It shows a lists of favourite restaurants
+ * with new inspections.
+ */
 public class RestaurantUpdateFragment extends Fragment {
     private RecyclerView mRestaurantRecyclerView;
     private RestaurantUpdateFragment.RestaurantAdapter mAdapter;

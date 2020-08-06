@@ -33,7 +33,7 @@
     <string name="location_error">Unable to get current location</string>
     <string name="search">Search</string>
     <string name="clear_search">Clear Search</string>
-    <string name="favorite">Favorites</string>
+    <string name="favorite">Favorite</string>
     <string name="search_favorite">Search Favorites</string>
     <string name="hazard_filter_title">Hazard Level of most recent Inspections</string>
     <string name="low_hazard_filter">Low</string>

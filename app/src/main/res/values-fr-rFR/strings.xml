@@ -46,5 +46,7 @@
     <string name="cancel_btn">ANNULER</string>
     <string name="clear_filter_btn">RÉINITIALISER LES FILTRES</string>
     <string name="filter_pg_title">FILTRE:</string>
+    <string name="restaurant_update_title">Nouvelles Inspections</string>
+    <string name="no_new_inspection">Aucun restaurant préféré avec une nouvelle inspection</string>
 
 </resources>
