@@ -2,19 +2,13 @@ package com.example.restauranthealthinspectionbrowser.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.SearchView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -32,87 +26,20 @@ import com.example.restauranthealthinspectionbrowser.model.RestaurantManager;
 
 import java.util.List;
 
-/**
- * RestaurantListFragment sets up the restaurant list view screen through
- * RestaurantManager class. It starts RestaurantActivity upon selection of a
- * restaurant in the list.
- */
-public class RestaurantListFragment extends Fragment {
-    private static final String TAG = "RestaurantListFragment";
-    private static final int REQUEST_CODE_FILTER = 31;
-    private static final int REQUEST_CODE_RESTAURANT = 32;
-
+public class RestaurantUpdateFragment extends Fragment {
     private RecyclerView mRestaurantRecyclerView;
-    private RestaurantAdapter mAdapter;
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-        setRetainInstance(true);
-    }
-
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.fragment_restaurant_list, menu);
-
-        MenuItem searchItem = menu.findItem(R.id.menu_item_search);
-        final SearchView searchView = (SearchView) searchItem.getActionView();
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                Log.d(TAG, "QueryTextSubmit: " + s);
-                QueryPreferences.setStoredTitleQuery(getActivity(), s);
-                updateUI();
-                return true;
-            }
-            @Override
-            public boolean onQueryTextChange(String s) {
-                Log.d(TAG, "QueryTextChange: " + s);
-                return false;
-            }
-        });
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_item_map_view:
-                Intent intent = new Intent (getActivity(), MapsActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-                return true;
-            case R.id.menu_item_clear:
-                QueryPreferences.setStoredTitleQuery(getActivity(), null);
-                updateUI();
-                return true;
-            case R.id.menu_item_filter:
-                Intent filter = FilterActivity.makeIntent(getActivity());
-                startActivityForResult(filter, REQUEST_CODE_FILTER);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        updateUI();
-    }
+    private RestaurantUpdateFragment.RestaurantAdapter mAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_restaurant_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_restaurant_update, container, false);
 
         mRestaurantRecyclerView = (RecyclerView) view.findViewById(R.id.restaurant_recycler_view);
         mRestaurantRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         updateUI();
 
-//        startActivity(new Intent(getActivity(), PopUpActivity.class));
         return view;
     }
 
@@ -122,7 +49,7 @@ public class RestaurantListFragment extends Fragment {
                 .getRestaurants(query);
 
         if (mAdapter == null) {
-            mAdapter = new RestaurantAdapter(restaurants);
+            mAdapter = new RestaurantUpdateFragment.RestaurantAdapter(restaurants);
             mRestaurantRecyclerView.setAdapter(mAdapter);
         } else {
             mAdapter.setRestaurants(restaurants);
@@ -130,7 +57,7 @@ public class RestaurantListFragment extends Fragment {
         }
     }
 
-    private class RestaurantHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    private class RestaurantHolder extends RecyclerView.ViewHolder {
         private TextView mTitleTextView;
         private ImageView mRestaurantIcon;
         private TextView mDateTextView;
@@ -143,7 +70,6 @@ public class RestaurantListFragment extends Fragment {
 
         public RestaurantHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.list_item_restaurant, parent, false));
-            itemView.setOnClickListener(this);
 
             mTitleTextView = (TextView) itemView.findViewById(R.id.title);
             mRestaurantIcon = (ImageView) itemView.findViewById(R.id.restaurant_icon);
@@ -172,7 +98,7 @@ public class RestaurantListFragment extends Fragment {
                 HazardRatingHelper helper = new HazardRatingHelper();
                 mHazardLevelTextView.setTextColor(
                         ContextCompat.getColor(getActivity(),
-                        helper.getHazardColor(hazardLevel))
+                                helper.getHazardColor(hazardLevel))
                 );
                 mHazardLevelImageView.setImageResource(helper.getHazardIcon(hazardLevel));
             }
@@ -193,15 +119,9 @@ public class RestaurantListFragment extends Fragment {
                 mFavouriteImageView.setImageResource(R.drawable.ic_baseline_star_border_24);
             }
         }
-
-        @Override
-        public void onClick(View v) {
-            Intent intent = RestaurantActivity.makeIntent(getActivity(), mRestaurantID);
-            startActivityForResult(intent, REQUEST_CODE_RESTAURANT);
-        }
     }
 
-    private class RestaurantAdapter extends RecyclerView.Adapter<RestaurantHolder> {
+    private class RestaurantAdapter extends RecyclerView.Adapter<RestaurantUpdateFragment.RestaurantHolder> {
         private List<Restaurant> mRestaurants;
 
         public RestaurantAdapter(List<Restaurant> restaurants) {
@@ -210,14 +130,14 @@ public class RestaurantListFragment extends Fragment {
 
         @NonNull
         @Override
-        public RestaurantHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        public RestaurantUpdateFragment.RestaurantHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
 
-            return new RestaurantHolder(layoutInflater, parent);
+            return new RestaurantUpdateFragment.RestaurantHolder(layoutInflater, parent);
         }
 
         @Override
-        public void onBindViewHolder(@NonNull RestaurantHolder holder, int position) {
+        public void onBindViewHolder(@NonNull RestaurantUpdateFragment.RestaurantHolder holder, int position) {
             Restaurant restaurant = mRestaurants.get(position);
             holder.bind(restaurant);
         }
