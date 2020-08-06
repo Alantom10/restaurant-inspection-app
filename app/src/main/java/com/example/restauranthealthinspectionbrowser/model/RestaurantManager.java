@@ -112,14 +112,24 @@ public class RestaurantManager {
         return iterateRestaurantCursor(cursor);
     }
 
-    public List<Restaurant> getRestaurants(String query) {
-        if (query == null) {
+    public List<Restaurant> getRestaurants(String[] query) {
+        String clause = query[0];
+        Log.i(TAG, "Query clause = " + clause);
+
+        if (clause.equals("")) {
             return getRestaurants();
         }
         else {
+            String[] args = new String[query.length - 1];
+
+            for (int i = 0; i < args.length; i++) {
+                args[i] = query[i + 1];
+                Log.i(TAG, "Query argument = " + args[i]);
+            }
+
             RestaurantCursorWrapper cursor = queryRestaurants(
-                    RestaurantTable.Cols.TITLE + " LIKE ?",
-                    new String[] { "%" + query + "%" }
+                    clause,
+                    args
             );
 
             return iterateRestaurantCursor(cursor);
