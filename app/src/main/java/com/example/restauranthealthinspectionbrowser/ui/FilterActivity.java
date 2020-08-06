@@ -46,7 +46,7 @@ public class FilterActivity extends AppCompatActivity {
                 try{
                     hazStr = (String) x.getText();
                 } catch(NullPointerException ex) {
-                    hazStr = "Low Moderate High"; //int rad -1 when nothing is selected
+                    hazStr = ""; //int rad -1 when nothing is selected
                 }
 
                 EditText minInput = (EditText) findViewById(R.id.min_input);
@@ -75,10 +75,31 @@ public class FilterActivity extends AppCompatActivity {
             }
         });
 
+        Button button1 = (Button) findViewById(R.id.clearFilterBtn);
+        button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
         Button button2 = (Button) findViewById(R.id.cancel_btn);
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                FilterSettings filterSet = FilterSettings.getFilterSettings();
+                favourites = false;
+                filterSet.setFavSetting(favourites);
+
+                hazStr = "";
+                filterSet.setHazardSetting(hazStr);
+
+                minViolation = 0;
+                filterSet.setMinSetting(minViolation);
+
+                maxViolation = 1000;
+                filterSet.setMaxSetting(maxViolation);
+
                 finish();
             }
         });
