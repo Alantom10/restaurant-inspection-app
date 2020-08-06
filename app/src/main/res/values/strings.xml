@@ -32,5 +32,18 @@
     <string name="location_error">Unable to get current location</string>
     <string name="search">Search</string>
     <string name="clear_search">Clear Search</string>
-    <string name="favorite">Favorite</string>
+    <string name="favorite">Favorites</string>
+    <string name="search_favorite">Search Favorites</string>
+    <string name="hazard_filter_title">Hazard Level of most recent Inspections</string>
+    <string name="low_hazard_filter">Low</string>
+    <string name="moderate_hazard_filter">Moderate</string>
+    <string name="high_hazard_filter">High</string>
+    <string name="num_violation_filter">Number of Violations</string>
+    <string name="min_num_violation">Min:</string>
+    <string name="max_num_violation">Max:</string>
+    <string name="upadte_btn">UPDATE</string>
+    <string name="cancel_btn">CANCEL</string>
+    <string name="clear_filter_btn">CLEAR FILTER</string>
+    <string name="filter_pg_title">FILTER:</string>
+
 </resources>
