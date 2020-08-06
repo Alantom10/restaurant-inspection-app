@@ -169,7 +169,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.i(TAG, "onActivityResult called");
         super.onActivityResult(requestCode, resultCode, data);
-        setUpClusters();
+
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
+
+//        setUpClusters();
     }
 
     // Adapted from: https://www.youtube.com/watch?v=Vt6H9TOmsuo&list=PLgCYzUzKIBE-vInwQhGSdnbyJ62nixHCt&index=4
