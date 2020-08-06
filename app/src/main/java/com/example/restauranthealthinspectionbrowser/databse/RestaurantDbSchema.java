@@ -17,6 +17,7 @@ public class RestaurantDbSchema {
             public static final String RATING = "rating";
             public static final String DATE = "date";
             public static final String FAVOURITE = "favourite";
+            public static final String UPDATED = "updated";
         }
     }
 }

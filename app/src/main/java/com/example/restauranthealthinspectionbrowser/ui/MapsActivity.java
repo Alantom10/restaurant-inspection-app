@@ -587,6 +587,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 e.printStackTrace();
             }
 
+            Intent intent = new Intent (MapsActivity.this, RestaurantUpdateActivity.class);
+            startActivity(intent);
+
             setUpClusters();
         }
 

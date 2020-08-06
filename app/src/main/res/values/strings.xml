@@ -33,7 +33,7 @@
     <string name="location_error">Unable to get current location</string>
     <string name="search">Search</string>
     <string name="clear_search">Clear Search</string>
-    <string name="favorite">Favorites</string>
+    <string name="favorite">Favorite</string>
     <string name="search_favorite">Search Favorites</string>
     <string name="hazard_filter_title">Hazard Level of most recent Inspections</string>
     <string name="low_hazard_filter">Low</string>
@@ -46,5 +46,7 @@
     <string name="cancel_btn">CANCEL</string>
     <string name="clear_filter_btn">CLEAR FILTER</string>
     <string name="filter_pg_title">FILTER:</string>
+    <string name="restaurant_update_title">New Inspections</string>
+    <string name="no_new_inspection">No favourite restaurants with new inspection</string>
 
 </resources>

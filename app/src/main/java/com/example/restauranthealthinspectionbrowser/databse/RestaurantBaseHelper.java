@@ -29,7 +29,8 @@ public class RestaurantBaseHelper extends SQLiteOpenHelper {
                 RestaurantTable.Cols.ISSUES + ", " +
                 RestaurantTable.Cols.RATING + ", " +
                 RestaurantTable.Cols.DATE + ", " +
-                RestaurantTable.Cols.FAVOURITE +
+                RestaurantTable.Cols.FAVOURITE + ", " +
+                RestaurantTable.Cols.UPDATED +
                 ")"
         );
     }

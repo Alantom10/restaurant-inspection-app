@@ -36,6 +36,7 @@ public class MapInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
         TextView hazardLevelTextView = (TextView) view.findViewById(R.id.hazard_level);
         ImageView restaurantIcon = (ImageView) view.findViewById(R.id.restaurant_icon);
         ImageView hazardLevelIcon = (ImageView) view.findViewById(R.id.hazard_level_icon);
+        ImageView favouriteIcon = (ImageView) view.findViewById(R.id.favourite_icon);
 
         Restaurant restaurant = new RestaurantManager(mContext).getRestaurant(marker.getPosition());
 
@@ -63,6 +64,13 @@ public class MapInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
         else {
             hazardLevelTextView.setText(R.string.no_inspection_info);
             hazardLevelIcon.setImageResource(R.drawable.blank_icon);
+        }
+
+        if (restaurant.isFavourite()) {
+            favouriteIcon.setImageResource(R.drawable.ic_baseline_star_24);
+        }
+        else {
+            favouriteIcon.setImageResource(R.drawable.ic_baseline_star_border_24);
         }
     }
 
