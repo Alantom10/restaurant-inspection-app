@@ -131,6 +131,7 @@ public class RestaurantListFragment extends Fragment {
         private TextView mNumIssuesTextView;
         private TextView mHazardLevelTextView;
         private ImageView mHazardLevelImageView;
+        private ImageView mFavouriteImageView;
 
         private String mRestaurantID;
 
@@ -144,6 +145,7 @@ public class RestaurantListFragment extends Fragment {
             mNumIssuesTextView = (TextView) itemView.findViewById(R.id.num_issues);
             mHazardLevelTextView = (TextView) itemView.findViewById(R.id.hazard_level);
             mHazardLevelImageView = (ImageView) itemView.findViewById(R.id.hazard_level_icon);
+            mFavouriteImageView = (ImageView) itemView.findViewById(R.id.favourite_icon);
         }
 
         public void bind(Restaurant restaurant) {
@@ -177,6 +179,13 @@ public class RestaurantListFragment extends Fragment {
 
             int iconResId = new RestaurantIconHelper().getIconResId(restaurant.getTitle());
             mRestaurantIcon.setImageResource(iconResId);
+
+            if (restaurant.isFavourite()) {
+                mFavouriteImageView.setImageResource(R.drawable.ic_baseline_star_24);
+            }
+            else {
+                mFavouriteImageView.setImageResource(R.drawable.ic_baseline_star_border_24);
+            }
         }
 
         @Override
