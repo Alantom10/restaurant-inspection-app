@@ -74,5 +74,13 @@ public class FilterActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        Button button2 = (Button) findViewById(R.id.cancel_btn);
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 }
