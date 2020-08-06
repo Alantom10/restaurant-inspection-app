@@ -73,6 +73,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     public static final String FILE_NAME_RESTAURANTS = "restaurants.csv";
     public static final String FILE_NAME_INSPECTION_REPORTS = "inspection_reports.csv";
+    private static final int REQUEST_CODE_FILTER = 51;
 
     private String mNewLastModifiedRestaurants;
     private String mNewLastModifiedInspections;
@@ -155,12 +156,19 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 setUpClusters();
                 return true;
             case R.id.menu_item_filter:
-                Intent intent2 = new Intent(MapsActivity.this, FilterActivity.class);
-                startActivity(intent2);
+                Intent filter = FilterActivity.makeIntent(MapsActivity.this);
+                startActivityForResult(filter, REQUEST_CODE_FILTER);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.i(TAG, "onActivityResult called");
+        super.onActivityResult(requestCode, resultCode, data);
+        setUpClusters();
     }
 
     // Adapted from: https://www.youtube.com/watch?v=Vt6H9TOmsuo&list=PLgCYzUzKIBE-vInwQhGSdnbyJ62nixHCt&index=4

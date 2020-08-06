@@ -115,7 +115,7 @@ public class RestaurantManager {
 
     public List<Restaurant> getRestaurants(String[] query) {
         String clause = query[0];
-        Log.i(TAG, "Query clause = " + clause);
+        Log.i(TAG, "Query clause: " + clause);
 
         if (clause.equals("")) {
             return getRestaurants();
@@ -125,7 +125,7 @@ public class RestaurantManager {
 
             for (int i = 0; i < args.length; i++) {
                 args[i] = query[i + 1];
-                Log.i(TAG, "Query argument = " + args[i]);
+                Log.i(TAG, "Query argument: " + args[i]);
             }
 
             RestaurantCursorWrapper cursor = queryRestaurants(
