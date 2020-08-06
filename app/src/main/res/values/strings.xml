@@ -47,5 +47,6 @@
     <string name="clear_filter_btn">CLEAR FILTER</string>
     <string name="filter_pg_title">FILTER:</string>
     <string name="restaurant_update_title">New Inspections</string>
+    <string name="no_new_inspection">No favourite restaurants with new inspection</string>
 
 </resources>

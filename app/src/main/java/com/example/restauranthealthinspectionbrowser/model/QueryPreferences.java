@@ -80,6 +80,12 @@ public class QueryPreferences {
         return result;
     }
 
+    public static String[] getNewInspectionQuery(Context context) {
+        String clause = RestaurantTable.Cols.FAVOURITE + " = ? AND " +
+                RestaurantTable.Cols.UPDATED + " = ?";
+        return new String[] { clause, "1", "1" };
+    }
+
     public static void setStoredTitleQuery(Context context, String query) {
         SharedPreferences.Editor editor = PreferenceManager
                 .getDefaultSharedPreferences(context).edit();

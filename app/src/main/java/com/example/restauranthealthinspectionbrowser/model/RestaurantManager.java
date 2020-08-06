@@ -250,17 +250,18 @@ public class RestaurantManager {
                     mDatabase.insert(RestaurantTable.NAME, null, values);
                 }
                 else {
-                    restaurant.setIssues(issues);
-                    restaurant.setRating(rating);
-                    restaurant.setDate(date);
-
                     long time = restaurant.getDate().getTime();
-                    if (time == 0 || time < date.getTime()) {
+                    Log.i(TAG, "New date: " + date.getTime() + "; Old date: " + time);
+                    if (time < date.getTime()) {
                         restaurant.setUpdated(true);
                     }
                     else {
                         restaurant.setUpdated(false);
                     }
+
+                    restaurant.setIssues(issues);
+                    restaurant.setRating(rating);
+                    restaurant.setDate(date);
 
                     ContentValues values = getContentValues(restaurant);
                     mDatabase.update(RestaurantTable.NAME, values,
