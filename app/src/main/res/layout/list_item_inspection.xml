@@ -21,39 +21,35 @@
         android:id="@+id/num_non_critical_issues"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
         android:text="# non-critical issues found"
-        app:layout_constraintBottom_toBottomOf="@+id/num_critical_issues"
-        app:layout_constraintStart_toEndOf="@+id/num_critical_issues"
-        app:layout_constraintTop_toTopOf="@+id/num_critical_issues" />
+        app:layout_constraintStart_toStartOf="@+id/num_critical_issues"
+        app:layout_constraintTop_toBottomOf="@+id/num_critical_issues" />
 
     <TextView
         android:id="@+id/hazard_level"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:text="@string/hazard_level"
-        app:layout_constraintStart_toEndOf="@+id/hazard_level_icon"
-        app:layout_constraintTop_toBottomOf="@+id/num_critical_issues" />
+        app:layout_constraintStart_toStartOf="@+id/num_critical_issues"
+        app:layout_constraintTop_toBottomOf="@+id/num_non_critical_issues" />
 
     <TextView
         android:id="@+id/inspection_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:text="Date"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/num_critical_issues"
         app:layout_constraintTop_toBottomOf="@+id/hazard_level" />
 
     <ImageView
         android:id="@+id/hazard_level_icon"
         android:layout_width="33dp"
         android:layout_height="24dp"
-        android:layout_marginStart="13dp"
-        app:layout_constraintBottom_toBottomOf="@+id/hazard_level"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="16dp"
+        app:layout_constraintStart_toEndOf="@+id/hazard_level"
         app:layout_constraintTop_toTopOf="@+id/hazard_level"
         app:srcCompat="@drawable/green_exclamation_circle" />
 
