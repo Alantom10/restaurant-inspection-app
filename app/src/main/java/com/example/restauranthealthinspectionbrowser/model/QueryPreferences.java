@@ -55,7 +55,7 @@ public class QueryPreferences {
             if (query.size() > 0) {
                 clause += " AND ";
             }
-            clause += RestaurantTable.Cols.ISSUES + " <= CAST(? as INTEGER)";
+            clause += RestaurantTable.Cols.CRITICAL + " <= CAST(? as INTEGER)";
             query.add(maxIssuesQuery);
         }
 
@@ -64,7 +64,7 @@ public class QueryPreferences {
             if (query.size() > 0) {
                 clause += " AND ";
             }
-            clause += RestaurantTable.Cols.ISSUES + " >= CAST(? as INTEGER)";
+            clause += RestaurantTable.Cols.CRITICAL + " >= CAST(? as INTEGER)";
             query.add(minIssuesQuery);
         }
 

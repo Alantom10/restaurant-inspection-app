@@ -54,11 +54,11 @@ public class InspectionManager {
 
     public int getCriticalIssues(String restaurantID) {
         int criticalIssues = 0;
-        long time = System.currentTimeMillis();
+        long now = System.currentTimeMillis();
 
         List<Inspection> inspectionList = getInspections(restaurantID);
         for (Inspection inspection : inspectionList) {
-            boolean isRecent = time - inspection.getInspectionDate().getTime() < DateUtils.YEAR_IN_MILLIS;
+            boolean isRecent = now - inspection.getInspectionDate().getTime() < DateUtils.YEAR_IN_MILLIS;
             if (isRecent) {
                 criticalIssues += inspection.getNumCritical();
             }
