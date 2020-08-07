@@ -1,6 +1,7 @@
 package com.example.restauranthealthinspectionbrowser.model;
 
 import android.text.format.DateUtils;
+import android.util.Log;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -13,11 +14,13 @@ import java.util.concurrent.TimeUnit;
  * on UI.
  */
 public class DateHelper {
+    private static final String TAG = "DateHelper";
 
     public static CharSequence getDisplayDate(Date inspectionDate) {
         long time = inspectionDate.getTime();
         long now = System.currentTimeMillis();
         long interval = now - time;
+        Log.i(TAG, "Days ago: " + (interval < TimeUnit.DAYS.toMillis(30)));
         if (interval < TimeUnit.DAYS.toMillis(30)) {
             return DateUtils.getRelativeTimeSpanString(time, now, DateUtils.DAY_IN_MILLIS);
         }

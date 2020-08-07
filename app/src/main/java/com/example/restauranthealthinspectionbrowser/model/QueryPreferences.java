@@ -37,7 +37,7 @@ public class QueryPreferences {
             if (query.size() > 0) {
                 clause += " AND ";
             }
-            clause += RestaurantTable.Cols.FAVOURITE + " = ?";
+            clause += RestaurantTable.Cols.FAVOURITE + " = CAST(? as INTEGER)";
             query.add(favouriteQuery);
         }
 
@@ -55,7 +55,7 @@ public class QueryPreferences {
             if (query.size() > 0) {
                 clause += " AND ";
             }
-            clause += RestaurantTable.Cols.ISSUES + " <= ?";
+            clause += RestaurantTable.Cols.CRITICAL + " <= CAST(? as INTEGER)";
             query.add(maxIssuesQuery);
         }
 
@@ -64,7 +64,7 @@ public class QueryPreferences {
             if (query.size() > 0) {
                 clause += " AND ";
             }
-            clause += RestaurantTable.Cols.ISSUES + " >= ?";
+            clause += RestaurantTable.Cols.CRITICAL + " >= CAST(? as INTEGER)";
             query.add(minIssuesQuery);
         }
 
@@ -81,8 +81,8 @@ public class QueryPreferences {
     }
 
     public static String[] getNewInspectionQuery(Context context) {
-        String clause = RestaurantTable.Cols.FAVOURITE + " = ? AND " +
-                RestaurantTable.Cols.UPDATED + " = ?";
+        String clause = RestaurantTable.Cols.FAVOURITE + " = CAST(? as INTEGER) AND " +
+                RestaurantTable.Cols.UPDATED + " = CAST(? as INTEGER)";
         return new String[] { clause, "1", "1" };
     }
 

@@ -1,7 +1,6 @@
 package com.example.restauranthealthinspectionbrowser.ui;
 
 import android.app.Activity;
-import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -21,7 +20,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.restauranthealthinspectionbrowser.R;
-import com.example.restauranthealthinspectionbrowser.databse.RestaurantDbSchema;
 import com.example.restauranthealthinspectionbrowser.model.DateHelper;
 import com.example.restauranthealthinspectionbrowser.model.Inspection;
 import com.example.restauranthealthinspectionbrowser.model.InspectionManager;
@@ -141,7 +139,7 @@ public class RestaurantFragment extends Fragment {
 
     private void updateRecyclerView() throws FileNotFoundException {
         InspectionManager manager = InspectionManager.getInstance(getActivity());
-        List<Inspection> inspections = manager.getInspectionsForRestaurant(mRestaurantID);
+        List<Inspection> inspections = manager.getInspections(mRestaurantID);
         mAdapter = new InspectionAdapter(inspections);
         mInspectionRecyclerView.setAdapter(mAdapter);
     }
